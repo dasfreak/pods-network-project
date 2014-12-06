@@ -5,8 +5,6 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.xmlrpc.client.XmlRpcClient;
-
 public class Node {
 	InetAddress ip;
 	List<InetAddress> network;

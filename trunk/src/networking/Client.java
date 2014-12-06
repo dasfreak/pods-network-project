@@ -1,86 +1,106 @@
 package networking;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
+import java.io.BufferedReader;
+import java.io.Console;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import org.apache.xmlrpc.WebServer;
-import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.*;
 
-public class Client {
+
+public class Client implements Runnable {
 	String ip;
-	List<String> ip_list = new LinkedList<String>();
-	public static int port = 50000;
-	XmlRpcClient server = null;
-
-	public Client() {
-
-	}
-
-	public Integer sum(int x, int y) {
-		System.out.println("Received method call (sum)");
-		return new Integer(x + y);
-	}
-
-	public void startServer() {
-		try {
-			System.out.println("Starting Server");
-			WebServer server = new WebServer(port);
-			server.addHandler("sample", new Client());
-			server.start();
-			System.out.println("Server running on port " + port);
-		} catch (Exception exception) {
-			System.err.println("JavaServer: " + exception);
+	List<RemoteNode> network;
+	
+	class RemoteNode
+	{
+		String ip;
+		XmlRpcClient rpc;
+		
+		public RemoteNode( String ip, XmlRpcClient rpc )
+		{
+			this.ip  = ip;
+			this.rpc = rpc;
+		}
+		public String toString()
+		{
+			return ip;
+		}
+		public XmlRpcClient getRpc() {
+			return rpc;
 		}
 	}
 
-	public void connect(String ip) {
+	public Client() {
+		network = new LinkedList<RemoteNode>();
 		try {
-			server = new XmlRpcClient("http://" + ip + ":50000" + "/RPC2");
+			ip = InetAddress.getLocalHost().getHostAddress().toString();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new LinkedList<String>();
+		System.out.println("My IP is: "+ip);
+	}
+
+	public void addNode(String ip) {
+		try {
+			network.add(new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":50000" + "/RPC2")));
 		} catch (Exception exception) {
 			System.err.println("JavaClient: " + exception);
 		}
-
 	}
 
-	public void showMenu() {
+	public void showMenu() throws NumberFormatException, IOException {
 
-		Scanner console = new Scanner(System.in);
-
+	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	
 		System.out.println("--- Super cool networking client ---");
 		System.out.println("(1) 5+3");
 		System.out.println("(8) show network");
 		System.out.println("(9) add known node");
 		System.out.println("(0) exit");
-		System.out.print("Your choice: ");
-		int choice = console.nextInt();
-
+		System.out.println("Your choice: ");
+		String line = br.readLine();
+		
+		int choice = Integer.parseInt(line);
 		switch (choice) {
 		case 1:
-			if(ip_list.size() == 0){ System.out.println("No nodes yet"); break;}
-			for (int i = 0; i < ip_list.size(); i++) {
+			if (network.size() == 0 )
+			{
+				System.out.println("No nodes yet");
+				break;
+			}
+			
+			for ( int i = 0; i < network.size(); i++ )
+			{
 				System.out.println("Machine #" + i + ": "
-						+ ip_list.get(i).toString());
+						+ network.get(i).toString());
 			}
 			System.out.print("Please choose machine number: ");
-			Scanner console2 = new Scanner(System.in);
-			choice = console2.nextInt();
-			connect(ip_list.get(choice));
-			getSum(5, 3);
+			choice = Integer.parseInt(br.readLine());
+			performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
 			break;
 		case 9: {
-			System.out.print("Please enter IP ");
-			Scanner console3 = new Scanner(System.in);
-			String ip = console3.nextLine();
+			System.out.println("Please enter IP: ");
+			String ip = br.readLine();
 
 			// add this server to serverlist
-			ip_list.add(ip);
-
+			addNode(ip);
 			break;
 		}
 		case 8:
-			System.out.println(ip_list.toString());
+			System.out.println("Network size is: "+network.size());
+			for ( RemoteNode node : network )
+			{
+				System.out.println(node);
+			}
 			break;
 		case 0:
 			System.exit(0);
@@ -90,23 +110,40 @@ public class Client {
 		}
 	}
 
-	public void getSum(Integer x, Integer y) {
+	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x, int y) {
 
-		Vector params = new Vector();
-		params.addElement(new Integer(x));
-		params.addElement(new Integer(y));
-
+		Vector<Integer> params = new Vector<Integer>();
+		params.addElement(x);
+		params.addElement(y);
+		
 		Object result = null;
 		try {
-			result = server.execute("sample.sum", params);
+			result = xmlRpcClient.execute("Calculator."+op, params);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		int sum = ((Integer) result).intValue();
-		System.out.println("The sum is: " + sum);
+		int numericalResult = ((Integer) result).intValue();
+		System.out.println("The sum is: " + numericalResult);
 
 	}
 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while (true)
+		{
+			try {
+				showMenu();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
