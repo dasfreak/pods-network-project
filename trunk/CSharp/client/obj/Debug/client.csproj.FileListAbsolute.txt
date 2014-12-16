@@ -1,0 +1,8 @@
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\bin\client.exe.config
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\bin\client.exe
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\bin\client.pdb
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\obj\Debug\client.csprojResolveAssemblyReference.cache
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\obj\Debug\Properties.Resources.resources
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\obj\Debug\client.csproj.GenerateResource.Cache
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\obj\Debug\client.exe
+C:\WF_WCF_Samples\WCF\Basic\Services\Hosting\SelfHost\CS\client\obj\Debug\client.pdb
