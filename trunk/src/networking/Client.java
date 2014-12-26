@@ -2,7 +2,10 @@ package networking;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -14,7 +17,7 @@ import org.apache.xmlrpc.*;
 
 
 public class Client implements Runnable {
-	
+
 	private static Client instance;
 
 	String ip;
@@ -43,11 +46,25 @@ public class Client implements Runnable {
 	public Client() {
 		instance = this;
 		network = new LinkedList<RemoteNode>();
+	    Enumeration<NetworkInterface> n = null;
 		try {
-			ip = InetAddress.getLocalHost().getHostAddress().toString();
-		} catch (UnknownHostException e) {
+			n = NetworkInterface.getNetworkInterfaces();
+		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
+		}
+		for (; n.hasMoreElements();)
+		{
+		    NetworkInterface e = n.nextElement();
+
+		    Enumeration<InetAddress> a = e.getInetAddresses();
+		    for (; a.hasMoreElements();)
+		    {
+		        InetAddress addr = a.nextElement();
+		        ip = addr.getHostAddress();
+		        break;
+		    }
+		    break;
 		}
 		
 		RemoteNode node = CreateNode(ip);
