@@ -49,26 +49,46 @@ public class Client implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		RemoteNode node = CreateNode(ip);
+		network.add(node);
 		new LinkedList<String>();
 		System.out.println("My IP is: "+ip);
 	}
 
-	public void addNodeToStructure(String ip)
+	public RemoteNode CreateNode(String ip)
 	{
+		RemoteNode node = null;
 		try {
-			network.add(new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":5000" + "/RPC2")));
+		node = new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":5000" + "/RPC2"));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}		
+		return node;
 	}
 	
+	public void addNodeToStructure( String ip )
+	{
+		network.add( CreateNode(ip) );
+	}
+		
+	
 	private void addNode(String ip) {
-		addNodeToStructure(ip);
 		for ( RemoteNode node : network )
 		{
-			propogateMessage( node.rpc, ip );
+			if ( node.ip != this.ip )
+			{
+				propogateMessage( node.rpc, ip );	
+			}
 		}
+		
+		RemoteNode node = CreateNode(ip);
+		for ( RemoteNode n : network )
+		{
+			propogateMessage( node.rpc, n.ip);
+		}
+		network.add(node);
 	}
 
 	public boolean showMenu( boolean printMenu) throws IOException {
@@ -148,6 +168,8 @@ public class Client implements Runnable {
 		}
 
 	}
+
+
 
 	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x, int y) {
 
