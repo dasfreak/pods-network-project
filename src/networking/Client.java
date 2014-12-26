@@ -56,7 +56,7 @@ public class Client implements Runnable {
 	public void addNodeToStructure(String ip)
 	{
 		try {
-			network.add(new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":50000" + "/RPC2")));
+			network.add(new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":5000" + "/RPC2")));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
