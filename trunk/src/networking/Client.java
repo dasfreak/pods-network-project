@@ -2,7 +2,11 @@ package networking;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -40,15 +44,20 @@ public class Client implements Runnable {
 		}
 	}
 
-	public Client() {
+    void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
+        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+            if (netint.getDisplayName().startsWith("e"))
+            	ip = inetAddress.toString().replaceFirst("/", "");
+        }
+     }
+
+	public Client() throws SocketException, UnknownHostException {
 		instance = this;
 		network = new LinkedList<RemoteNode>();
-		try {
-			ip = InetAddress.getLocalHost().getHostAddress().toString();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+		for (NetworkInterface netint : Collections.list(nets))
+		    displayInterfaceInformation(netint);
 		
 		RemoteNode node = CreateNode(ip);
 		network.add(node);
