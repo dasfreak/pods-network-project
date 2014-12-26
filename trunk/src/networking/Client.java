@@ -67,7 +67,7 @@ public class Client implements Runnable {
 		addNodeToStructure(ip);
 		for ( RemoteNode node : network )
 		{
-			propogateMessage( node.rpc, node.ip );
+			propogateMessage( node.rpc, ip );
 		}
 	}
 
