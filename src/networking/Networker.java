@@ -7,7 +7,7 @@ public class Networker {
 		// starting client and show menu
 
 		new Server();
-		new Thread( new Client()).start();
-
+		Client client = new Client();
+		new Thread( client ).start();
 	}
 }
