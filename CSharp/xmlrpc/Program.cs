@@ -39,9 +39,13 @@ namespace xmlrpc
             Console.WriteLine("listening at: {0}", epXmlRpc.ListenUri);
 
 
-            Console.WriteLine("Starting Client");
+            
 
-            ChannelFactory<IMath> cf = new ChannelFactory<IMath>(new WebHttpBinding(), "http://localhost/xmlrpc");
+            Console.WriteLine("Please enter the IP adress you want to connect to: ");
+            String ip = Console.ReadLine();
+
+            Console.WriteLine("Starting Client");
+            ChannelFactory<IMath> cf = new ChannelFactory<IMath>(new WebHttpBinding(), "http://"+ip+"/xmlrpc");
 
             cf.Endpoint.Behaviors.Add(new XmlRpcEndpointBehavior());
 
