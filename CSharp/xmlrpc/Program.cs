@@ -11,31 +11,40 @@ namespace xmlrpc
     interface Methods
     {
         [OperationContract()]
+        List<string> AddToList();
+
+        [OperationContract()]
         double Add(double A, double B);
-        string Test(string Name);
+    }
+
+    public class Global
+    {
+        public static List<string> IpList = new List<string>();
     }
 
     public class Server : Methods
     {
+
         public double Add(double A, double B)
         {
             return A + B;
         }
 
-        public string Test(string Name)
+        public List<string> AddToList()
         {
-            return "Hello"+Name;
+            return Global.IpList;
         }
     }
 
 
+
     class Program
-    {
+    {     
+
         static void Main(string[] args)
         {
-        //store ip addresses
-        List<string> iplist = new List<string>();
 
+        List<string> IpList = new List<string>();
 
         // start server on localhost
         Console.WriteLine("Starting Server");
@@ -50,21 +59,16 @@ namespace xmlrpc
 
         Console.WriteLine("Please enter the IP adress you want to connect to: ");
         string ip = Console.ReadLine();
-        iplist.Add(ip);
 
         // start client
         Console.WriteLine("Starting Client");
-        ChannelFactory<Methods> cf = new ChannelFactory<Methods>(new WebHttpBinding(), "http://"+iplist[0]+"/xmlrpc");
-
+        ChannelFactory<Methods> cf = new ChannelFactory<Methods>(new WebHttpBinding(), "http://"+ip+"/xmlrpc");
         cf.Endpoint.Behaviors.Add(new XmlRpcEndpointBehavior());
-
         Methods client = cf.CreateChannel();
+        Console.WriteLine("Connected to: http://" + ip + "/xmlrpc");
 
-        // call client method Add
-        string asd = client.Test("Marc");
-        Console.WriteLine(asd);
-        double answer = client.Add(1,5);
         Console.WriteLine("Sending 1+5...");
+        double answer = client.Add(1, 5);
         Console.WriteLine("Result: "+answer.ToString());
         Console.ReadLine();
         }
