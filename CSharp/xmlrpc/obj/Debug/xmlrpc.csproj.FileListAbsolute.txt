@@ -1,8 +1,8 @@
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.exe.config
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.csprojResolveAssemblyReference.cache
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.exe
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.pdb
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\Microsoft.Samples.XmlRpc.dll
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\Microsoft.Samples.XmlRpc.pdb
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.exe
-c:\users\marc\documents\visual studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.pdb
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.exe.config
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.exe
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\xmlrpc.pdb
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\Microsoft.Samples.XmlRpc.dll
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\bin\Debug\Microsoft.Samples.XmlRpc.pdb
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.csprojResolveAssemblyReference.cache
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.exe
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\xmlrpc\obj\Debug\xmlrpc.pdb
