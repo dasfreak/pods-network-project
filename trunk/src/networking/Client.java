@@ -20,6 +20,7 @@ import org.apache.xmlrpc.*;
 public class Client implements Runnable {
 
 	private static Client instance;
+	private RemoteNode node;
 
 	String ip;
 	
@@ -59,9 +60,8 @@ public class Client implements Runnable {
 		for (NetworkInterface netint : Collections.list(nets))
 		    displayInterfaceInformation(netint);
 		
-		RemoteNode node = CreateNode(ip);
+		node = CreateNode(ip);
 		network.add(node);
-		new LinkedList<String>();
 		System.out.println("My IP is: "+ip);
 	}
 
@@ -180,6 +180,7 @@ public class Client implements Runnable {
 			}
 		}
 		network.clear();
+		network.add(node);
 	}
 	
 	public void propogateExitMessage(XmlRpcClient xmlRpcClient )
