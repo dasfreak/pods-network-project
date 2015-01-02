@@ -88,14 +88,14 @@ public class Client implements Runnable {
 		{
 			if ( node.ip != this.ip )
 			{
-				propogateMessage( node.rpc, ip );	
+				propogateNewNodeMessage( node.rpc, ip );	
 			}
 		}
 		
 		RemoteNode node = CreateNode(ip);
 		for ( RemoteNode n : network )
 		{
-			propogateMessage( node.rpc, n.ip);
+			propogateNewNodeMessage( node.rpc, n.ip);
 		}
 		network.add(node);
 	}
@@ -108,8 +108,9 @@ public class Client implements Runnable {
 	    {
 			System.out.println("--- Super cool networking client ---");
 			System.out.println("(1) 5+3");
+			System.out.println("(7) exit network");
 			System.out.println("(8) show network");
-			System.out.println("(9) add known node");
+			System.out.println("(9) join network - specifiy an IP of an exisiting node in the network");
 			System.out.println("(0) exit");
 			System.out.println("Your choice: ");
 	    }
@@ -141,6 +142,11 @@ public class Client implements Runnable {
 			choice = Integer.parseInt(br.readLine());
 			performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
 			break;
+			
+		case 7: {
+			exitNetwork();
+			break;
+		}
 		case 9: {
 			System.out.println("Please enter IP: ");
 			String ip = br.readLine();
@@ -165,7 +171,31 @@ public class Client implements Runnable {
 		return true;
 	}
 	
-	public void propogateMessage(XmlRpcClient xmlRpcClient, String ip )
+	private void exitNetwork() {
+		for ( RemoteNode node : network )
+		{
+			if ( node.ip != this.ip )
+			{
+				propogateExitMessage( node.rpc );	
+			}
+		}
+		network.clear();
+	}
+	
+	public void propogateExitMessage(XmlRpcClient xmlRpcClient )
+	{
+		Vector<String> params = new Vector<String>();
+		params.add(this.ip);
+		try {
+			xmlRpcClient.execute("ClientAux.nodeExistedNetwork", params);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public void propogateNewNodeMessage(XmlRpcClient xmlRpcClient, String ip )
 	{
 		Vector<String> params = new Vector<String>();
 		params.add(ip);
@@ -175,7 +205,6 @@ public class Client implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 
@@ -224,5 +253,16 @@ public class Client implements Runnable {
 			throw new Exception();
 		}
 		return instance;
+	}
+
+	public void removeNodeFromStructure(String nodeIp) {
+		for ( int index = 0; index < network.size(); index++ )
+		{
+			if ( network.get(index).ip.compareTo(nodeIp) == 0 )
+			{
+				network.remove(index);
+				break;
+			}
+		}
 	}
 }

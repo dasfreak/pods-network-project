@@ -11,4 +11,16 @@ public class ClientAux {
 		return true;
 		 
 	 }
+	 
+	 public static boolean nodeExistedNetwork( String ip ){
+		 
+		 try {
+			Client.getInstance().removeNodeFromStructure(ip);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		 return true;
+	 }
 }
