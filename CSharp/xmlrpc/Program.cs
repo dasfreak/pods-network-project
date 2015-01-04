@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Microsoft.Samples.XmlRpc;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace xmlrpc
 {
@@ -11,15 +12,7 @@ namespace xmlrpc
     interface Methods
     {
         [OperationContract()]
-        List<string> AddToList();
-
-        [OperationContract()]
         double Add(double A, double B);
-    }
-
-    public class Global
-    {
-        public static List<string> IpList = new List<string>();
     }
 
     public class Server : Methods
@@ -29,14 +22,49 @@ namespace xmlrpc
         {
             return A + B;
         }
+    }
 
-        public List<string> AddToList()
+    public class serverPart
+    {
+        public void start()
         {
-            return Global.IpList;
+            // start server on localhost
+            Console.WriteLine("Starting Server");
+
+            Uri baseAddress = new UriBuilder(Uri.UriSchemeHttp, "localhost", -1, "/xmlrpc").Uri;
+            ServiceHost serviceHost = new ServiceHost(typeof(Server));
+            var epXmlRpc = serviceHost.AddServiceEndpoint(typeof(Methods), new WebHttpBinding(WebHttpSecurityMode.None), new Uri(baseAddress, "./xmlrpc"));
+            epXmlRpc.Behaviors.Add(new XmlRpcEndpointBehavior());
+            serviceHost.Open();
+            Console.WriteLine("listening at: {0}", epXmlRpc.ListenUri);
         }
     }
 
+    public class clientPart
+    {
+        Methods client;
+        List<string> IpList = new List<string>();
 
+        public void start()
+        {
+            // start client
+            Console.WriteLine("Starting Client");
+        }
+
+        public void connect(string ip)
+        {
+            ChannelFactory<Methods> cf = new ChannelFactory<Methods>(new WebHttpBinding(), "http://" + ip + "/xmlrpc");
+            cf.Endpoint.Behaviors.Add(new XmlRpcEndpointBehavior());
+            client = cf.CreateChannel();
+            Console.WriteLine("Connected to: http://" + ip + "/xmlrpc");
+        }
+
+        public double doMath()
+        {
+            Console.WriteLine("Sending 5+3...");
+            return client.Add(5, 3);
+        }
+    }
 
     class Program
     {     
@@ -44,32 +72,29 @@ namespace xmlrpc
         static void Main(string[] args)
         {
 
-        List<string> IpList = new List<string>();
+        // start server thread and wait till started
+        serverPart serverObject = new serverPart();
+        Thread serverThread = new Thread(serverObject.start);
+        serverThread.Start();
+        while (!serverThread.IsAlive);
 
-        // start server on localhost
-        Console.WriteLine("Starting Server");
+        // start client thread and wait till started
+        clientPart clientObject = new clientPart();
+        Thread clientThread = new Thread(clientObject.start);
+        clientThread.Start();
+        while (!clientThread.IsAlive);
 
-        Uri baseAddress = new UriBuilder(Uri.UriSchemeHttp, "localhost", -1, "/xmlrpc").Uri;
-        ServiceHost serviceHost = new ServiceHost(typeof(Server));
-        var epXmlRpc = serviceHost.AddServiceEndpoint(typeof(Methods), new WebHttpBinding(WebHttpSecurityMode.None), new Uri(baseAddress, "./xmlrpc"));
-        epXmlRpc.Behaviors.Add(new XmlRpcEndpointBehavior());
-        serviceHost.Open();
-        Console.WriteLine("listening at: {0}", epXmlRpc.ListenUri);
+        // pause main thread
+        Thread.Sleep(1000);
 
-
-        Console.WriteLine("Please enter the IP adress you want to connect to: ");
+        // connect to ip
+        Console.WriteLine("Enter ip: ");
         string ip = Console.ReadLine();
+        clientObject.connect(ip);
 
-        // start client
-        Console.WriteLine("Starting Client");
-        ChannelFactory<Methods> cf = new ChannelFactory<Methods>(new WebHttpBinding(), "http://"+ip+"/xmlrpc");
-        cf.Endpoint.Behaviors.Add(new XmlRpcEndpointBehavior());
-        Methods client = cf.CreateChannel();
-        Console.WriteLine("Connected to: http://" + ip + "/xmlrpc");
-
-        Console.WriteLine("Sending 1+5...");
-        double answer = client.Add(1, 5);
-        Console.WriteLine("Result: "+answer.ToString());
+        // send Add command and print result
+        double answer = clientObject.doMath();
+        Console.WriteLine("Result: " + answer.ToString());
         Console.ReadLine();
         }
     }
