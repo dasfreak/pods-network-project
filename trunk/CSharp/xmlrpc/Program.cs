@@ -30,10 +30,7 @@ namespace xmlrpc
 
     }
 
-    public class Global
-    {
-        public static List<string> IpList = new List<string>();
-    }
+
 
     public class Server : Methods
     {
@@ -42,7 +39,7 @@ namespace xmlrpc
             // start server on localhost
             Console.WriteLine("Starting Server");
 
-            Uri baseAddress = new UriBuilder(Uri.UriSchemeHttp, "localhost", 1337, "/xmlrpc").Uri;
+            Uri baseAddress = new UriBuilder(Uri.UriSchemeHttp, "localhost", Global.port, "/xmlrpc").Uri;
             ServiceHost serviceHost = new ServiceHost(typeof(Server));
             var epXmlRpc = serviceHost.AddServiceEndpoint(typeof(Methods), new WebHttpBinding(WebHttpSecurityMode.None), new Uri(baseAddress, "./xmlrpc"));
             epXmlRpc.Behaviors.Add(new XmlRpcEndpointBehavior());
@@ -83,79 +80,7 @@ namespace xmlrpc
 
     }
 
-    public class clientPart
-    {
-        Methods client;
 
-        public void printNodes()
-        {
-            Console.WriteLine("");
-            Console.WriteLine("List of Nodes:");
-            foreach (string ip in Global.IpList)
-            {
-                Console.WriteLine(ip);
-            }
-            Console.WriteLine("");
-        }
-
-        public void connect(string ip)
-        {
-           ChannelFactory<Methods> cf = new ChannelFactory<Methods>(new WebHttpBinding(), "http://" + ip + ":1337/xmlrpc");
-            cf.Endpoint.Behaviors.Add(new XmlRpcEndpointBehavior());
-            client = cf.CreateChannel();
-            Console.WriteLine("Connected to: http://" + ip + ":1337/xmlrpc");
-        }
-
-        public double doMath(string ip)
-        {
-            connect(ip);
-            Console.WriteLine("Sending 5+3...");
-            return client.Add(5, 3);
-        }
-
-        public void sendOwnIpAddressToNetwork(String ip)
-        {
-           foreach (string nodeAddress in Global.IpList)
-            {
-                connect(nodeAddress);
-                client.AddNewNodeToList(ip);
-            }
-            Console.WriteLine("Everyone should know you");
-        }
-
-        public void sendRemoveRequestToNetwork(String ip)
-        {
-            // delete own address from list
-            Global.IpList.Remove(ip);
-
-            foreach (string nodeAddress in Global.IpList)
-            {
-                connect(nodeAddress);
-                client.RemoveNodeFromList(ip);
-            }
-            Console.WriteLine("You have been removed from the network");
-        }
-
-        public int requestIpListSize()
-        {
-            return client.getIpListSize();
-        }
-
-        public void requestIpList(int size)
-        {
-            string newAddress;
-            for (int i = 0; i < size; i++)
-            {
-                newAddress = client.getIpListEntry(i);
-                if (!Global.IpList.Exists(item => item == newAddress))
-                {
-                    Global.IpList.Add(newAddress);
-                }
-            }
-        }
-
-
-    }
 
     class Program
     {     
@@ -184,41 +109,58 @@ namespace xmlrpc
 
         // Add own ip address to list
         Global.IpList.Add(ipAddress);
-        Global.IpList.Add("127.0.0.1");
-        Global.IpList.Add("localhost");
+        Global.IpList.Add("asd");
 
-        // ask for ip
-        Console.WriteLine("Enter ip: ");
-        string ip = Console.ReadLine();
-
-        // connect to host
-        clientObject.connect(ip);
-
-        // get number of host in network
-        int IpListSize = clientObject.requestIpListSize();
-
-        // request every ip
-        clientObject.requestIpList(IpListSize);
-
-        // send own ip address to every node
-       clientObject.sendOwnIpAddressToNetwork(ipAddress);
-        
-        
-        // print networknodes
-        clientObject.printNodes();
-
-        // send Add command to every node and print result
-        foreach (string node in Global.IpList)
+        int choice = 1;
+        while (choice != 0)
         {
-            double answer = clientObject.doMath(node);
-            Console.WriteLine("Result: " + answer.ToString());
-            Console.ReadLine();
-        }
+            choice = clientObject.showMenu();
 
-        // sign off from network
-        clientObject.sendRemoveRequestToNetwork(ipAddress);
+            switch (choice)
+            {
+                case 0:
+                    Console.WriteLine("Auf Wiedersehen!");
+                    break;
+                case 1:
+                    Console.WriteLine("Please enter ip: ");
+                    string ip = Console.ReadLine();
 
+                    // connect to host
+                    clientObject.connect(ip);
 
+                    // get number of host in network
+                    int IpListSize = clientObject.requestIpListSize();
+
+                    // request every ip
+                    clientObject.requestIpList(IpListSize);
+
+                    // send own ip address to every node
+                    clientObject.sendOwnIpAddressToNetwork(ipAddress);
+
+                    break;
+                case 2:
+                    // print networknodes
+                    clientObject.printNodes();
+                    break;
+                case 3:
+                    // send Add command to every node and print result
+                    foreach (string node in Global.IpList)
+                    {
+                        double answer = clientObject.doMath(node);
+                        Console.WriteLine("Result: " + answer.ToString());
+                        Console.ReadLine();
+                    }
+                    break;
+                case 4:
+                    // sign off from network
+                    clientObject.sendRemoveRequestToNetwork(ipAddress);
+                    break;
+                default:
+                    Console.WriteLine("wrong input");
+                    break;
+            }
+        }  
+  
         Console.ReadLine();
         }
     }
