@@ -29,6 +29,7 @@ public class Client implements Runnable {
 	List<RemoteNode> network;
 	private int startValue;
 	private boolean isStartValueSet;
+	private int currentValue;
 	
 	class RemoteNode
 	{
@@ -243,13 +244,22 @@ public class Client implements Runnable {
 		}
 	}
 
+	
+	public void performCalc( Operation op, int x ) {
+		for ( RemoteNode node : network )
+		{
+			if ( node.ip != this.ip )
+			{
+				//performCalc( node.rpc, op, x );	
+			}
+		}
+	}
 
 
-	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x, int y) {
+	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x) {
 
 		Vector<Integer> params = new Vector<Integer>();
 		params.addElement(x);
-		params.addElement(y);
 		
 		Object result = null;
 		try {
@@ -310,12 +320,18 @@ public class Client implements Runnable {
 		else
 		{
 			System.out.println("Recieved start value: "+value);
-			startValue = value;
+			currentValue = startValue = value;;
 			isStartValueSet = true;
+			// start thread for 20 seconds that performs the random calculation
+			new Thread(new CalculatingTask()).start();
 		}
 	}
 
 	public boolean isStartMessageSet() {
 		return isStartValueSet;
+	}
+
+	public int getCurrentValue() {
+		return currentValue;
 	}
 }
