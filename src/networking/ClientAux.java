@@ -1,6 +1,8 @@
 package networking;
 
 public class ClientAux {
+	
+	 static int startValue;
 	 public static boolean newNodeInNetwork(String ip) {
 		 try {
 			Client.getInstance().addNodeToStructure(ip);
@@ -10,6 +12,13 @@ public class ClientAux {
 		}
 		return true;
 		 
+	 }
+	 
+	 public static boolean startMessage( Integer value )
+	 {
+		 startValue = value;
+		 System.out.println("Recieved start value: "+value);
+		 return true;
 	 }
 	 
 	 public static boolean nodeExistedNetwork( String ip ){
