@@ -27,6 +27,8 @@ public class Client implements Runnable {
 	String ip;
 	
 	List<RemoteNode> network;
+	private int startValue;
+	private boolean isStartValueSet;
 	
 	class RemoteNode
 	{
@@ -62,6 +64,7 @@ public class Client implements Runnable {
 		for (NetworkInterface netint : Collections.list(nets))
 		    displayInterfaceInformation(netint);
 		
+		isStartValueSet = false;
 		node = CreateNode(ip);
 		network.add(node);
 		System.out.println("My IP is: "+ip);
@@ -297,5 +300,22 @@ public class Client implements Runnable {
 				break;
 			}
 		}
+	}
+
+	public void setStartValue(int value) {
+		if ( isStartValueSet )
+		{
+			System.out.println("Recieved start value: "+value +" But start message is already set - no change!!"); 
+		}
+		else
+		{
+			System.out.println("Recieved start value: "+value);
+			startValue = value;
+			isStartValueSet = true;
+		}
+	}
+
+	public boolean isStartMessageSet() {
+		return isStartValueSet;
 	}
 }
