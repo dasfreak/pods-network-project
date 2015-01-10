@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.naming.InitialContext;
+
 import org.apache.xmlrpc.*;
 
 
@@ -107,11 +109,11 @@ public class Client implements Runnable {
 	    if ( printMenu )
 	    {
 			System.out.println("--- Super cool networking client ---");
-			System.out.println("(1) 5+3");
-			System.out.println("(7) exit network");
-			System.out.println("(8) show network");
-			System.out.println("(9) join network - specifiy an IP of an exisiting node in the network");
-			System.out.println("(0) exit");
+			System.out.println("(1) join network - specifiy an IP of an exisiting node in the network");
+			System.out.println("(2) show network");
+			System.out.println("(3) Start calculation with initial value");
+			System.out.println("(4) exit network");
+			System.out.println("(0) exit ungracefully");
 			System.out.println("Your choice: ");
 	    }
 
@@ -126,10 +128,29 @@ public class Client implements Runnable {
 		}
 		
 		switch (choice) {
-		case 1:
-			if (network.size() == 0 )
+		case 1: {
+			System.out.println("Please enter IP: ");
+			String ip = br.readLine();
+
+			// add this server to serverlist
+			addNode(ip);
+			break;
+		}
+		
+		case 2:
+		{
+			System.out.println("Network size is: "+network.size());
+			for ( RemoteNode node : network )
 			{
-				System.out.println("No nodes yet");
+				System.out.println(node);
+			}
+			break;
+		}
+		
+		case 3:{
+			if (network.size() <= 1 )
+			{
+				System.out.println("No nodes yet to start a calculations!");
 				break;
 			}
 			
@@ -138,30 +159,18 @@ public class Client implements Runnable {
 				System.out.println("Machine #" + i + ": "
 						+ network.get(i).toString());
 			}
-			System.out.print("Please choose machine number: ");
-			choice = Integer.parseInt(br.readLine());
-			performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
+			System.out.print("Please choose an initial value: ");
+			int intitialValue = Integer.parseInt(br.readLine());
+			startCalc(intitialValue);
+			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
 			break;
-			
-		case 7: {
+		}
+		
+		case 4: {
 			exitNetwork();
 			break;
 		}
-		case 9: {
-			System.out.println("Please enter IP: ");
-			String ip = br.readLine();
 
-			// add this server to serverlist
-			addNode(ip);
-			break;
-		}
-		case 8:
-			System.out.println("Network size is: "+network.size());
-			for ( RemoteNode node : network )
-			{
-				System.out.println(node);
-			}
-			break;
 		case 0:
 			System.exit(0);
 			break;
@@ -171,6 +180,29 @@ public class Client implements Runnable {
 		return true;
 	}
 	
+	private void startCalc(int intitialValue) {
+		System.out.println("Starting distributed calc with initial value of: "+intitialValue);
+		for ( RemoteNode node : network )
+		{
+			if ( node.ip != this.ip )
+			{
+				propogateStartMessage( node.rpc, intitialValue );	
+			}
+		}
+	}
+
+	private void propogateStartMessage( XmlRpcClient xmlRpcClient, int intitialValue) {
+		Vector<Integer> params = new Vector<Integer>();
+		params.add(intitialValue);
+		try {
+			xmlRpcClient.execute("ClientAux.startMessage", params);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	private void exitNetwork() {
 		for ( RemoteNode node : network )
 		{
