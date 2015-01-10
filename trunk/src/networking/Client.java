@@ -185,6 +185,7 @@ public class Client implements Runnable {
 	}
 	
 	private void startCalc(int intitialValue) {
+		setStartValue( intitialValue );
 		System.out.println("Starting distributed calc with initial value of: "+intitialValue);
 		for ( RemoteNode node : network )
 		{
