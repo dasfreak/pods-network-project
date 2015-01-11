@@ -2,9 +2,9 @@ package networking;
 
 public enum Operation {
 	ADDITION ("add"),
-	SUBSTRACTION("sub"),
-	MULTIPLICATION("mul"),
-	DIVISION("div");
+	SUBSTRACTION("subtract"),
+	MULTIPLICATION("multiply"),
+	DIVISION("divide");
 	
 	
 	private final String opName;
