@@ -2,10 +2,10 @@ package networking;
 
 public class Calculator {
     
-	public static int add(int i1) {
-		int i2 = 0;
+	public static int add(int i2) {
+		int i1 = 0;
 		try {
-			i2 = Client.getInstance().getCurrentValue();
+			i1 = Client.getInstance().getCurrentValue();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -21,11 +21,11 @@ public class Calculator {
         return result;
     }
     
-    public static int subtract(int i1) {
-		int i2 = 0;
+    public static int subtract(int i2) {
+		int i1 = 0;
 		
 		try {
-			i2 = Client.getInstance().getCurrentValue();
+			i1 = Client.getInstance().getCurrentValue();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,11 +42,11 @@ public class Calculator {
         return result;
     }
     
-    public static int divide(int i1)
+    public static int divide(int i2)
     {
-		int i2 = 0;
+		int i1 = 0;
 		try {
-			i2 = Client.getInstance().getCurrentValue();
+			i1 = Client.getInstance().getCurrentValue();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,11 +69,11 @@ public class Calculator {
     	return result;
     }
     
-    public static int multiply( int i1 )
+    public static int multiply( int i2 )
     {
-		int i2 = 0;
+		int i1 = 0;
 		try {
-			i2 = Client.getInstance().getCurrentValue();
+			i1 = Client.getInstance().getCurrentValue();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
