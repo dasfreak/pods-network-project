@@ -283,7 +283,7 @@ public class Client implements Runnable {
 	}
 
 
-	public int performCalc(XmlRpcClient xmlRpcClient, Operation op, int x) {
+	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x) {
 
 		Vector<Integer> params = new Vector<Integer>();
 		params.addElement(x);
@@ -295,8 +295,6 @@ public class Client implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return (Integer) result;
 	}
 
 	@Override
