@@ -1,5 +1,6 @@
 package networking;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class TokenRing implements Runnable {
 	
 	public TokenRing(List<RemoteNode> network, String ip)
 	{
-		network = new LinkedList<RemoteNode>();
+		this.network = new ArrayList<RemoteNode>(network.size());
 		Collections.copy(this.network, network);
 		this.ip      = ip;
 		
