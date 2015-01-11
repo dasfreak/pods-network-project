@@ -19,7 +19,7 @@ public class CalculatingTask implements Runnable {
 		{			
 			Operation op = Operation.values()[randomGenerator.nextInt(Operation.values().length)];
 			int genNumber = randomGenerator.nextInt(100);
-			System.out.println("["+System.currentTimeMillis()+"] Initiating calculation: Operation: "+op+" Value: "+genNumber);
+			System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
 			
 			try {
 				Client.getInstance().performCalc( op, genNumber );
