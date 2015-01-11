@@ -29,8 +29,8 @@ public class TokenRing implements Runnable {
 	
 	public TokenRing(List<RemoteNode> network, String ip)
 	{
-		this.network = new ArrayList<RemoteNode>(network.size());
-		Collections.copy(this.network, network);
+		this.network = new LinkedList<RemoteNode>();
+		this.network.addAll(network);
 		this.ip      = ip;
 		
 		fetchCordinator();
