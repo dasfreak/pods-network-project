@@ -31,7 +31,7 @@ public class Client implements Runnable {
 	private boolean isStartValueSet;
 	private int currentValue;
 	
-	class RemoteNode
+	class RemoteNode implements Comparable<RemoteNode>
 	{
 		String ip;
 		XmlRpcClient rpc;
@@ -47,6 +47,11 @@ public class Client implements Runnable {
 		}
 		public XmlRpcClient getRpc() {
 			return rpc;
+		}
+		
+		@Override
+		public int compareTo(RemoteNode o) {
+			return this.ip.compareTo(o.ip);
 		}
 	}
 
