@@ -256,13 +256,34 @@ public class Client implements Runnable {
 		{
 			if ( node.ip != this.ip )
 			{
-				//performCalc( node.rpc, op, x );	
+				performCalc( node.rpc, op, x );	
+			}
+			else
+			{
+				switch (op)
+				{
+				case ADDITION:
+					Calculator.add(x);
+					break;
+				case SUBSTRACTION:
+					Calculator.subtract(x);
+					break;
+				case MULTIPLICATION:
+					Calculator.multiply(x);
+					break;
+				case DIVISION:
+					Calculator.divide(x);
+					break;
+				default:
+					break;	
+				}
+				
 			}
 		}
 	}
 
 
-	public void performCalc(XmlRpcClient xmlRpcClient, Operation op, int x) {
+	public int performCalc(XmlRpcClient xmlRpcClient, Operation op, int x) {
 
 		Vector<Integer> params = new Vector<Integer>();
 		params.addElement(x);
@@ -275,9 +296,7 @@ public class Client implements Runnable {
 			e.printStackTrace();
 		}
 
-		int numericalResult = ((Integer) result).intValue();
-		System.out.println("The sum is: " + numericalResult);
-
+		return (Integer) result;
 	}
 
 	@Override
@@ -340,5 +359,10 @@ public class Client implements Runnable {
 
 	public int getCurrentValue() {
 		return currentValue;
+	}
+
+	public void storeNewResult(int result) {
+		this.currentValue = result;
+		System.out.println("Result changed to: "+result);
 	}
 }

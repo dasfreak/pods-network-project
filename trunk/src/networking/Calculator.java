@@ -10,18 +10,36 @@ public class Calculator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return i1 + i2;
+		System.out.println("Calculating: "+ i1 + " + "+ i2);
+		int result = i1 + i2;
+		try {
+			Client.getInstance().storeNewResult(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return result;
     }
     
     public static int subtract(int i1) {
 		int i2 = 0;
+		
 		try {
 			i2 = Client.getInstance().getCurrentValue();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return i1 - i2;
+		System.out.println("Calculating: "+ i1 + " - "+ i2);
+		int result = i1 - i2;
+		try {
+			Client.getInstance().storeNewResult(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        return result;
     }
     
     public static int divide(int i1)
@@ -33,8 +51,16 @@ public class Calculator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		int result = i1/i2;
+		System.out.println("Calculating: "+ i1 + " / "+ i2);
+		try {
+			Client.getInstance().storeNewResult(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    	return i1/i2;
+    	return result;
     }
     
     public static int multiply( int i1 )
@@ -46,6 +72,16 @@ public class Calculator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return i1*i2;
+		
+		int result = i1*i2;
+		System.out.println("Calculating: "+ i1 + " * "+ i2);
+		try {
+			Client.getInstance().storeNewResult(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	return result;
     }
 }
