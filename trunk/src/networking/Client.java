@@ -329,6 +329,7 @@ public class Client implements Runnable {
 			currentValue = startValue = value;;
 			isStartValueSet = true;
 			// start thread for 20 seconds that performs the random calculation
+			new Thread( new TokenRing(this.network, this.ip));
 			new Thread(new CalculatingTask()).start();
 		}
 	}
