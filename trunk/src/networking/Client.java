@@ -237,7 +237,7 @@ public class Client implements Runnable {
 		Vector<String> params = new Vector<String>();
 		params.add(this.ip);
 		try {
-			xmlRpcClient.execute("ClientAux.nodeExistedNetwork", params);
+			xmlRpcClient.execute("ClientAux.nodeQuitNetwork", params);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
