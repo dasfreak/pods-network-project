@@ -34,7 +34,8 @@ public class TokenRing implements Runnable {
 		this.network.addAll(network);
 		this.ip      = ip;
 		
-		Collections.sort(network);
+		Collections.sort(this.network);
+		
 		
 		for ( int index = 0; index < network.size(); index++ )
 		{
