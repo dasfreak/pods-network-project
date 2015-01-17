@@ -1,0 +1,3 @@
+C:\xml-rpc\obj\Debug\BettyApplication.csprojResolveAssemblyReference.cache
+C:\xml-rpc\obj\Debug\WindowsApplication4.Form1.resources
+C:\xml-rpc\obj\Debug\BettyApplication.csproj.GenerateResource.Cache

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="BettyApplication">
+</Property><Property Name="Projektmappendatei" Value="C:\xml-rpc.net.3.0.0\samples\BettyApplication\BettyApplication.sln">
+</Property><Property Name="Date" Value="Dienstag, 30. Dezember 2014">
+</Property><Property Name="Time" Value="11:56">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="BettyApplication.sln" Description="Datei wurde erfolgreich als &quot;C:\xml-rpc.net.3.0.0\samples\BettyApplication\Backup\BettyApplication.sln&quot; gesichert">
+</Event><Event ErrorLevel="0" Project="BettyApplication" Source="BettyApplication.csproj" Description="Projektdatei erfolgreich gesichert als C:\xml-rpc.net.3.0.0\samples\BettyApplication\Backup\BettyApplication.csproj">
+</Event><Event ErrorLevel="0" Project="BettyApplication" Source="Betty.cs" Description="Datei erfolgreich gesichert als C:\xml-rpc.net.3.0.0\samples\BettyApplication\Backup\Betty.cs">
+</Event><Event ErrorLevel="0" Project="BettyApplication" Source="Form1.cs" Description="Datei erfolgreich gesichert als C:\xml-rpc.net.3.0.0\samples\BettyApplication\Backup\Form1.cs">
+</Event><Event ErrorLevel="0" Project="BettyApplication" Source="Form1.resx" Description="Datei erfolgreich gesichert als C:\xml-rpc.net.3.0.0\samples\BettyApplication\Backup\Form1.resx">
+</Event><Event ErrorLevel="0" Project="BettyApplication" Source="BettyApplication.csproj" Description="Die Projektdatei erfordert keine Konvertierung.">
+</Event><Event ErrorLevel="3" Project="BettyApplication" Source="BettyApplication.csproj" Description="Keine Konvertierung erforderlich">
+</Event><Event ErrorLevel="0" Project="" Source="BettyApplication.sln" Description="Die Projektmappe wurde erfolgreich konvertiert.">
+</Event><Event ErrorLevel="3" Project="" Source="BettyApplication.sln" Description="Converted">
+</Event></UpgradeLog>
