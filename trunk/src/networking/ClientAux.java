@@ -24,7 +24,7 @@ public class ClientAux {
 		return true;
 	 }
 	 
-	 public static boolean nodeExistedNetwork( String ip ){
+	 public static boolean nodeQuitNetwork( String ip ){
 		 
 		 try {
 			Client.getInstance().removeNodeFromStructure(ip);
