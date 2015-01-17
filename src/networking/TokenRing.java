@@ -21,7 +21,7 @@ public class TokenRing implements Runnable {
 	private String ip;
 	private String ipCordinator;
 	
-	private Token token = null;
+	private volatile Token token = null;
 	
 	public static TokenRing getInstance()
 	{
@@ -74,6 +74,7 @@ public class TokenRing implements Runnable {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
 	private boolean isHolderOfToken() {
 		if ( token != null && token.currentHolder.compareTo(this.ip) == 0 )
 		{
