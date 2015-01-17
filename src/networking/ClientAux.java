@@ -13,10 +13,10 @@ public class ClientAux {
 		 
 	 }
 	 
-	 public static boolean startMessage( int value )
+	 public static boolean startMessage( int value, int algoChoice )
 	 {
 		 try {
-			Client.getInstance().setStartValue(value);
+			Client.getInstance().setStartValue(value, algoChoice);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
