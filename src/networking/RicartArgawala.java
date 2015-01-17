@@ -27,6 +27,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		requestsQueue = new TreeSet<String>();
 		okayList      = new TreeSet<String>();
 		isPending     = false;
+		
+		instance = this;
 	}
 	
 	public void requestReceived( String ip, long timestamp )
