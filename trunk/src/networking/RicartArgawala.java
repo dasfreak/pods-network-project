@@ -129,8 +129,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		// TODO Auto-generated method stub
 		Vector<Object> params = new Vector<Object>();
+		
 		params.add(this.ip);
 		params.add(this.timestamp);
 		

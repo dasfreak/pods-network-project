@@ -120,8 +120,8 @@ public class Client implements Runnable {
 			System.out.println("--- Super cool networking client ---");
 			System.out.println("(1) join network - specifiy an IP of an exisiting node in the network");
 			System.out.println("(2) show network");
-			System.out.println("(3) Start calculation with initial value");
-			System.out.println("(4) exit network");
+			System.out.println("(3) Start distributed calculation with initial value");
+			System.out.println("(5) exit network");
 			System.out.println("(0) exit ungracefully");
 			System.out.println("Your choice: ");
 	    }
@@ -156,7 +156,8 @@ public class Client implements Runnable {
 			break;
 		}
 		
-		case 3:{
+		case 3:
+		{
 			if (network.size() <= 1 )
 			{
 				System.out.println("No nodes yet to start a calculations!");
@@ -170,12 +171,15 @@ public class Client implements Runnable {
 			}
 			System.out.print("Please choose an initial value: ");
 			int intitialValue = Integer.parseInt(br.readLine());
-			startCalc(intitialValue);
+			System.out.print("For Token Ring please type 1, for Ricart & Argawala please type 2: ");
+			int algoChoice = Integer.parseInt(br.readLine());
+			startCalc(intitialValue,algoChoice);
 			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
-			break;
+
 		}
 		
-		case 4: {
+		case 4:
+		{
 			exitNetwork();
 			break;
 		}
@@ -189,21 +193,24 @@ public class Client implements Runnable {
 		return true;
 	}
 	
-	private void startCalc(int intitialValue) {
-		setStartValue( intitialValue );
+
+
+	private void startCalc(int intitialValue, int algoChoice) {
+		setStartValue( intitialValue, algoChoice );
 		System.out.println("Starting distributed calc with initial value of: "+intitialValue);
 		for ( RemoteNode node : network )
 		{
 			if ( node.ip != this.ip )
 			{
-				propogateStartMessage( node.rpc, intitialValue );	
+				propogateStartMessage( node.rpc, intitialValue, algoChoice );	
 			}
 		}
 	}
 
-	private void propogateStartMessage( XmlRpcClient xmlRpcClient, int intitialValue) {
+	private void propogateStartMessage( XmlRpcClient xmlRpcClient, int intitialValue, int algoChoice) {
 		Vector<Integer> params = new Vector<Integer>();
 		params.add(intitialValue);
+		params.add(algoChoice);
 		try {
 			xmlRpcClient.execute("ClientAux.startMessage", params);
 		} catch (Exception e) {
@@ -334,7 +341,7 @@ public class Client implements Runnable {
 		}
 	}
 
-	public void setStartValue(int value) {
+	public void setStartValue(int value, int algoChoice) {
 		if ( isStartValueSet )
 		{
 			System.out.println("Recieved start value: "+value +" But start message is already set - no change!!"); 
@@ -345,7 +352,15 @@ public class Client implements Runnable {
 			currentValue = startValue = value;;
 			isStartValueSet = true;
 			// start thread for 20 seconds that performs the random calculation
-			new Thread( new TokenRing(this.network, this.ip)).start();
+			if ( algoChoice == 1)
+			{
+				new Thread( new TokenRing(this.network, this.ip)).start();
+			}
+			else
+			{
+				new Thread( new RicartArgawala(this.network, this.ip)).start();
+			}
+				
 			new Thread(new CalculatingTask()).start();
 		}
 	}
