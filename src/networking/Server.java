@@ -14,6 +14,7 @@ public class Server {
 		server = new WebServer(port);
 		server.addHandler("Calculator", Calculator.class );
 		server.addHandler("ClientAux",  ClientAux.class );
+		server.addHandler("TokenRingAux", TokenRingAux.class);
 		server.addHandler("$default", new Echo());
 		// TODO Auto-generated method stub
 		System.out.println("Attempting to start XML-RPC Server at port: "+port);
