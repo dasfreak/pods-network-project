@@ -30,6 +30,7 @@ public class TokenRing implements Runnable {
 	
 	public TokenRing(List<RemoteNode> network, String ip)
 	{
+		// pay attension to the difference between network and this.network
 		this.network = new LinkedList<RemoteNode>();
 		this.network.addAll(network);
 		this.ip      = ip;
@@ -38,7 +39,7 @@ public class TokenRing implements Runnable {
 		
 		for ( int index = 0; index < network.size(); index++ )
 		{
-			if ( network.get(index).ip.compareTo(this.ip) == 0 )
+			if ( this.network.get(index).ip.compareTo(this.ip) == 0 )
 			{
 				this.indexInRing = index;
 				break;
