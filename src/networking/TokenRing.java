@@ -95,7 +95,7 @@ public class TokenRing implements Runnable {
 	{
 		// fetch next peer:
 		int nextPeer = ( indexInRing + 1 ) % network.size();
-		System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
+		//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
 
 		Vector<String> params = new Vector<String>();
 
@@ -115,7 +115,7 @@ public class TokenRing implements Runnable {
 	
 	public synchronized void receivedToken(Token token)
 	{
-		System.out.println("Received Token!");
+	//	System.out.println("Received Token!");
 		this.token = token;
 	}
 
