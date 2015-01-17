@@ -46,7 +46,7 @@ public class TokenRing implements Runnable {
 		}
 		
 		fetchCordinator();
-		this.instance = this;
+		TokenRing.instance = this;
 	}
 	private void fetchCordinator() {
 		ipCordinator = network.get(0).ip;
