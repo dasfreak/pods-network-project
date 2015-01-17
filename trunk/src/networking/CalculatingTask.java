@@ -26,12 +26,13 @@ public class CalculatingTask implements Runnable {
 				operationQueueSize++;
 				op = Operation.values()[randomGenerator.nextInt(Operation.values().length)];
 				genNumber = randomGenerator.nextInt(100);
+				SyncAlgorithm.getInstance().setPending();
 			}
 			
-			if ( TokenRing.getInstance().hasRing() )
+			if ( SyncAlgorithm.getInstance().canAccess() )
 			{
 				// Critical Section
-				TokenRing.getInstance().setCalcInProgress();
+				SyncAlgorithm.getInstance().setCalcInProgress();
 				
 				System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
 				
@@ -42,7 +43,7 @@ public class CalculatingTask implements Runnable {
 					e.printStackTrace();
 				}
 				
-				TokenRing.getInstance().setCalcDone();
+				SyncAlgorithm.getInstance().setCalcDone();
 			}
 
 			// wait a random time	

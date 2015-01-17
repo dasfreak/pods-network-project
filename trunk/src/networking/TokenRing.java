@@ -10,30 +10,21 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import networking.Client.RemoteNode;
 
-public class TokenRing implements Runnable {
+public class TokenRing extends SyncAlgorithm implements Runnable {
 		
-	private static TokenRing instance = null;
-	private List<RemoteNode> network;
 	private int indexInRing = -1;
 	
-	private String ip;
+
 	private String ipCordinator;
 	
-	private boolean isCalcDone = true;
 	
 	private volatile Token token = null;
 	
-	public static TokenRing getInstance()
-	{
-		return instance;
-	}
 	
 	public TokenRing(List<RemoteNode> network, String ip)
 	{
 		// pay attension to the difference between network and this.network
-		this.network = new LinkedList<RemoteNode>();
-		this.network.addAll(network);
-		this.ip      = ip;
+		super ( network, ip );
 		
 		Collections.sort(this.network);
 		
@@ -71,17 +62,7 @@ public class TokenRing implements Runnable {
 			}
 		}
 	}
-	public synchronized boolean isCalcDone() {
-		return isCalcDone;
-	}
-	
-	public synchronized void setCalcDone(){
-		isCalcDone = true;
-	}
-	
-	public synchronized void setCalcInProgress(){
-		isCalcDone = false;
-	}
+
 	
 	public synchronized boolean hasRing() {
 		if ( token != null && token.currentHolder.compareTo(this.ip) == 0 )
@@ -117,6 +98,11 @@ public class TokenRing implements Runnable {
 	{
 	//	System.out.println("Received Token!");
 		this.token = token;
+	}
+	@Override
+	public synchronized boolean canAccess() {
+		// TODO Auto-generated method stub
+		return hasRing();
 	}
 
 }
