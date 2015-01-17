@@ -1,7 +1,6 @@
 package networking;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +13,13 @@ import networking.Client.RemoteNode;
 public class TokenRing implements Runnable {
 		
 	private static TokenRing instance = null;
-	
 	private List<RemoteNode> network;
 	private int indexInRing = -1;
 	
 	private String ip;
 	private String ipCordinator;
+	
+	private boolean isCalcDone = true;
 	
 	private volatile Token token = null;
 	
@@ -65,18 +65,25 @@ public class TokenRing implements Runnable {
 	public void run() {
 		while (true)
 		{
-			if ( isHolderOfToken() && isCalcDone() )
+			if ( hasRing() && isCalcDone() )
 			{
 				forwardToken();
 			}
 		}
 	}
-	private boolean isCalcDone() {
-		// TODO Auto-generated method stub
-		return true;
+	public synchronized boolean isCalcDone() {
+		return isCalcDone;
 	}
 	
-	private boolean isHolderOfToken() {
+	public synchronized void setCalcDone(){
+		isCalcDone = true;
+	}
+	
+	public synchronized void setCalcInProgress(){
+		isCalcDone = false;
+	}
+	
+	public synchronized boolean hasRing() {
 		if ( token != null && token.currentHolder.compareTo(this.ip) == 0 )
 		{
 			return true;
@@ -106,7 +113,7 @@ public class TokenRing implements Runnable {
 		}
 	}
 	
-	public void receivedToken(Token token)
+	public synchronized void receivedToken(Token token)
 	{
 		System.out.println("Received Token!");
 		this.token = token;

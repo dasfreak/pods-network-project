@@ -288,9 +288,8 @@ public class Client implements Runnable {
 		Vector<Integer> params = new Vector<Integer>();
 		params.addElement(x);
 		
-		Object result = null;
 		try {
-			result = xmlRpcClient.execute("Calculator."+op, params);
+			xmlRpcClient.execute("Calculator."+op, params);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -347,7 +346,7 @@ public class Client implements Runnable {
 			isStartValueSet = true;
 			// start thread for 20 seconds that performs the random calculation
 			new Thread( new TokenRing(this.network, this.ip)).start();
-			//new Thread(new CalculatingTask()).start();
+			new Thread(new CalculatingTask()).start();
 		}
 	}
 
