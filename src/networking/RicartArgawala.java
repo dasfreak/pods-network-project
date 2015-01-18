@@ -85,7 +85,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	public void run() {
 		while (true)
 		{
-			if ( isPending )
+			if ( isPending() )
 			{
 				// request from all nodes
 				okayList.clear();
@@ -105,6 +105,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				canAccess = false;
 			}
 		}
+	}
+
+	private synchronized boolean isPending() {
+		return isPending;
 	}
 
 	private void sendOkayToQueueNodes() {
