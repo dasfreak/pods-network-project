@@ -96,12 +96,12 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				// wait for okay from all
 				while( okayList.size() <= ( network.size() - 1 ) ); // -1 because of self node
 				
+				System.out.println("Can access now!");
 				setAccess( true );
 				// can access now
+				while (!isPending());
 				while (!isCalcDone());
-				
-				isPending = false;
-				
+							
 				// send okay to all processes in queue
 				sendOkayToQueueNodes();
 				

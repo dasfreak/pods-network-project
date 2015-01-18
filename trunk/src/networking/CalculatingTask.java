@@ -31,8 +31,9 @@ public class CalculatingTask implements Runnable {
 			
 			if ( SyncAlgorithm.getInstance().canAccess() )
 			{
-				// Critical Section
 				SyncAlgorithm.getInstance().setCalcInProgress();
+				SyncAlgorithm.getInstance().clearPending();
+				// Critical Section
 				
 				System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
 				
