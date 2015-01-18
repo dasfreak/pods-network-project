@@ -32,7 +32,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 			}
 		}
 		
-		System.out.println("Initial network size = "+super.network.size());
+		//System.out.println("Initial network size = "+super.network.size());
 		fetchCordinator();
 		TokenRing.instance = this;
 	}
@@ -70,11 +70,8 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	
 	private void forwardToken()
 	{
-		// fetch next peer:
-		System.out.println("super.network.size() = "+super.network.size());
-		
+		// fetch next peer:		
 		int nextPeer = ( indexInRing + 1 ) % super.network.size();
-		System.out.println("next peer rpc "+network.get(nextPeer).rpc);
 		
 		//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
 
