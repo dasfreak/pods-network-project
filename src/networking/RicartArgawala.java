@@ -94,7 +94,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				broadcastRequest();
 				timestamp++;
 				// wait for okay from all
-				while( okayList.size() <= ( network.size() - 1 ) ); // -1 because of self node
+				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
 				
 				System.out.println("Can access now!");
 				setAccess( true );
