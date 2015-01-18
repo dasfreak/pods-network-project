@@ -215,6 +215,32 @@ public class Client
         routingTable.RemoveAt(TableContains(ip));
     }
 
+    public void setStartValue(int value, int algoChoice) {
+		if ( isStartValueSet )
+		{
+			Console.WriteLine("Recieved start value: "+value +" But start message is already set - no change!!"); 
+		}
+		else
+		{
+			Console.WriteLine("Recieved start value: "+value);
+			currentValue = startValue = value;;
+			isStartValueSet = true;
+			// start thread for 20 seconds that performs the random calculation
+			if ( algoChoice == 1)
+			{
+				Console.WriteLine("Starting TokenRing");
+				//new Thread( new TokenRing(this.network, this.ip)).start();
+			}
+			else
+			{
+                Console.WriteLine("Starting Ricart Argawala");
+				//new Thread( new RicartArgawala(this.network, this.ip)).start();
+			}
+				
+			//new Thread(new CalculatingTask()).start();
+		}
+	}
+
 
 }
 }
