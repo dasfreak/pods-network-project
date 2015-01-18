@@ -42,7 +42,7 @@ public class CalculatingTask implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+				operationQueueSize--;
 				SyncAlgorithm.getInstance().setCalcDone();
 			}
 

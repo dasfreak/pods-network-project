@@ -10,13 +10,15 @@ public abstract class SyncAlgorithm {
 	
 	protected List<RemoteNode> network;
 	protected String ip;
-	protected volatile boolean isCalcDone = true;
-	protected volatile boolean isPending = false;
+	protected volatile boolean isCalcDone;
+	protected volatile boolean isPending;
 
 	protected static SyncAlgorithm instance = null;
 
 	public SyncAlgorithm(List<RemoteNode> network, String ip)
 	{
+		isPending = false;
+		isCalcDone = true;
 		// pay attention to the difference between network and this.network
 		this.network = new LinkedList<RemoteNode>();
 		this.network.addAll(network);
@@ -43,7 +45,7 @@ public abstract class SyncAlgorithm {
 	abstract  public boolean canAccess();
 
 	public synchronized void setPending() {
-		System.out.println("Settig isPending");
+		System.out.println("Setting isPending");
 		isPending = true;
 	}
 }
