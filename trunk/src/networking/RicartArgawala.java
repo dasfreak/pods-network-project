@@ -33,7 +33,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-
+		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 		if ( isCalcDone() && !this.isPending )
 		{
 			// send OK
@@ -58,6 +58,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void sendOk(String ip) {
+		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
 		params.add(ip);
 
@@ -118,6 +119,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				if (node.compareTo(rNode.ip) == 0)
 				{
+					System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
 						rNode.rpc.execute("okReceived", params);
 					} catch (XmlRpcException | IOException e) {
@@ -131,6 +133,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
+		System.out.println("Boradcasting request\n");
 		Vector<Object> params = new Vector<Object>();
 		
 		params.add(this.ip);
