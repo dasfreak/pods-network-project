@@ -7,7 +7,7 @@ public class CalculatingTask implements Runnable {
 	volatile boolean isCalculating = false;
 	static final int TIME_FOR_CALC_IN_MSEC    = 20 * 1000;
 	static final int MAX_TIME_FOR_WAIT_IN_MSC =  1 * 1000;
-
+	
 	int operationQueueSize = 0;
 	Operation op;
 	int genNumber;
@@ -18,7 +18,16 @@ public class CalculatingTask implements Runnable {
 		long currentTime = 0;
 	    Random randomGenerator = new Random();
 	    long randomTimeInMSec;
+	    
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		System.out.println("Starting calc session for: "+TIME_FOR_CALC_IN_MSEC/1000+" seconds:");
+		
 		do
 		{	
 			if ( operationQueueSize < 1 )
