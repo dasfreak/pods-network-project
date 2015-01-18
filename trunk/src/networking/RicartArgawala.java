@@ -45,7 +45,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		else if ( this.isPending )
 		{
 			// queue request
-			if ( timestamp < this.timestamp )
+			if ( timestamp <= this.timestamp )
 			{
 				sendOk(ip);
 			}
