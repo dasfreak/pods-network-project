@@ -276,6 +276,7 @@ public class Client implements Runnable {
 	public void performCalc( Operation op, int x ) {
 		for ( RemoteNode node : network )
 		{
+			System.out.println("node.ip = "+node.ip);
 			if ( node.ip.compareTo(this.ip) != 0 )
 			{
 				System.out.println("# Sending calc operation: "+op+" with value: "+x+" to ip "+node.ip);
