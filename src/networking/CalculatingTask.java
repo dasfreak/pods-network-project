@@ -18,14 +18,7 @@ public class CalculatingTask implements Runnable {
 		long currentTime = 0;
 	    Random randomGenerator = new Random();
 	    long randomTimeInMSec;
-	    
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+	    		
 		System.out.println("Starting calc session for: "+TIME_FOR_CALC_IN_MSEC/1000+" seconds:");
 		
 		do
