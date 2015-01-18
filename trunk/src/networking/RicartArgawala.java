@@ -20,10 +20,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	private volatile boolean canAccess;
 	private long timestamp;
 	
-	public RicartArgawala(List<RemoteNode> network, String ip)
+	public RicartArgawala(List<RemoteNode> networkInput, String ip)
 	{
 		// pay attention to the difference between network and this.network
-		super(network, ip);
+		super(networkInput, ip);
 	    Random randomGenerator = new Random();
 		timestamp = randomGenerator.nextInt(50);
 		requestsQueue = new TreeSet<String>();
