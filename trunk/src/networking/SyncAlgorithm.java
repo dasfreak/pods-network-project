@@ -42,7 +42,8 @@ public abstract class SyncAlgorithm {
 
 	abstract  public boolean canAccess();
 
-	public void setPending() {
+	public synchronized void setPending() {
+		System.out.println("Settig isPending");
 		isPending = true;
 	}
 }
