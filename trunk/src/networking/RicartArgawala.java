@@ -114,7 +114,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		return isPending;
 	}
 
-	private void sendOkayToQueueNodes() {
+	private synchronized void sendOkayToQueueNodes() {
 		
 		Vector<String> params = new Vector<String>();
 
