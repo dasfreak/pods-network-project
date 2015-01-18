@@ -12,11 +12,7 @@ import networking.Client.RemoteNode;
 public class TokenRing extends SyncAlgorithm implements Runnable {
 		
 	private int indexInRing = -1;
-	
-
 	private String ipCordinator;
-	
-	
 	private volatile Token token = null;
 	
 	
@@ -36,6 +32,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 			}
 		}
 		
+		System.out.println("Initial network size = "+super.network.size());
 		fetchCordinator();
 		TokenRing.instance = this;
 	}

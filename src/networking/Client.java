@@ -136,7 +136,7 @@ public class Client implements Runnable {
 			System.out.println("(1) join network - specifiy an IP of an exisiting node in the network");
 			System.out.println("(2) show network");
 			System.out.println("(3) Start distributed calculation with initial value");
-			System.out.println("(5) exit network");
+			System.out.println("(4) exit network");
 			System.out.println("(0) exit ungracefully");
 			System.out.println("Your choice: ");
 	    }
@@ -190,7 +190,7 @@ public class Client implements Runnable {
 			int algoChoice = Integer.parseInt(br.readLine());
 			startCalc(intitialValue, algoChoice);
 			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
-
+			break;
 		}
 		
 		case 4:
