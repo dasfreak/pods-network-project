@@ -8,9 +8,9 @@ public class RicartArgawalaAux {
 		return true;
 	}
 	
-	public static boolean requestReceived( String ip, long timestamp )
+	public static boolean requestReceived( String ip, String timestamp )
 	{
-		((RicartArgawala)(RicartArgawala.getInstance())).requestReceived( ip, timestamp );
+		((RicartArgawala)(RicartArgawala.getInstance())).requestReceived( ip, Long.parseLong(timestamp) );
 		return true;
 	}
 }

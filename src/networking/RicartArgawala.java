@@ -139,11 +139,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 
 	private void broadcastRequest() {
 		System.out.println("Boradcasting request\n");
-		Vector<Object> params = new Vector<Object>();
+		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
-		params.add(this.timestamp);
-		
+		params.add(Long.toString(this.timestamp));
 		
 		for (RemoteNode node : network )
 		{
