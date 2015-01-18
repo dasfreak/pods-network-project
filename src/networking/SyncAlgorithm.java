@@ -8,20 +8,20 @@ import networking.Client.RemoteNode;
 
 public abstract class SyncAlgorithm {
 	
-	protected volatile List<RemoteNode> network;
+	protected List<RemoteNode> network;
 	protected String ip;
 	protected volatile boolean isCalcDone;
 	protected volatile boolean isPending;
 
 	protected static SyncAlgorithm instance = null;
 
-	public SyncAlgorithm(List<RemoteNode> network, String ip)
+	public SyncAlgorithm(List<RemoteNode> networkInput, String ip)
 	{
 		isPending = false;
 		isCalcDone = true;
 		// pay attention to the difference between network and this.network
 		this.network = new LinkedList<RemoteNode>();
-		this.network.addAll(network);
+		this.network.addAll(networkInput);
 		this.ip      = ip;
 	}
 	
