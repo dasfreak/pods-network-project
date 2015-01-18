@@ -10,8 +10,11 @@ public interface NetworkClientInterface : IXmlRpcProxy
   [XmlRpcMethod("ClientAux.newNodeInNetwork")]
     bool newNodeInNet(String ip);
 
-  [XmlRpcMethod("ClientAux.nodeExistedNetwork")]
-    bool nodeExistedNetwork(String ip);
+  [XmlRpcMethod("ClientAux.nodeQuitNetwork")]
+    bool nodeQuitNetwork(String ip);
+
+  [XmlRpcMethod("ClientAux.startMessage")]
+     bool startMessage(int value, int algoChoice);
 
   // Calculator
 
@@ -38,8 +41,11 @@ public interface NetworkServerInterface
     [XmlRpcMethod("ClientAux.newNodeInNetwork")]
     bool newNodeInNet(String ip);
 
-    [XmlRpcMethod("ClientAux.nodeExistedNetwork")]
-    bool nodeExistedNetwork(String ip);
+    [XmlRpcMethod("ClientAux.nodeQuitNetwork")]
+    bool nodeQuitNetwork(String ip);
+
+    [XmlRpcMethod("ClientAux.startMessage")]
+    bool startMessage(int value, int algoChoice);
 
     // Calculator
 
