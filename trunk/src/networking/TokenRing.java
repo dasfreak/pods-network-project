@@ -25,11 +25,11 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		// pay attension to the difference between network and this.network
 		super ( network, ip );
 		
-		Collections.sort(this.network);
+		Collections.sort(super.network);
 		
-		for ( int index = 0; index < network.size(); index++ )
+		for ( int index = 0; index < super.network.size(); index++ )
 		{
-			if ( this.network.get(index).ip.compareTo(this.ip) == 0 )
+			if ( super.network.get(index).ip.compareTo(this.ip) == 0 )
 			{
 				this.indexInRing = index;
 				break;
@@ -74,7 +74,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	private void forwardToken()
 	{
 		// fetch next peer:
-		int nextPeer = ( indexInRing + 1 ) % network.size();
+		int nextPeer = ( indexInRing + 1 ) % super.network.size();
 		//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
 
 		Vector<String> params = new Vector<String>();

@@ -8,7 +8,7 @@ import networking.Client.RemoteNode;
 
 public abstract class SyncAlgorithm {
 	
-	protected List<RemoteNode> network;
+	protected volatile List<RemoteNode> network;
 	protected String ip;
 	protected volatile boolean isCalcDone;
 	protected volatile boolean isPending;
