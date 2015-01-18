@@ -77,7 +77,9 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	public synchronized void okReceived(String ip) {
+		System.out.println("==>Received okay from "+ip);
 		okayList.add(ip);
+		System.out.println("   okayList size is"+okayList.size());
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				broadcastRequest();
 				timestamp++;
 				// wait for okay from all
-				while( okayList.size() != ( network.size() - 1 ) ); // -1 because of self node
+				while( okayList.size() <= ( network.size() - 1 ) ); // -1 because of self node
 				
 				setAccess( true );
 				// can access now
