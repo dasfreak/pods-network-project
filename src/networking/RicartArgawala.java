@@ -17,7 +17,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	private volatile boolean canAccess;
 	private long timestamp;
-	private volatile boolean isPending;
 	
 	public RicartArgawala(List<RemoteNode> network, String ip)
 	{
@@ -85,7 +84,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	public void run() {
 		while (true)
 		{
-			System.out.println("isPending = "+isPending());
 			if ( isPending() )
 			{
 				System.out.println("Pending request detected\n");
