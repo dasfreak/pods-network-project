@@ -42,10 +42,14 @@ public abstract class SyncAlgorithm {
 		return instance;
 	}
 
-	abstract  public boolean canAccess();
+	abstract public boolean canAccess();
 
 	public synchronized void setPending() {
 		System.out.println("Setting isPending");
 		isPending = true;
+	}
+
+	public void clearPending() {
+		isPending = false;
 	}
 }
