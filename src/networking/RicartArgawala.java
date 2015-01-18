@@ -59,7 +59,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	private void sendOk(String ip) {
 		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
-		params.add(ip);
+		params.add(this.ip);
 
 		for ( RemoteNode node : this.network )
 		{
