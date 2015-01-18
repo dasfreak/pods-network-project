@@ -66,7 +66,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			if ( node.ip.compareTo(ip) == 0 )
 			{
 				try {
-					node.rpc.execute("okReceived", params);
+					node.rpc.execute("RicartArgawalaAux.okReceived", params);
 				} catch (XmlRpcException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -126,7 +126,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				{
 					System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
-						rNode.rpc.execute("okReceived", params);
+						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -138,7 +138,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		System.out.println("Boradcasting request\n");
+		System.out.println("Boradcasting request:");
 		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
@@ -149,7 +149,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			if (node.ip.compareTo(this.ip) != 0 )
 			{
 				try {
-					node.rpc.execute("requestReceived", params);
+					node.rpc.execute("RicartArgawalaAux.requestReceived", params);
 				} catch (XmlRpcException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
