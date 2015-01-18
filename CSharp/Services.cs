@@ -15,6 +15,12 @@ namespace Networking
             return true;
         }
 
+        public bool startMessage(int value, int algoChoice)
+        {
+            Client.getInstance().setStartValue(value, algoChoice);
+            return true;
+        }
+
         public bool nodeQuitNetwork(String ip)
         {       
              Client.getInstance().removeNodeFromStructure(ip);
