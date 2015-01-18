@@ -103,5 +103,6 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		// TODO Auto-generated method stub
 		return hasRing();
 	}
+	
 
 }

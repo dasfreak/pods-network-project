@@ -26,9 +26,9 @@ public class Client implements Runnable {
 	String ip;
 	
 	List<RemoteNode> network;
-	private int startValue;
-	private boolean isStartValueSet;
-	private int currentValue;
+	private volatile int startValue;
+	private volatile boolean isStartValueSet;
+	private volatile int currentValue;
 	
 	class RemoteNode implements Comparable<RemoteNode>
 	{
@@ -188,7 +188,7 @@ public class Client implements Runnable {
 			int intitialValue = Integer.parseInt(br.readLine());
 			System.out.print("For Token Ring please type 1, for Ricart & Argawala please type 2: ");
 			int algoChoice = Integer.parseInt(br.readLine());
-			startCalc(intitialValue,algoChoice);
+			startCalc(intitialValue, algoChoice);
 			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
 
 		}
@@ -366,18 +366,21 @@ public class Client implements Runnable {
 			System.out.println("Recieved start value: "+value);
 			currentValue = startValue = value;;
 			isStartValueSet = true;
+			
+			Thread t;
 			// start thread for 20 seconds that performs the random calculation
 			if ( algoChoice == 1)
 			{
 				System.out.println("Starting TokenRing");
-				new Thread( new TokenRing(this.network, this.ip)).start();
+				t = new Thread( new TokenRing(this.network, this.ip));
 			}
 			else
 			{
 				System.out.println("Starting Ricart Argawala");
-				new Thread( new RicartArgawala(this.network, this.ip)).start();
+				t = new Thread( new RicartArgawala(this.network, this.ip));
 			}
-				
+			
+			t.start();
 			new Thread(new CalculatingTask()).start();
 		}
 	}
