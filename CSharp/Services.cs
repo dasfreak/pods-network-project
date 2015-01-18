@@ -15,8 +15,7 @@ namespace Networking
             return true;
         }
 
-
-        public bool nodeExistedNetwork(String ip)
+        public bool nodeQuitNetwork(String ip)
         {       
              Client.getInstance().removeNodeFromStructure(ip);
            

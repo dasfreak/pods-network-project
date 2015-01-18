@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Text;
 using CookComputing.XmlRpc;
@@ -29,10 +31,23 @@ public class Client
     String ip;
     RemoteNode node;
     List<RemoteNode> routingTable;
-    static String port="5000";
+    static String port = "5000";
+    private int startValue;
+    private bool isStartValueSet;
+    private int currentValue;
 
-    public Client(){        
-        Initililze("127.0.0.1");
+    public Client(){
+        IPHostEntry host;
+        string localIP = "?";
+        host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+            }
+        }
+        Initililze(localIP);
     }
 
     public Client(String ip){
@@ -83,7 +98,6 @@ public class Client
     public String generate_url(String ip){
         return "http://"+ip+":"+port+"/RPC2";
      }
-
 
     public bool propogateNewNodeMessage(String url ,String ip)
     {
@@ -192,7 +206,7 @@ public class Client
 
          Leave.Url = url;
 
-         bool param = Leave.nodeExistedNetwork(this.ip); 
+         bool param = Leave.nodeQuitNetwork(this.ip); 
 		
 	}
 
