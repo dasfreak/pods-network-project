@@ -11,7 +11,7 @@ public abstract class SyncAlgorithm {
 	protected List<RemoteNode> network;
 	protected String ip;
 	protected volatile boolean isCalcDone = true;
-	protected volatile boolean isPending = true;
+	protected volatile boolean isPending = false;
 
 	protected static SyncAlgorithm instance = null;
 
