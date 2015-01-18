@@ -1,5 +1,6 @@
 package networking;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.NetworkInterface;
@@ -64,9 +65,25 @@ public class Client implements Runnable {
 	public Client() throws SocketException, UnknownHostException {
 		instance = this;
 		network = new LinkedList<RemoteNode>();
-		Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-		for (NetworkInterface netint : Collections.list(nets))
-		    displayInterfaceInformation(netint);
+	//	Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+	//	for (NetworkInterface netint : Collections.list(nets))
+	//	    displayInterfaceInformation(netint);
+		
+		// get all ip-addresses and sort out loopback/virtual/offline and ipv6
+		Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+		while (interfaces.hasMoreElements()){
+		    NetworkInterface current = interfaces.nextElement();
+		    if (!current.isUp() || current.isLoopback() || current.isVirtual()) continue;
+		    Enumeration<InetAddress> addresses = current.getInetAddresses();
+		    while (addresses.hasMoreElements()){
+		        InetAddress current_addr = addresses.nextElement();
+		        if (current_addr.isLoopbackAddress()) continue;
+		        if (current_addr instanceof Inet4Address)
+					  ip = current_addr.getHostAddress();
+		    }
+		}
+		
+		
 		
 		isStartValueSet = false;
 		node = CreateNode(ip);
