@@ -352,10 +352,12 @@ public class Client implements Runnable {
 			// start thread for 20 seconds that performs the random calculation
 			if ( algoChoice == 1)
 			{
+				System.out.println("Starting TokenRing");
 				new Thread( new TokenRing(this.network, this.ip)).start();
 			}
 			else
 			{
+				System.out.println("Starting Ricart Argawala");
 				new Thread( new RicartArgawala(this.network, this.ip)).start();
 			}
 				
