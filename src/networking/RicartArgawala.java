@@ -34,7 +34,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	public void requestReceived( String ip, long timestamp )
 	{
 		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
-		if ( isCalcDone() && !this.isPending )
+		if ( isCalcDone() && !isPending() )
 		{
 			// send OK
 			sendOk(ip);
@@ -85,6 +85,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	public void run() {
 		while (true)
 		{
+			System.out.println("isPending = "+isPending());
 			if ( isPending() )
 			{
 				System.out.println("Pending request detected\n");
