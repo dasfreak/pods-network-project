@@ -71,7 +71,11 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	private void forwardToken()
 	{
 		// fetch next peer:
+		System.out.println("super.network.size() = "+super.network.size());
+		
 		int nextPeer = ( indexInRing + 1 ) % super.network.size();
+		System.out.println("next peer rpc "+network.get(nextPeer).rpc);
+		
 		//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
 
 		Vector<String> params = new Vector<String>();
