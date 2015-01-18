@@ -26,7 +26,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		super(network, ip);
 	    Random randomGenerator = new Random();
 		timestamp = randomGenerator.nextInt(50);
-		requestsQueue = Collections.synchronizedSet( new TreeSet<String>() );
+		requestsQueue = new TreeSet<String>();
 		okayList      = Collections.synchronizedSet( new TreeSet<String>() );
 		isPending     = false;
 		canAccess     = false;
@@ -98,10 +98,9 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				okayList.clear();
 				broadcastRequest();
 				timestamp++;
-				// wait for okay from all
-				synchronized (okayList) {
-					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-				}
+					// wait for okay from all
+				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+				
 				System.out.println("====> CS enter");
 				setAccess( true );
 				// can access now
