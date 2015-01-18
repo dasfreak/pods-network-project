@@ -82,9 +82,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 
 		params.add(token.ipCreator);
 		params.add(network.get(nextPeer).ip);
-		
-		token = null;
-		
+				
 		// send request to node
 		try {
 			network.get(nextPeer).rpc.execute("TokenRingAux.tokenReceived", params );
@@ -92,6 +90,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		token = null;
 	}
 	
 	public synchronized void receivedToken(Token token)
