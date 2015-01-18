@@ -98,7 +98,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				// wait for okay from all
 				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
 				
-				//System.out.println("Can access now!");
+				System.out.println("====> CS enter");
 				setAccess( true );
 				// can access now
 				while (!isPending());
@@ -106,7 +106,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 							
 				// send okay to all processes in queue
 				sendOkayToQueueNodes();
-				
+				System.out.println("<==== CS exit");
+
 				setAccess( false );
 			}
 		}
@@ -142,7 +143,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		//System.out.println("Boradcasting request:");
+		//System.out.println("Broadcasting request:");
 		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
