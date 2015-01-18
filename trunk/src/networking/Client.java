@@ -112,7 +112,7 @@ public class Client implements Runnable {
 	private void addNode(String ip) {
 		for ( RemoteNode node : network )
 		{
-			if ( node.ip != this.ip )
+			if ( node.ip.compareTo(this.ip) != 0 )
 			{
 				propogateNewNodeMessage( node.rpc, ip );	
 			}
@@ -215,7 +215,7 @@ public class Client implements Runnable {
 		System.out.println("Starting distributed calc with initial value of: "+intitialValue);
 		for ( RemoteNode node : network )
 		{
-			if ( node.ip != this.ip )
+			if ( node.ip.compareTo(this.ip) != 0  )
 			{
 				propogateStartMessage( node.rpc, intitialValue, algoChoice );	
 			}
@@ -238,7 +238,7 @@ public class Client implements Runnable {
 	private void exitNetwork() {
 		for ( RemoteNode node : network )
 		{
-			if ( node.ip != this.ip )
+			if ( node.ip.compareTo(this.ip) != 0 )
 			{
 				propogateExitMessage( node.rpc );	
 			}
