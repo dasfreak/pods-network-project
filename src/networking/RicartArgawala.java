@@ -2,6 +2,7 @@ package networking;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -22,7 +23,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	{
 		// pay attention to the difference between network and this.network
 		super(network, ip);
-		timestamp = 0;
+	    Random randomGenerator = new Random();
+		timestamp = randomGenerator.nextInt(50);
 		requestsQueue = new TreeSet<String>();
 		okayList      = new TreeSet<String>();
 		isPending     = false;
@@ -45,7 +47,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		else if ( this.isPending )
 		{
 			// queue request
-			if ( timestamp <= this.timestamp )
+			if ( timestamp < this.timestamp )
 			{
 				sendOk(ip);
 			}
