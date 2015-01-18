@@ -1,6 +1,7 @@
 package networking;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -25,10 +26,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		super(network, ip);
 	    Random randomGenerator = new Random();
 		timestamp = randomGenerator.nextInt(50);
-		requestsQueue = new TreeSet<String>();
-		okayList      = new TreeSet<String>();
+		requestsQueue = Collections.synchronizedSet( new TreeSet<String>() );
+		okayList      = Collections.synchronizedSet( new TreeSet<String>() );
 		isPending     = false;
-		
+		canAccess     = false;
 		instance = this;
 	}
 	
@@ -40,11 +41,11 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			// send OK
 			sendOk(ip);
 		}
-		else if ( !this.isCalcDone )
+		else if ( !isCalcDone() )
 		{
 			requestsQueue.add(ip);
 		}
-		else if ( this.isPending )
+		else if ( isPending() )
 		{
 			// queue request
 			if ( timestamp < this.timestamp )
@@ -80,7 +81,9 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 
 	public synchronized void okReceived(String ip) {
 		//System.out.println("==>Received okay from "+ip);
-		okayList.add(ip);
+		synchronized (okayList){
+			okayList.add(ip);
+		}
 		//System.out.println("   okayList size is"+okayList.size());
 	}
 
@@ -96,8 +99,9 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				broadcastRequest();
 				timestamp++;
 				// wait for okay from all
-				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-				
+				synchronized (okayList) {
+					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+				}
 				System.out.println("====> CS enter");
 				setAccess( true );
 				// can access now
