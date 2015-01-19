@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CookComputing.XmlRpc;
 
 namespace Networking
 {
@@ -43,7 +44,7 @@ namespace Networking
 
 
 
-		public override void run()
+		public void run()
 		{
 			while (true)
 			{
@@ -81,7 +82,13 @@ namespace Networking
 			token = null;
 
 			// send request to node
-			network[nextPeer].getURL().execute("TokenRingAux.tokenReceived", @params);
+
+            NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+            executer.AttachLogger(new XmlRpcDebugLogger());
+
+            executer.Url = network[nextPeer].getURL();
+
+			executer.tokenReceived(token.ipCreator,network[nextPeer].getIP());
 
 		}
 

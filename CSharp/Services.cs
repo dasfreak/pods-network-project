@@ -28,7 +28,7 @@ namespace Networking
             return true;
         }
 
-        public static int add(int i2)
+        public int add(int i2)
         {
             int i1 = 0;
             try
@@ -56,7 +56,7 @@ namespace Networking
             return result;
         }
 
-        public static int subtract(int i2)
+        public int subtract(int i2)
         {
             int i1 = 0;
 
@@ -86,7 +86,7 @@ namespace Networking
             return result;
         }
 
-        public static int divide(int i2)
+        public int divide(int i2)
         {
             int i1 = 0;
             try
@@ -121,7 +121,7 @@ namespace Networking
             return result;
         }
 
-        public static int multiply(int i2)
+        public int multiply(int i2)
         {
             int i1 = 0;
             try
@@ -158,6 +158,19 @@ namespace Networking
             return true;
         }
 
+        //RicartArgawala
+        public bool okReceived(string ip)
+        {
+            ((RicartArgawala)(RicartArgawala.Instance)).okReceived(ip);
+            return true;
+        }
+
+        public bool requestReceived(string ip, string timestamp)
+        {
+            Console.WriteLine("requestReceived in Aux");
+            ((RicartArgawala)(RicartArgawala.Instance)).requestReceived(ip, long.Parse(timestamp));
+            return true;
+        }
 
     }
 }

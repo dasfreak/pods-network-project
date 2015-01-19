@@ -66,14 +66,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Networking.exe" size="28672">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Networking.exe" size="40960">
       <assemblyIdentity name="Networking" version="0.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>PzIekZbcmRU6fyzkzxU4ALZdMtc=</dsig:DigestValue>
+        <dsig:DigestValue>hg5MQ0XmuDjNLlwkgnifVmSQE1Y=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
