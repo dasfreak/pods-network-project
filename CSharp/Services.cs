@@ -48,6 +48,13 @@ namespace Networking
             return s1 / s2;
         }
 
+        //TokenRing
+        public bool tokenReceived(String ipCreator, String ipHolder)
+        {
+            ((TokenRing)TokenRing.getInstance()).receivedToken(new Token(ipCreator, ipHolder));
+            return true;
+        }
+
 
     }
 }

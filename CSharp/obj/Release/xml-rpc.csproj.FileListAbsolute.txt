@@ -7,3 +7,4 @@ C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Release\xml-rpc.c
 C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Release\Networking.exe.manifest
 C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Release\Networking.application
 C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Release\Networking.exe
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Release\xml-rpc.csprojResolveAssemblyReference.cache

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using CookComputing.XmlRpc;
 
 
@@ -13,14 +14,12 @@ namespace Networking
     {
         public int value1;
         public int value2;
-    }    
+    }
 
 
-public class Client
+    public class Client
   {
     private static Client instance;   // singleton design
-
-
 
 
     public static Client getInstance() // singleton design
@@ -30,7 +29,7 @@ public class Client
 
     String ip;
     RemoteNode node;
-    List<RemoteNode> routingTable;
+    List<RemoteNode> network;
     static String port = "5000";
     private int startValue;
     private bool isStartValueSet;
@@ -50,6 +49,18 @@ public class Client
         Initililze(localIP);
     }
 
+    public static Client Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					throw new Exception();
+				}
+				return instance;
+			}
+		}
+
     public Client(String ip){
         Initililze(ip);
       }
@@ -57,20 +68,20 @@ public class Client
     public void Initililze(String ip) {
 
         instance = this;
-        routingTable = new List<RemoteNode>();
+        network = new List<RemoteNode>();
         this.ip = ip;
         this.node = new RemoteNode(ip, generate_url(ip));
-        routingTable.Add(new RemoteNode(ip, generate_url(ip)));
+        network.Add(new RemoteNode(ip, generate_url(ip)));
     
      }
 
    public void setIP(String ip){       
 
-       routingTable.RemoveAt(TableContains(this.ip));
+       network.RemoveAt(TableContains(this.ip));
        
        this.ip = ip;
        node = new RemoteNode(ip, generate_url(ip));
-       routingTable.Add(node);
+       network.Add(node);
        exitNetwork();
 
     }
@@ -85,10 +96,10 @@ public class Client
        String Table = "";
        //foreach()
       
-       for (int i = 0; i < routingTable.Count; i++)
+       for (int i = 0; i < network.Count; i++)
        {
-           if (routingTable[i]!=null)
-             Table = Table + routingTable[i].getIP() + "\n";
+           if (network[i]!=null)
+             Table = Table + network[i].getIP() + "\n";
 
        }
        return Table;
@@ -128,12 +139,12 @@ public class Client
               Join.AttachLogger(new XmlRpcDebugLogger());
 
               Join.Url = url;
-              routingTable.Add(node);
+              network.Add(node);
 
               param = Join.newNodeInNet(this.ip);              
 
-              //if (param == true) routingTable.Add(node);
-              if (param == false) routingTable.RemoveAt(TableContains(ip));
+              //if (param == true) network.Add(node);
+              if (param == false) network.RemoveAt(TableContains(ip));
           }
 
       return param;
@@ -143,14 +154,14 @@ public class Client
 
         String url = generate_url(ip);
 
-        for (int i = 0; i < routingTable.Count; i++)
+        for (int i = 0; i < network.Count; i++)
         {
-            if (routingTable[i] != null)
+            if (network[i] != null)
             {
-                if ((routingTable[i].getIP() != this.ip) && (routingTable[i].getIP() != ip))
+                if ((network[i].getIP() != this.ip) && (network[i].getIP() != ip))
                 {
-                    propogateNewNodeMessage(routingTable[i].getURL(), ip); // new node to table entry
-                    propogateNewNodeMessage(url, routingTable[i].getIP());     // Table content to new node
+                    propogateNewNodeMessage(network[i].getURL(), ip); // new node to table entry
+                    propogateNewNodeMessage(url, network[i].getIP());     // Table content to new node
                 }
             }
         }
@@ -160,9 +171,9 @@ public class Client
     public int TableContains (String ip){
         int index = -1;
 
-        for (int i = 0; i < routingTable.Count; i++){
-            if (routingTable[i] != null){
-                if (routingTable[i].getIP() == ip){
+        for (int i = 0; i < network.Count; i++){
+            if (network[i] != null){
+                if (network[i].getIP() == ip){
                     index = i;
                     break;
                 }                   
@@ -177,7 +188,7 @@ public class Client
 
         if (TableContains(ip)==(-1))
         {
-            routingTable.Add(local_node);                                 
+            network.Add(local_node);                                 
             propagate(ip);
             
         }
@@ -185,17 +196,17 @@ public class Client
 
     public void exitNetwork() {
 
-        for (int i = 0; i < routingTable.Count; i++)	
+        for (int i = 0; i < network.Count; i++)	
 		{
-            if (routingTable[i] != null) 
+            if (network[i] != null) 
             {
-                if (routingTable[i].getIP() != this.ip)
-                  propogateExitMessage(routingTable[i].getURL());	
+                if (network[i].getIP() != this.ip)
+                  propogateExitMessage(network[i].getURL());	
 			}
 		}
 
-        routingTable.Clear();        
-        routingTable.Add(this.node);
+        network.Clear();        
+        network.Add(this.node);
 	}
 	
 
@@ -212,7 +223,7 @@ public class Client
 
     public void removeNodeFromStructure(String ip)
     {        
-        routingTable.RemoveAt(TableContains(ip));
+        network.RemoveAt(TableContains(ip));
     }
 
     public void setStartValue(int value, int algoChoice) {
@@ -220,27 +231,99 @@ public class Client
 		{
 			Console.WriteLine("Recieved start value: "+value +" But start message is already set - no change!!"); 
 		}
-		else
-		{
-			Console.WriteLine("Recieved start value: "+value);
-			currentValue = startValue = value;;
-			isStartValueSet = true;
-			// start thread for 20 seconds that performs the random calculation
-			if ( algoChoice == 1)
-			{
-				Console.WriteLine("Starting TokenRing");
-				//new Thread( new TokenRing(this.network, this.ip)).start();
-			}
-			else
-			{
+        else
+        {
+            Console.WriteLine("Recieved start value: " + value);
+            currentValue = startValue = value;
+            isStartValueSet = true;
+            // start thread for 20 seconds that performs the random calculation
+            if (algoChoice == 1)
+            {
+                Console.WriteLine("Starting TokenRing");
+                (new Thread(new TokenRing(this.network, this.ip))).Start();
+            }
+            else
+            {
                 Console.WriteLine("Starting Ricart Argawala");
-				//new Thread( new RicartArgawala(this.network, this.ip)).start();
+                (new Thread(new RicartArgawala(this.network, this.ip))).Start();
+            }
+
+            (new Thread(new CalculatingTask())).Start();
+        }
+	}
+
+        public virtual void performCalc(Operation op, int x)
+		{
+			foreach (RemoteNode node in network)
+			{
+				if (node.getIP() != this.ip)
+				{
+					performCalc(node.getURL(), op, x);
+				}
+				else
+				{
+					switch (op.InnerEnumValue())
+					{
+					case Operation.InnerEnum.ADDITION:
+						Calculator.add(x);
+						break;
+					case Operation.InnerEnum.SUBSTRACTION:
+						Calculator.subtract(x);
+						break;
+					case Operation.InnerEnum.MULTIPLICATION:
+						Calculator.multiply(x);
+						break;
+					case Operation.InnerEnum.DIVISION:
+						Calculator.divide(x);
+						break;
+					default:
+						break;
+					}
+
+				}
 			}
-				
-			//new Thread(new CalculatingTask()).start();
+		}
+
+        public virtual void performCalc(string xmlRpcClient, Operation? op, int x)
+		{
+
+			List<int?> @params = new List<int?>();
+			@params.Add(x);
+
+			try
+			{
+				xmlRpcClient.execute("Calculator." + op, @params);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				Console.WriteLine(e.ToString());
+				Console.Write(e.StackTrace);
+			}
+		}
+
+        public virtual bool StartMessageSet
+		{
+			get
+			{
+				return isStartValueSet;
+			}
+		}
+
+		public virtual int CurrentValue
+		{
+			get
+			{
+				return currentValue;
+			}
+		}
+
+		public virtual void storeNewResult(int result)
+		{
+			this.currentValue = result;
+			Console.WriteLine("Result changed to: " + result);
 		}
 	}
 
 
-}
 }
