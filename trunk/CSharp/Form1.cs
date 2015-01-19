@@ -43,6 +43,12 @@ namespace Networking
     private TextBox txtStateNumber1;
     private Label label3;
     private Button butGetStateNames;
+    private Button button1;
+    private Button button2;
+    private TextBox textBox_startvalue;
+    private Label label5;
+    private Label current_value;
+    private Label label8;
     Client My_Client;
     //public Client My_Client;
 
@@ -111,6 +117,11 @@ namespace Networking
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.SubtResult = new System.Windows.Forms.Label();
+            this.txtStateNumber2 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtStateNumber1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.butGetStateNames = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.enter = new System.Windows.Forms.Button();
             this.my_ip_print = new System.Windows.Forms.Label();
@@ -121,11 +132,12 @@ namespace Networking
             this.NetworkOutput = new System.Windows.Forms.Label();
             this.ServerGroupBox4 = new System.Windows.Forms.GroupBox();
             this.ServerData = new System.Windows.Forms.Label();
-            this.butGetStateNames = new System.Windows.Forms.Button();
-            this.txtStateNumber1 = new System.Windows.Forms.TextBox();
-            this.txtStateNumber2 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox_startvalue = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.current_value = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -224,6 +236,46 @@ namespace Networking
             this.SubtResult.TabIndex = 3;
             this.SubtResult.Click += new System.EventHandler(this.SubtResult_Click);
             // 
+            // txtStateNumber2
+            // 
+            this.txtStateNumber2.Location = new System.Drawing.Point(98, 58);
+            this.txtStateNumber2.Name = "txtStateNumber2";
+            this.txtStateNumber2.Size = new System.Drawing.Size(49, 20);
+            this.txtStateNumber2.TabIndex = 4;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(3, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 16);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Value 2:";
+            // 
+            // txtStateNumber1
+            // 
+            this.txtStateNumber1.Location = new System.Drawing.Point(98, 29);
+            this.txtStateNumber1.Name = "txtStateNumber1";
+            this.txtStateNumber1.Size = new System.Drawing.Size(49, 20);
+            this.txtStateNumber1.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(90, 16);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Value 1:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // butGetStateNames
+            // 
+            this.butGetStateNames.Location = new System.Drawing.Point(197, 26);
+            this.butGetStateNames.Name = "butGetStateNames";
+            this.butGetStateNames.Size = new System.Drawing.Size(70, 21);
+            this.butGetStateNames.TabIndex = 6;
+            this.butGetStateNames.Text = " Subtract ";
+            this.butGetStateNames.Click += new System.EventHandler(this.butGetStateNames_Click);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.enter);
@@ -314,50 +366,67 @@ namespace Networking
             this.ServerData.Size = new System.Drawing.Size(231, 34);
             this.ServerData.TabIndex = 0;
             // 
-            // butGetStateNames
+            // button1
             // 
-            this.butGetStateNames.Location = new System.Drawing.Point(197, 26);
-            this.butGetStateNames.Name = "butGetStateNames";
-            this.butGetStateNames.Size = new System.Drawing.Size(70, 21);
-            this.butGetStateNames.TabIndex = 6;
-            this.butGetStateNames.Text = " Subtract ";
-            this.butGetStateNames.Click += new System.EventHandler(this.butGetStateNames_Click);
+            this.button1.Location = new System.Drawing.Point(363, 333);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(116, 21);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Start TokenRing";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // txtStateNumber1
+            // button2
             // 
-            this.txtStateNumber1.Location = new System.Drawing.Point(98, 29);
-            this.txtStateNumber1.Name = "txtStateNumber1";
-            this.txtStateNumber1.Size = new System.Drawing.Size(49, 20);
-            this.txtStateNumber1.TabIndex = 3;
+            this.button2.Location = new System.Drawing.Point(497, 333);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(116, 21);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Start RicartArgawala";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // txtStateNumber2
+            // textBox_startvalue
             // 
-            this.txtStateNumber2.Location = new System.Drawing.Point(98, 58);
-            this.txtStateNumber2.Name = "txtStateNumber2";
-            this.txtStateNumber2.Size = new System.Drawing.Size(49, 20);
-            this.txtStateNumber2.TabIndex = 4;
+            this.textBox_startvalue.Location = new System.Drawing.Point(450, 303);
+            this.textBox_startvalue.Name = "textBox_startvalue";
+            this.textBox_startvalue.Size = new System.Drawing.Size(49, 20);
+            this.textBox_startvalue.TabIndex = 7;
+            this.textBox_startvalue.TextChanged += new System.EventHandler(this.textBox_startvalue_TextChanged);
             // 
-            // label4
+            // label5
             // 
-            this.label4.Location = new System.Drawing.Point(3, 60);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 16);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Value 2:";
+            this.label5.Location = new System.Drawing.Point(360, 307);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(90, 16);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "StartValue:";
             // 
-            // label3
+            // current_value
             // 
-            this.label3.Location = new System.Drawing.Point(3, 31);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 16);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Value 1:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.current_value.Location = new System.Drawing.Point(599, 304);
+            this.current_value.Name = "current_value";
+            this.current_value.Size = new System.Drawing.Size(51, 19);
+            this.current_value.TabIndex = 7;
+            this.current_value.Click += new System.EventHandler(this.current_value_Click);
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(505, 307);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(90, 16);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "CurrentValue:";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(887, 509);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.current_value);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBox_startvalue);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.ServerGroupBox4);
             this.Controls.Add(this.NetworkOutput);
             this.Controls.Add(this.Show_button1);
@@ -375,6 +444,7 @@ namespace Networking
             this.groupBox3.PerformLayout();
             this.ServerGroupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
     }
 		#endregion
@@ -512,12 +582,6 @@ namespace Networking
      
     }
 
-    private void button1_Click(object sender, EventArgs e)
-    {
-        
-        
-    }
-
     private void label2_Click(object sender, EventArgs e)
     {
 
@@ -615,6 +679,31 @@ namespace Networking
       }
 
       private void label6_Click(object sender, EventArgs e)
+      {
+
+      }
+
+      private void button1_Click(object sender, EventArgs e)
+      {
+          My_Client.startCalc(Convert.ToInt32(textBox_startvalue.Text), 1);
+      }
+
+      private void button2_Click(object sender, EventArgs e)
+      {
+          My_Client.startCalc(Convert.ToInt32(textBox_startvalue.Text), 0);
+      }
+
+      private void textBox_startvalue_TextChanged(object sender, EventArgs e)
+      {
+
+      }
+
+      private void label8_Click(object sender, EventArgs e)
+      {
+
+      }
+
+      private void current_value_Click(object sender, EventArgs e)
       {
 
       }

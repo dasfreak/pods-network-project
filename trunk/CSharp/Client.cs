@@ -300,23 +300,23 @@ namespace Networking
 
                 executer.Url = xmlRpcClient;
 
-                if (op.toString() == "ADDITION")
+                switch (op.InnerEnumValue())
                 {
-                    executer.add(x);
+                    case Operation.InnerEnum.ADDITION:
+                        executer.add(x);
+                        break;
+                    case Operation.InnerEnum.SUBSTRACTION:
+                        executer.subtract(x);
+                        break;
+                    case Operation.InnerEnum.MULTIPLICATION:
+                        executer.multiply(x);
+                        break;
+                    case Operation.InnerEnum.DIVISION:
+                        executer.divide(x);
+                        break;
+                    default:
+                        break;
                 }
-                if (op.toString() == "SUBSTRACTION")
-                {
-                    executer.subtract(x);
-                }
-                if (op.toString() == "MULTIPLICATION")
-                {
-                    executer.multiply(x);
-                }
-                if (op.toString() == "DIVISION")
-                {
-                    executer.divide(x);
-                }
-
 
 				//xmlRpcClient.execute("Calculator." + op, @params);
 			}
@@ -349,7 +349,39 @@ namespace Networking
 			this.currentValue = result;
 			Console.WriteLine("Result changed to: " + result);
 		}
-	}
 
 
+    public void startCalc(int intitialValue, int algoChoice)
+		{
+			setStartValue(intitialValue, algoChoice);
+			Console.WriteLine("Starting distributed calc with initial value of: " + intitialValue);
+			foreach (RemoteNode node in network)
+			{
+				if (node.getIP() != this.ip)
+				{
+					propogateStartMessage(node.getURL(), intitialValue, algoChoice);
+				}
+			}
+		}
+
+    public void propogateStartMessage(string xmlRpcClient, int intitialValue, int algoChoice)
+		{
+			try
+			{
+                NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                executer.AttachLogger(new XmlRpcDebugLogger());
+
+                executer.Url = xmlRpcClient;
+
+                executer.startMessage(intitialValue, algoChoice);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				Console.WriteLine(e.ToString());
+				Console.Write(e.StackTrace);
+			}
+
+		}
+  }
 }
