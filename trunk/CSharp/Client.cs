@@ -300,7 +300,23 @@ namespace Networking
 
                 executer.Url = xmlRpcClient;
 
-                bool param = executer.add(x);
+                if (op.toString() == "ADDITION")
+                {
+                    executer.add(x);
+                }
+                if (op.toString() == "SUBSTRACTION")
+                {
+                    executer.subtract(x);
+                }
+                if (op.toString() == "MULTIPLICATION")
+                {
+                    executer.multiply(x);
+                }
+                if (op.toString() == "DIVISION")
+                {
+                    executer.divide(x);
+                }
+
 
 				//xmlRpcClient.execute("Calculator." + op, @params);
 			}

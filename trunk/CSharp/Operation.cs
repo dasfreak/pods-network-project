@@ -3,7 +3,7 @@
 namespace Networking
 {
 
-	public sealed class Operation
+	public class Operation
 	{
 		public static readonly Operation ADDITION = new Operation("ADDITION", InnerEnum.ADDITION, "add");
 		public static readonly Operation SUBSTRACTION = new Operation("SUBSTRACTION", InnerEnum.SUBSTRACTION, "subtract");
@@ -44,7 +44,7 @@ namespace Networking
 			ordinalValue = nextOrdinal++;
 			innerEnumValue = innerEnum;
 		}
-		public override string toString()
+		public string toString()
 		{
 			return opName;
 		}

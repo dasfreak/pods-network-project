@@ -443,7 +443,7 @@ namespace Networking
           request.value1 = Convert.ToInt32(txtStateNumber1.Text);
           request.value2 = Convert.ToInt32(txtStateNumber2.Text);
 
-          retstr = NetSubtract.subtract(request.value1, request.value2);
+          retstr = NetSubtract.subtract(request.value1);
        
 
         String name=Convert.ToString(retstr);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CookComputing.XmlRpc;
 using System.Linq;
 using System.Text;
 
@@ -61,7 +62,13 @@ namespace Networking
 			{
 				if (node.getIP().CompareTo(ip) == 0)
 				{
-					node.getURL().execute("RicartArgawalaAux.okReceived", @params);
+
+                    NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                    executer.AttachLogger(new XmlRpcDebugLogger());
+
+                    executer.Url = node.getURL();
+
+					executer.okReceived(ip);
 					break;
 				}
 			}
@@ -77,7 +84,7 @@ namespace Networking
                 }
             }
 
-            public override void run()
+            public void run()
             {
                 while (true)
                 {
@@ -130,7 +137,15 @@ namespace Networking
 					if (node.CompareTo(rNode.getIP()) == 0)
 					{
 						Console.WriteLine("Sending okay to queue node " + rNode.getIP());
-						rNode.getURL().execute("RicartArgawalaAux.okReceived", @params);
+
+                        NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                        executer.AttachLogger(new XmlRpcDebugLogger());
+
+                        executer.Url = rNode.getURL();
+
+                        executer.okReceived(ip);
+
+						//rNode.getURL().execute("RicartArgawalaAux.okReceived", @params);
 					}
 				}
 			}
@@ -149,7 +164,15 @@ namespace Networking
 			{
 				if (node.getIP().CompareTo(this.ip) != 0)
 				{
-						node.getURL().execute("RicartArgawalaAux.requestReceived", @params);
+                    NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                    executer.AttachLogger(new XmlRpcDebugLogger());
+
+                    executer.Url = node.getURL();
+
+                    executer.requestReceived(this.ip, Convert.ToString(this.timestamp));
+
+
+						//node.getURL().execute("RicartArgawalaAux.requestReceived", @params);
 				}
 			}
 		}
