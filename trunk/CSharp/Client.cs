@@ -240,15 +240,17 @@ namespace Networking
             if (algoChoice == 1)
             {
                 Console.WriteLine("Starting TokenRing");
-                (new Thread(new TokenRing(this.network, this.ip))).Start();
+                var thread = new Thread(() => new TokenRing(this.network, this.ip));
+                thread.Start();
             }
             else
             {
                 Console.WriteLine("Starting Ricart Argawala");
-                (new Thread(new RicartArgawala(this.network, this.ip))).Start();
+                var thread = new Thread(() => new RicartArgawala(this.network, this.ip));
+                thread.Start();
             }
-
-            (new Thread(new CalculatingTask())).Start();
+            var thread2 = new Thread(() => new CalculatingTask());
+            thread2.Start();
         }
 	}
 
@@ -284,7 +286,7 @@ namespace Networking
 			}
 		}
 
-        public virtual void performCalc(string xmlRpcClient, Operation? op, int x)
+        public virtual void performCalc(string xmlRpcClient, Operation op, int x)
 		{
 
 			List<int?> @params = new List<int?>();
@@ -292,7 +294,15 @@ namespace Networking
 
 			try
 			{
-				xmlRpcClient.execute("Calculator." + op, @params);
+
+                NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                executer.AttachLogger(new XmlRpcDebugLogger());
+
+                executer.Url = xmlRpcClient;
+
+                bool param = executer.add(x);
+
+				//xmlRpcClient.execute("Calculator." + op, @params);
 			}
 			catch (Exception e)
 			{

@@ -141,7 +141,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculatingTask.cs" />
     <Compile Include="Calculator.cs" />
+    <Compile Include="DateTimeHelperClass.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="RicartArgawala.cs" />
     <Compile Include="Server.cs" />
