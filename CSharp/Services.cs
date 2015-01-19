@@ -28,30 +28,133 @@ namespace Networking
             return true;
         }
 
-        public int subtract(int s1, int s2)
+        public static int add(int i2)
         {
-            return s1 - s2;
+            int i1 = 0;
+            try
+            {
+                i1 = Client.Instance.CurrentValue;
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+            Console.WriteLine("Calculating: " + i1 + " + " + i2);
+            int result = i1 + i2;
+            try
+            {
+                Client.Instance.storeNewResult(result);
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+            return result;
         }
 
-        public int add(int s1, int s2)
+        public static int subtract(int i2)
         {
-            return s1 + s2;
+            int i1 = 0;
+
+            try
+            {
+                i1 = Client.Instance.CurrentValue;
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+            Console.WriteLine("Calculating: " + i1 + " - " + i2);
+            int result = i1 - i2;
+            try
+            {
+                Client.Instance.storeNewResult(result);
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+
+            return result;
         }
 
-        public int multiply(int s1, int s2)
+        public static int divide(int i2)
         {
-            return s1 * s2;
+            int i1 = 0;
+            try
+            {
+                i1 = Client.Instance.CurrentValue;
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+
+            int result = i1;
+            if (i2 != 0)
+            {
+                result = i1 / i2;
+                Console.WriteLine("Calculating: " + i1 + " / " + i2);
+                try
+                {
+                    Client.Instance.storeNewResult(result);
+                }
+                catch (Exception e)
+                {
+                    // TODO Auto-generated catch block
+                    Console.WriteLine(e.ToString());
+                    Console.Write(e.StackTrace);
+                }
+
+            }
+
+            return result;
         }
 
-        public int divide(int s1, int s2)
+        public static int multiply(int i2)
         {
-            return s1 / s2;
+            int i1 = 0;
+            try
+            {
+                i1 = Client.Instance.CurrentValue;
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+
+            int result = i1 * i2;
+            Console.WriteLine("Calculating: " + i1 + " * " + i2);
+            try
+            {
+                Client.Instance.storeNewResult(result);
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+
+            return result;
         }
 
         //TokenRing
         public bool tokenReceived(String ipCreator, String ipHolder)
         {
-            ((TokenRing)TokenRing.getInstance()).receivedToken(new Token(ipCreator, ipHolder));
+            ((TokenRing)TokenRing.Instance).receivedToken(new Token(ipCreator, ipHolder));
             return true;
         }
 

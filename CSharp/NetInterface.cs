@@ -19,16 +19,16 @@ public interface NetworkClientInterface : IXmlRpcProxy
   // Calculator
 
   [XmlRpcMethod("Calculator.subtract")]
-    int subtract(int s1, int s2);
+    int subtract(int s1);
 
   [XmlRpcMethod("Calculator.add")]
-     int add(int s1, int s2);
+     int add(int s1);
 
   [XmlRpcMethod("Calculator.divide")]
-     int divide(int s1, int s2);
+     int divide(int s1);
 
   [XmlRpcMethod("Calculator.multiply")]
-      int multiply(int s1, int s2);
+      int multiply(int s1);
 
   //RicartArgawalaAux
   
@@ -63,16 +63,16 @@ public interface NetworkServerInterface
     // Calculator
 
     [XmlRpcMethod("Calculator.subtract")]
-        int subtract(int s1, int s2);
+        int subtract(int s1);
 
     [XmlRpcMethod("Calculator.add")]
-       int add(int s1, int s2);
+       int add(int s1);
 
     [XmlRpcMethod("Calculator.divide")]
-       int divide(int s1, int s2);
+       int divide(int s1);
 
     [XmlRpcMethod("Calculator.multiply")]
-       int multiply(int s1, int s2);
+       int multiply(int s1);
 
     //RicartArgawalaAux
 
