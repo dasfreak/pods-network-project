@@ -26,12 +26,7 @@ namespace Networking
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox2;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.Label label4;
-    private System.Windows.Forms.TextBox txtStateNumber1;
-    private System.Windows.Forms.TextBox txtStateNumber2;
     private Label SubtResult;
-    private System.Windows.Forms.Button butGetStateNames;
     private Button leave_button;
     private GroupBox groupBox3;
     private Button enter;
@@ -43,6 +38,11 @@ namespace Networking
     private Label NetworkOutput;
     private GroupBox ServerGroupBox4;
     private Label ServerData;
+    private TextBox txtStateNumber2;
+    private Label label4;
+    private TextBox txtStateNumber1;
+    private Label label3;
+    private Button butGetStateNames;
     Client My_Client;
     //public Client My_Client;
 
@@ -111,11 +111,6 @@ namespace Networking
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.SubtResult = new System.Windows.Forms.Label();
-            this.txtStateNumber2 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtStateNumber1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.butGetStateNames = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.enter = new System.Windows.Forms.Button();
             this.my_ip_print = new System.Windows.Forms.Label();
@@ -126,6 +121,11 @@ namespace Networking
             this.NetworkOutput = new System.Windows.Forms.Label();
             this.ServerGroupBox4 = new System.Windows.Forms.GroupBox();
             this.ServerData = new System.Windows.Forms.Label();
+            this.butGetStateNames = new System.Windows.Forms.Button();
+            this.txtStateNumber1 = new System.Windows.Forms.TextBox();
+            this.txtStateNumber2 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -224,46 +224,6 @@ namespace Networking
             this.SubtResult.TabIndex = 3;
             this.SubtResult.Click += new System.EventHandler(this.SubtResult_Click);
             // 
-            // txtStateNumber2
-            // 
-            this.txtStateNumber2.Location = new System.Drawing.Point(98, 58);
-            this.txtStateNumber2.Name = "txtStateNumber2";
-            this.txtStateNumber2.Size = new System.Drawing.Size(49, 20);
-            this.txtStateNumber2.TabIndex = 4;
-            // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(3, 60);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 16);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Value 2:";
-            // 
-            // txtStateNumber1
-            // 
-            this.txtStateNumber1.Location = new System.Drawing.Point(98, 29);
-            this.txtStateNumber1.Name = "txtStateNumber1";
-            this.txtStateNumber1.Size = new System.Drawing.Size(49, 20);
-            this.txtStateNumber1.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(3, 31);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 16);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Value 1:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // butGetStateNames
-            // 
-            this.butGetStateNames.Location = new System.Drawing.Point(197, 26);
-            this.butGetStateNames.Name = "butGetStateNames";
-            this.butGetStateNames.Size = new System.Drawing.Size(70, 21);
-            this.butGetStateNames.TabIndex = 6;
-            this.butGetStateNames.Text = " Subtract ";
-            this.butGetStateNames.Click += new System.EventHandler(this.butGetStateNames_Click);
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.enter);
@@ -354,6 +314,46 @@ namespace Networking
             this.ServerData.Size = new System.Drawing.Size(231, 34);
             this.ServerData.TabIndex = 0;
             // 
+            // butGetStateNames
+            // 
+            this.butGetStateNames.Location = new System.Drawing.Point(197, 26);
+            this.butGetStateNames.Name = "butGetStateNames";
+            this.butGetStateNames.Size = new System.Drawing.Size(70, 21);
+            this.butGetStateNames.TabIndex = 6;
+            this.butGetStateNames.Text = " Subtract ";
+            this.butGetStateNames.Click += new System.EventHandler(this.butGetStateNames_Click);
+            // 
+            // txtStateNumber1
+            // 
+            this.txtStateNumber1.Location = new System.Drawing.Point(98, 29);
+            this.txtStateNumber1.Name = "txtStateNumber1";
+            this.txtStateNumber1.Size = new System.Drawing.Size(49, 20);
+            this.txtStateNumber1.TabIndex = 3;
+            // 
+            // txtStateNumber2
+            // 
+            this.txtStateNumber2.Location = new System.Drawing.Point(98, 58);
+            this.txtStateNumber2.Name = "txtStateNumber2";
+            this.txtStateNumber2.Size = new System.Drawing.Size(49, 20);
+            this.txtStateNumber2.TabIndex = 4;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(3, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 16);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Value 2:";
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(90, 16);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Value 1:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -433,7 +433,7 @@ namespace Networking
 
       NetworkClientInterface NetSubtract = (NetworkClientInterface)XmlRpcProxyGen.Create(typeof(NetworkClientInterface));
       NetSubtract.AttachLogger(new XmlRpcDebugLogger());
-      NetSubtract.Url = "http://127.0.0.1:5000/RPC2";
+      NetSubtract.Url = "http://" + My_Client.getIP() + ":5000/RPC2";
       StateStructRequest request;
       int retstr;
       
