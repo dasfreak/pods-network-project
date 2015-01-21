@@ -32,6 +32,8 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 			}
 		}
 		
+		System.out.println("My index in network is: " + this.indexInRing);
+		
 		//System.out.println("Initial network size = "+super.network.size());
 		fetchCordinator();
 		TokenRing.instance = this;
@@ -56,6 +58,9 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 			{
 				forwardToken();
 			}
+			
+			//System.out.println("TokenStatus: " + hasRing());
+			 	
 		}
 	}
 
@@ -73,7 +78,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		// fetch next peer:		
 		int nextPeer = ( indexInRing + 1 ) % super.network.size();
 		
-		//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
+		System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
 
 		Vector<String> params = new Vector<String>();
 
@@ -92,7 +97,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	
 	public synchronized void receivedToken(Token token)
 	{
-	//	System.out.println("Received Token!");
+	System.out.println("Received Token!");
 		this.token = token;
 	}
 	@Override

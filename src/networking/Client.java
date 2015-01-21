@@ -171,9 +171,14 @@ public class Client implements Runnable {
 			break;
 		}
 		
+		case 8:
+		{
+			performCalc(Operation.ADDITION,5);
+		}
+		
 		case 3:
 		{
-			if (network.size() <= 1 )
+			if (network.size() < 1 )
 			{
 				System.out.println("No nodes yet to start a calculations!");
 				break;
@@ -189,7 +194,7 @@ public class Client implements Runnable {
 			System.out.print("For Token Ring please type 1, for Ricart & Argawala please type 2: ");
 			int algoChoice = Integer.parseInt(br.readLine());
 			startCalc(intitialValue, algoChoice);
-			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5, 3);
+			//performCalc(network.get(choice).getRpc(), Operation.ADDITION, 5);
 			break;
 		}
 		
@@ -274,6 +279,15 @@ public class Client implements Runnable {
 
 	
 	public void performCalc( Operation op, int x ) {
+		
+
+		System.out.println("-----------------------------");
+		for ( RemoteNode node : network )
+		{
+			System.out.println(node.ip);
+		}
+		System.out.println("-----------------------------");
+		
 		System.out.println(" ===========> network.size() = "+network.size());
 		for ( RemoteNode node : network )
 		{
