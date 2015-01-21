@@ -96,7 +96,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				//System.out.println("Pending request detected\n");
 				// request from all nodes
 				okayList.clear();
-				broadcastRequest();
+
 				timestamp++;
 					// wait for okay from all
 				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
