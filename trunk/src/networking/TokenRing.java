@@ -52,7 +52,8 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	
 	@Override
 	public void run() {
-		while (true)
+		long timeStart = System.currentTimeMillis();
+		while (( System.currentTimeMillis() - timeStart ) < 20000)
 		{
 			if ( hasRing() && isCalcDone() )
 			{
