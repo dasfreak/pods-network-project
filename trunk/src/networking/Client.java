@@ -372,7 +372,7 @@ public class Client implements Runnable {
 	}
 
 	public void setStartValue(int value, int algoChoice) {
-		if ( calcTask.isAlive() )
+		if ( calcTask != null && calcTask.isAlive() )
 		{
 			System.out.println("Recieved start value: "+value +" But session is already in progress, please wait until it finishes!"); 
 		}
