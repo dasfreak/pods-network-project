@@ -27,9 +27,9 @@ public class Client implements Runnable {
 	
 	volatile List<RemoteNode> network;
 	private volatile int startValue;
-	private volatile boolean isStartValueSet;
 	private volatile int currentValue;
-	
+	private Thread syncAlgo;
+	private Thread calcTask;
 	class RemoteNode implements Comparable<RemoteNode>
 	{
 		String ip;
@@ -85,7 +85,6 @@ public class Client implements Runnable {
 		
 		
 		
-		isStartValueSet = false;
 		node = CreateNode(ip);
 		network.add(node);
 		System.out.println("My IP is: "+ip);
@@ -373,36 +372,31 @@ public class Client implements Runnable {
 	}
 
 	public void setStartValue(int value, int algoChoice) {
-		if ( isStartValueSet )
+		if ( calcTask.isAlive() )
 		{
-			System.out.println("Recieved start value: "+value +" But start message is already set - no change!!"); 
+			System.out.println("Recieved start value: "+value +" But session is already in progress, please wait until it finishes!"); 
 		}
 		else
 		{
 			System.out.println("Recieved start value: "+value);
 			currentValue = startValue = value;;
-			isStartValueSet = true;
 			
-			Thread t;
 			// start thread for 20 seconds that performs the random calculation
 			if ( algoChoice == 1)
 			{
 				System.out.println("Starting TokenRing");
-				t = new Thread( new TokenRing(this.network, this.ip));
+				syncAlgo = new Thread( new TokenRing(this.network, this.ip));
 			}
 			else
 			{
 				System.out.println("Starting Ricart Argawala");
-				t = new Thread( new RicartArgawala(this.network, this.ip));
+				syncAlgo = new Thread( new RicartArgawala(this.network, this.ip));
 			}
 			
-			t.start();
-			new Thread(new CalculatingTask()).start();
+			syncAlgo.start();
+			calcTask = new Thread(new CalculatingTask());
+			calcTask.start();
 		}
-	}
-
-	public boolean isStartMessageSet() {
-		return isStartValueSet;
 	}
 
 	public int getCurrentValue() {

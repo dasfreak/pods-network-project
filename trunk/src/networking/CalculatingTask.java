@@ -33,19 +33,19 @@ public class CalculatingTask implements Runnable {
 			
 			if ( SyncAlgorithm.getInstance().canAccess() )
 			{
+				operationQueueSize--;
 				SyncAlgorithm.getInstance().setCalcInProgress();
 				SyncAlgorithm.getInstance().clearPending();
 				// Critical Section
 				
 				System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
-				
+
 				try {
 					Client.getInstance().performCalc( op, genNumber );
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				operationQueueSize--;
 				SyncAlgorithm.getInstance().setCalcDone();
 			}
 			
