@@ -12,11 +12,13 @@ public abstract class SyncAlgorithm {
 	protected String ip;
 	protected volatile boolean isCalcDone;
 	protected volatile boolean isPending;
+	private volatile boolean isSessionDone;
 
 	protected static SyncAlgorithm instance = null;
 
 	public SyncAlgorithm(List<RemoteNode> networkInput, String ip)
 	{
+		isSessionDone = false;
 		isPending = false;
 		isCalcDone = true;
 		// pay attention to the difference between network and this.network
@@ -51,5 +53,13 @@ public abstract class SyncAlgorithm {
 
 	public void clearPending() {
 		isPending = false;
+	}
+
+	public synchronized void setSessionDone() {
+		isSessionDone = true;
+	}
+	
+	public synchronized boolean isSessionDone(){
+		return isSessionDone;
 	}
 }

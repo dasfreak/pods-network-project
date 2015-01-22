@@ -50,18 +50,18 @@ public class CalculatingTask implements Runnable {
 			}
 			
 			// wait a random time	
-			randomTimeInMSec = 1000;//randomGenerator.nextInt(MAX_TIME_FOR_WAIT_IN_MSC);
-			//System.out.println(randomTimeInMSec/1000);
+			randomTimeInMSec = randomGenerator.nextInt(MAX_TIME_FOR_WAIT_IN_MSC);
 			
-			/*try {
+			try {
 				Thread.sleep(randomTimeInMSec);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 			currentTime = System.currentTimeMillis();
 		} while ( ( currentTime - timeStart ) < TIME_FOR_CALC_IN_MSEC );
-		//System.out.println("The time is up!");
+		System.out.println("The time is up!");
+		SyncAlgorithm.getInstance().setSessionDone();
 	}
 	
 }
