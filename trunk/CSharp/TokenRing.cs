@@ -11,6 +11,7 @@ namespace Networking
         private int indexInRing = -1;
         private string ipCordinator;
         private volatile Token token = null;
+        bool _keepRunning = true;
 
         public TokenRing(IList<RemoteNode> network, string ip) : base(network, ip)
 		{
@@ -31,6 +32,11 @@ namespace Networking
 			TokenRing.instance = this;
 		}
 
+        public void RequestStop()
+        {
+            _keepRunning = false;
+        }
+
 		private void fetchCordinator()
 		{
 			ipCordinator = network[0].getIP();
@@ -45,14 +51,16 @@ namespace Networking
 
 
 		public void run()
-		{
-			while (true)
+        {
+            Console.WriteLine("\nThread  TokenRing is running\n");
+            while (_keepRunning)
 			{
 				if (hasRing() && CalcDone)
 				{
 					forwardToken();
 				}
 			}
+            Console.WriteLine("\nThread  TokenRing is terminated\n");
 		}
 
 

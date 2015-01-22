@@ -14,6 +14,7 @@ namespace Networking
 
             private volatile bool canAccess_Renamed;
             private long timestamp;
+            bool _keepRunning = true;
 
             public RicartArgawala(IList<RemoteNode> network, string ip) : base(network, ip)
             {
@@ -84,9 +85,16 @@ namespace Networking
                 }
             }
 
+            public void RequestStop()
+            {
+                _keepRunning = false;
+            }
+
             public void run()
             {
-                while (true)
+                Console.WriteLine("\nThread  RicartArgwala is running\n");
+
+                while (_keepRunning)
                 {
                     if (Pending)
                     {
@@ -96,11 +104,11 @@ namespace Networking
                         broadcastRequest();
                         timestamp++;
                         // wait for okay from all
-                        while (okayList.Count <= (network.Count - 1)) ; // -1 because of self node
+                        while ((okayList.Count <= (network.Count - 1))&&(_keepRunning)); ; // -1 because of self node
 
                         Access = true;
                         // can access now
-                        while (!CalcDone) ;
+                        while ((!CalcDone)&&(_keepRunning));
 
                         isPending = false;
 
@@ -110,6 +118,7 @@ namespace Networking
                         Access = false;
                     }
                 }
+             Console.WriteLine("\nThread  RicartArgwala is terminated\n");
             }
 
             private bool Pending
@@ -161,9 +170,11 @@ namespace Networking
 			@params.Add(Convert.ToString(this.timestamp));
 
 			foreach (RemoteNode node in network)
-			{
+            {
+                
 				if (node.getIP().CompareTo(this.ip) != 0)
-				{
+                {
+                    Console.WriteLine("Boradcasting request to:" + node.getIP());
                     NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
                     executer.AttachLogger(new XmlRpcDebugLogger());
 

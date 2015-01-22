@@ -19,6 +19,8 @@ namespace Networking
 
     public class Client
   {
+
+
     private static Client instance;   // singleton design
 
 
@@ -34,6 +36,13 @@ namespace Networking
     private int startValue;
     private bool isStartValueSet;
     private int currentValue;
+
+    bool initiator = false;
+    Thread RicartArgawala_Thread;
+    Thread TokenRing_Thread;
+    Thread CalculatingTask_Thread;
+    RicartArgawala RA;
+    TokenRing TR;
 
     public Client(){
         IPHostEntry host;
@@ -240,19 +249,63 @@ namespace Networking
             if (algoChoice == 1)
             {
                 Console.WriteLine("Starting TokenRing");
-                var thread = new Thread(() => new TokenRing(this.network, this.ip));
-                thread.Start();
+                
+                TR = new TokenRing(this.network, this.ip);
+                TokenRing_Thread = new Thread(TR.run);
+                TokenRing_Thread.Start();
+                
+                //var thread = new Thread(() => new TokenRing(this.network, this.ip));
+                //thread.Start();
             }
             else
             {
                 Console.WriteLine("Starting Ricart Argawala");
-                var thread = new Thread(() => new RicartArgawala(this.network, this.ip));
-                thread.Start();
+                RA = new RicartArgawala(this.network, this.ip);
+                RicartArgawala_Thread = new Thread(RA.run);
+                RicartArgawala_Thread.Start();
+
+                ////var thread = new Thread(() => new RicartArgawala(this.network, this.ip));
+                //thread.Start();
             }
-            var thread2 = new Thread(() => new CalculatingTask());
-            thread2.Start();
+
+          
+            CalculatingTask CT = new CalculatingTask();
+            CalculatingTask_Thread = new Thread(CT.run);
+            CalculatingTask_Thread.Start();
+
+            if (!initiator)
+            {
+                CalculatingTask_Thread.Join();
+
+                StopsRicartArgawalaThread();
+                StopsTokenRingThread();
+            }
+            
+            
+            //var thread2 = new Thread(() => new CalculatingTask());
+            //thread2.Start();
         }
 	}
+
+    public void StopsRicartArgawalaThread()
+    {
+        
+        if (RicartArgawala_Thread!=null)
+        {
+            if (RicartArgawala_Thread.IsAlive)
+                RA.RequestStop();
+        }
+     }
+
+    public void StopsTokenRingThread()
+    {
+
+        if (TokenRing_Thread != null)
+        {
+            if (TokenRing_Thread.IsAlive)
+                TR.RequestStop();
+        }
+    }
 
         public virtual void performCalc(Operation op, int x)
 		{
@@ -353,8 +406,9 @@ namespace Networking
 
     public void startCalc(int intitialValue, int algoChoice)
 		{
+            initiator = true;
 			setStartValue(intitialValue, algoChoice);
-			Console.WriteLine("Starting distributed calc with initial value of: " + intitialValue);
+            Console.WriteLine("Starting distributed calc with initial value of: " + startValue);
 			foreach (RemoteNode node in network)
 			{
 				if (node.getIP() != this.ip)
@@ -362,6 +416,13 @@ namespace Networking
 					propogateStartMessage(node.getURL(), intitialValue, algoChoice);
 				}
 			}
+            if (initiator)
+            {
+                CalculatingTask_Thread.Join();
+                StopsRicartArgawalaThread();
+                StopsTokenRingThread();
+            }
+            initiator = false;
 		}
 
     public void propogateStartMessage(string xmlRpcClient, int intitialValue, int algoChoice)
