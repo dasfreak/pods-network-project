@@ -14,9 +14,14 @@ namespace Networking
 		internal int operationQueueSize = 0;
 		internal Operation op;
 		internal int genNumber;
+      
+
+        
+
 
 		public void run()
-		{
+        {
+            Console.WriteLine("\nThread  CalcultingTask is running\n");
 			long timeStart = DateTimeHelperClass.CurrentUnixTimeMillis();
 			long currentTime = 0;
 			Random randomGenerator = new Random();
@@ -68,6 +73,7 @@ namespace Networking
 				}
 				currentTime = DateTimeHelperClass.CurrentUnixTimeMillis();
 			} while ((currentTime - timeStart) < TIME_FOR_CALC_IN_MSEC);
+           
 			Console.WriteLine("The time is up!");
 		}
 

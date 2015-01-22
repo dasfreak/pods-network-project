@@ -168,7 +168,8 @@ namespace Networking
         public bool requestReceived(string ip, string timestamp)
         {
             Console.WriteLine("requestReceived in Aux");
-            ((RicartArgawala)(RicartArgawala.Instance)).requestReceived(ip, long.Parse(timestamp));
+            
+                ((RicartArgawala)(RicartArgawala.Instance)).requestReceived(ip, long.Parse(timestamp));
             return true;
         }
 
