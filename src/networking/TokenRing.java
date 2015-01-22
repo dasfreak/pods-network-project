@@ -54,11 +54,11 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	public void run() {
 		while ( !isSessionDone() )
 		{
-			if ( hasRing() && isCalcDone() )
+			if ( hasRing() && isCalcDone() && !isPending )
 			{
 				forwardToken();
 			}
-			System.out.println("TokenStatus: " + hasRing());	
+			//System.out.println("TokenStatus: " + hasRing());	
 		}
 	}
 
