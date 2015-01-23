@@ -105,8 +105,15 @@ public class Client implements Runnable {
 	public void addNodeToStructure( String ip )
 	{
 		network.add( CreateNode(ip) );
+		
 	}
 		
+	void requestAddNode(String ip)
+	{
+		RemoteNode node = CreateNode(ip);
+		propogateNewNodeMessage( node.rpc, this.ip );	
+		network.add(node);
+	}
 	
 	void addNode(String ip) {
 		
@@ -131,9 +138,7 @@ public class Client implements Runnable {
 		{
 			propogateNewNodeMessage( node.rpc, n.ip);
 		}
-		
-		network.add(node);		
-
+		network.add(node);
 	}
 
 	public boolean showMenu( boolean printMenu) throws IOException {
@@ -167,7 +172,7 @@ public class Client implements Runnable {
 			String ip = br.readLine();
 
 			// add this server to serverlist
-			addNode(ip);
+			requestAddNode(ip);
 			break;
 		}
 		
