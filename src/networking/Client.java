@@ -111,8 +111,8 @@ public class Client implements Runnable {
 	void requestAddNode(String ip)
 	{
 		RemoteNode node = CreateNode(ip);
-		propogateNewNodeMessage( node.rpc, this.ip );	
 		network.add(node);
+		propogateNewNodeMessage( node.rpc, this.ip );	
 	}
 	
 	void addNode(String ip) {
