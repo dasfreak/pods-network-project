@@ -12,4 +12,9 @@ internal static class DateTimeHelperClass
 	{
 		return (long)(System.DateTime.UtcNow - Jan1st1970).TotalMilliseconds;
 	}
+    internal static long LocalTimeMillis()
+    {
+        return (long)(System.DateTime.Now - Jan1st1970).TotalMilliseconds;
+    }
+
 }
