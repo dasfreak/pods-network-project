@@ -110,24 +110,29 @@ public class Client implements Runnable {
 	
 	void addNode(String ip) {
 		
-		if ( !network.contains(ip))
+		for ( RemoteNode node : network )
 		{
-			for ( RemoteNode node : network )
+			if (node.ip.compareTo(ip) == 0)
 			{
-				if ( node.ip.compareTo(this.ip) != 0 )
-				{
-					propogateNewNodeMessage( node.rpc, ip );	
-				}
+				return;
 			}
-			
-			RemoteNode node = CreateNode(ip);
-			for ( RemoteNode n : network )
-			{
-				propogateNewNodeMessage( node.rpc, n.ip);
-			}
-			
-			network.add(node);		
 		}
+		
+		for ( RemoteNode node : network )
+		{
+			if ( node.ip.compareTo(this.ip) != 0 )
+			{
+				propogateNewNodeMessage( node.rpc, ip );	
+			}
+		}
+		
+		RemoteNode node = CreateNode(ip);
+		for ( RemoteNode n : network )
+		{
+			propogateNewNodeMessage( node.rpc, n.ip);
+		}
+		
+		network.add(node);		
 
 	}
 
