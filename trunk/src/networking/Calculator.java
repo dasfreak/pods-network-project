@@ -2,7 +2,7 @@ package networking;
 
 public class Calculator {
     
-	public static int add(int i2) {
+	public synchronized static int add(int i2) {
 		int i1 = 0;
 		try {
 			i1 = Client.getInstance().getCurrentValue();
@@ -21,7 +21,7 @@ public class Calculator {
         return result;
     }
     
-    public static int subtract(int i2) {
+    public synchronized static int subtract(int i2) {
 		int i1 = 0;
 		
 		try {
@@ -42,7 +42,7 @@ public class Calculator {
         return result;
     }
     
-    public static int divide(int i2)
+    public synchronized static int divide(int i2)
     {
 		int i1 = 0;
 		try {
@@ -69,7 +69,7 @@ public class Calculator {
     	return result;
     }
     
-    public static int multiply( int i2 )
+    public synchronized static int multiply( int i2 )
     {
 		int i1 = 0;
 		try {
