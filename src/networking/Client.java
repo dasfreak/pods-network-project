@@ -108,7 +108,7 @@ public class Client implements Runnable {
 		for ( RemoteNode node : network )
 		{
 			if ( node.ip.compareTo(ip) == 0)
-			return null;
+				return null;
 		}
 		RemoteNode node = CreateNode(ip);
 		network.add( node );
@@ -124,16 +124,22 @@ public class Client implements Runnable {
 			{
 				if ( n.ip.compareTo(this.ip) != 0 && n.ip.compareTo(ip) != 0 )
 				{
-					Vector<String> params = new Vector<String>();
-					params.add(n.ip);
-					try {
-						node.rpc.execute("ClientAux.addNodeToStructure", params);
-					} catch (XmlRpcException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					for ( RemoteNode j : network)
+					{
+						if ( j.ip.compareTo(this.ip) != 0 && j.ip.compareTo(ip) != 0 )
+						{
+							Vector<String> params = new Vector<String>();
+							params.add(j.ip);
+							try {
+								node.rpc.execute("ClientAux.addNodeToStructure", params);
+							} catch (XmlRpcException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 			}
