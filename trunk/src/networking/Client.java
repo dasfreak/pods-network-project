@@ -120,6 +120,23 @@ public class Client implements Runnable {
 		RemoteNode node = addNodeToStructure(ip);
 		if ( node != null)
 		{
+			for ( RemoteNode n : network )
+			{
+				if ( n.ip.compareTo(this.ip) != 0 && n.ip.compareTo(ip) != 0 )
+				{
+					Vector<String> params = new Vector<String>();
+					params.add(n.ip);
+					try {
+						node.rpc.execute("ClientAux.addNodeToStructure", params);
+					} catch (XmlRpcException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 			propogateNewNodeMessage( node.rpc, this.ip );	
 		}
 	}
