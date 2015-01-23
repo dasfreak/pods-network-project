@@ -38,6 +38,7 @@ public class CalculatingTask implements Runnable {
 			
 			if ( SyncAlgorithm.getInstance().canAccess() )
 			{
+				System.out.println("==> CS Enter");
 				operationQueueSize--;
 				SyncAlgorithm.getInstance().setCalcInProgress();
 				SyncAlgorithm.getInstance().clearPending();
@@ -52,6 +53,7 @@ public class CalculatingTask implements Runnable {
 					e.printStackTrace();
 				}
 				SyncAlgorithm.getInstance().setCalcDone();
+				System.out.println("<== CS Exit");
 			}
 			
 			// wait a random time	
