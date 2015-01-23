@@ -25,6 +25,7 @@ public class CalculatingTask implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	    SyncAlgorithm.getInstance().setCanStart();
 		System.out.println("Starting calc session for: "+TIME_FOR_CALC_IN_MSEC/1000+" seconds:");
 		do
 		{	
