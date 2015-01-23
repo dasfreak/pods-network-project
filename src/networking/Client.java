@@ -141,6 +141,7 @@ public class Client implements Runnable {
 				propogateNewNodeMessage( node.rpc, n.ip);
 			}
 		}
+		network.add(node);
 	}
 
 	public boolean showMenu( boolean printMenu) throws IOException {
