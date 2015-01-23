@@ -280,14 +280,14 @@ public class Client implements Runnable {
 	public void performCalc( Operation op, int x ) {
 		
 
-		System.out.println("-----------------------------");
-		for ( RemoteNode node : network )
-		{
-			System.out.println(node.ip);
-		}
-		System.out.println("-----------------------------");
+//		System.out.println("-----------------------------");
+//		for ( RemoteNode node : network )
+//		{
+//			System.out.println(node.ip);
+//		}
+//		System.out.println("-----------------------------");
 		
-		System.out.println(" ===========> network.size() = "+network.size());
+//		System.out.println(" ===========> network.size() = "+network.size());
 		for ( RemoteNode node : network )
 		{
 			if ( node.ip.compareTo(this.ip) != 0 )
