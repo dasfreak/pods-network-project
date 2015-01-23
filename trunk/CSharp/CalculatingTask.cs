@@ -9,7 +9,8 @@ namespace Networking
 
 		internal volatile bool isCalculating = false;
 		internal const int TIME_FOR_CALC_IN_MSEC = 20 * 1000;
-		internal const int MAX_TIME_FOR_WAIT_IN_MSC = 1 * 1000;
+        internal const int TIME_corection = 10000;  // 100 pico s. to 1 ms
+        internal const int MAX_TIME_FOR_WAIT_IN_MSC = 1 * 100;
 
 		internal int operationQueueSize = 0;
 		internal Operation op;
@@ -21,12 +22,13 @@ namespace Networking
 
 		public void run()
         {
-            Console.WriteLine("\nThread  CalcultingTask is running\n");
+            Console.WriteLine("Thread  CalcultingTask is running");
 			long timeStart = DateTimeHelperClass.CurrentUnixTimeMillis();
 			long currentTime = 0;
 			Random randomGenerator = new Random();
 			long randomTimeInMSec;
 			Console.WriteLine("Starting calc session for: " + TIME_FOR_CALC_IN_MSEC / 1000 + " seconds:");
+            DateTime startUtcNow = DateTime.UtcNow;
 			do
 			{
 				if (operationQueueSize < 1)
@@ -41,7 +43,7 @@ namespace Networking
 				{
 					// Critical Section
 					SyncAlgorithm.Instance.setCalcInProgress();
-
+                    SyncAlgorithm.Instance.clearPending();
 					Console.WriteLine("[" + DateTimeHelperClass.CurrentUnixTimeMillis() + "] [ Distributed Calc Request ] calculation: Operation: " + op + " Value: " + genNumber);
 
 					try
@@ -60,9 +62,11 @@ namespace Networking
 
 				// wait a random time	
 				randomTimeInMSec = randomGenerator.Next(MAX_TIME_FOR_WAIT_IN_MSC);
+                //TIME_MilliSec
 				try
 				{
-                    TimeSpan sleepTime = GenTimeSpanFromTicks(randomTimeInMSec);
+                    TimeSpan sleepTime = GenTimeSpanFromTicks(randomTimeInMSec * TIME_corection + TIME_corection);
+                    // min wait 1ms
                     Thread.Sleep(sleepTime);
 				}
 				catch
@@ -73,8 +77,11 @@ namespace Networking
 				}
 				currentTime = DateTimeHelperClass.CurrentUnixTimeMillis();
 			} while ((currentTime - timeStart) < TIME_FOR_CALC_IN_MSEC);
-           
-			Console.WriteLine("The time is up!");
+
+            //Console.WriteLine("The timeC=" + currentTime + "The timeS=" + timeStart);
+			//Console.WriteLine("The time is up!");
+            //DateTime saveUtcNow = DateTime.UtcNow;
+            //Console.WriteLine("Zeit " + saveUtcNow+ "Zeits"+startUtcNow);
 		}
 
         static TimeSpan GenTimeSpanFromTicks(long ticks)

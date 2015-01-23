@@ -61,7 +61,9 @@ namespace Networking
 
         abstract public bool canAccess();
 
+
         public virtual void setPending()
+
         {
             lock (this)
             {
@@ -69,6 +71,12 @@ namespace Networking
                 isPending = true;
             }
         }
+
+        public void clearPending()
+        {
+            isPending = false;
+        }
+
     }
 
 }

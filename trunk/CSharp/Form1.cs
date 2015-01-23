@@ -49,6 +49,8 @@ namespace Networking
     private Label current_value;
     private Label label8;
     private Label Message;
+    private Button button3;
+    private Label timebox;
     Client My_Client;
     //public Client My_Client;
 
@@ -61,7 +63,7 @@ namespace Networking
       
       InitializeComponent();
       My_Client = new Client();
-
+      IpNumber.Text="192.168.0.33";
       my_ip_print.Text = My_Client.getIP();
       ServerData.Text = "Port: 5000";
       Server My_server=new Server();
@@ -120,6 +122,8 @@ namespace Networking
             this.current_value = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.Message = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.timebox = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -197,6 +201,7 @@ namespace Networking
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.SubtResult);
             this.groupBox2.Controls.Add(this.txtStateNumber1);
             this.groupBox2.Controls.Add(this.label3);
@@ -391,10 +396,27 @@ namespace Networking
             this.Message.TabIndex = 10;
             this.Message.Click += new System.EventHandler(this.Message_Click);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(236, 95);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(84, 24);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Time";
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // timebox
+            // 
+            this.timebox.Location = new System.Drawing.Point(413, 250);
+            this.timebox.Name = "timebox";
+            this.timebox.Size = new System.Drawing.Size(186, 27);
+            this.timebox.TabIndex = 11;
+            // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
             this.ClientSize = new System.Drawing.Size(887, 509);
+            this.Controls.Add(this.timebox);
             this.Controls.Add(this.Message);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.current_value);
@@ -479,24 +501,8 @@ namespace Networking
 
     private void butGetStateNames_Click(object sender, System.EventArgs e)
     {
-        /*List<RemoteNode> net = new List<RemoteNode>();
-        net.Add(new RemoteNode("A\n"," "));
-        net.Add(new RemoteNode("B\n", " "));
-        net.Add(new RemoteNode("C\n", " "));
-        net.Add(new RemoteNode("D\n", " "));
-        net.Add(new RemoteNode("E\n", " "));
-        String Out = "S\n";
-        net.RemoveAt(1);
-        net.Add(new RemoteNode("L\n", " "));
-        net.RemoveAt(3);
-       // net.Add(new RemoteNode("M\n", " "));
-        //foreach (String node in net)getIP()
-        for (int i = 0;i< net.Count ; i++)
-        {
-            Out = Out + " " + net[i].getIP();
-        }
-        NetworkOutput.Text = Convert.ToString(net.Count);*/
-        
+       
+       
       NetworkClientInterface NetSubtract = (NetworkClientInterface)XmlRpcProxyGen.Create(typeof(NetworkClientInterface));
       NetSubtract.AttachLogger(new XmlRpcDebugLogger());
       NetSubtract.Url = "http://" + My_Client.getIP() + ":5000/RPC2";
@@ -645,7 +651,7 @@ namespace Networking
             ConnectionStatus.Text = "disconnected";
             IpNumber.ReadOnly = false;
             NetworkOutput.Text = string.Empty;
-            //My_Client.setIP(my_ip.Text);
+            
         }
         catch (Exception ex)
         {
@@ -715,6 +721,8 @@ namespace Networking
           else
               Message.Text = "           Error: Enter StartValue!";
 
+          Message.Text = "           Error: Enter StartValue!";
+          Message.Text = "            Calculation Result: "+Convert.ToString(My_Client.CurrentValue);
       }
 
       private void textBox_startvalue_TextChanged(object sender, EventArgs e)
@@ -731,7 +739,7 @@ namespace Networking
       {
 
       }
-
+      
       private void IpNumber_TextChanged(object sender, EventArgs e)
       {
 
@@ -739,6 +747,13 @@ namespace Networking
 
       private void Message_Click(object sender, EventArgs e)
       {
+
+      }
+
+      private void button3_Click(object sender, EventArgs e)
+      {
+          DateTime saveUtcNow = DateTime.UtcNow;
+          Console.WriteLine("Zeit" + saveUtcNow);
 
       }
 

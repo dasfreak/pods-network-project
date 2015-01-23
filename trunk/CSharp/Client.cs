@@ -266,21 +266,9 @@ namespace Networking
 
                 ////var thread = new Thread(() => new RicartArgawala(this.network, this.ip));
                 //thread.Start();
-            }
-
-          
-            CalculatingTask CT = new CalculatingTask();
-            CalculatingTask_Thread = new Thread(CT.run);
-            CalculatingTask_Thread.Start();
-
-            if (!initiator)
-            {
-                CalculatingTask_Thread.Join();
-
-                StopsRicartArgawalaThread();
-                StopsTokenRingThread();
-            }
+            }            
             
+            InitiatorNode(!initiator); // Starts Calculation only if node did't triggerd the calc.
             
             //var thread2 = new Thread(() => new CalculatingTask());
             //thread2.Start();
@@ -342,9 +330,7 @@ namespace Networking
         public virtual void performCalc(string xmlRpcClient, Operation op, int x)
 		{
 
-			List<int?> @params = new List<int?>();
-			@params.Add(x);
-
+		
 			try
 			{
 
@@ -371,7 +357,7 @@ namespace Networking
                         break;
                 }
 
-				//xmlRpcClient.execute("Calculator." + op, @params);
+				
 			}
 			catch (Exception e)
 			{
@@ -403,6 +389,23 @@ namespace Networking
 			Console.WriteLine("Result changed to: " + result);
 		}
 
+        
+        void InitiatorNode(bool nodeStartsCalc)
+        {
+            if (nodeStartsCalc)
+            {
+             
+                CalculatingTask CT = new CalculatingTask();
+                CalculatingTask_Thread = new Thread(CT.run);
+                CalculatingTask_Thread.Start();
+
+                if(initiator) 
+                     CalculatingTask_Thread.Join(); // waits for calc. end
+
+                StopsRicartArgawalaThread();
+                StopsTokenRingThread();
+            }
+      }
 
     public void startCalc(int intitialValue, int algoChoice)
 		{
@@ -416,12 +419,10 @@ namespace Networking
 					propogateStartMessage(node.getURL(), intitialValue, algoChoice);
 				}
 			}
-            if (initiator)
-            {
-                CalculatingTask_Thread.Join();
-                StopsRicartArgawalaThread();
-                StopsTokenRingThread();
-            }
+
+            InitiatorNode(initiator);// node triggerd the calc. starts calc. after all nodes recieved StartMessage
+             
+            
             initiator = false;
 		}
 

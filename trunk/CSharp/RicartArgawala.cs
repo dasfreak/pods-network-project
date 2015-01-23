@@ -13,13 +13,18 @@ namespace Networking
             private volatile HashSet<string> okayList;
 
             private volatile bool canAccess_Renamed;
+
+            
             private long timestamp;
             bool _keepRunning = true;
 
             public RicartArgawala(IList<RemoteNode> network, string ip) : base(network, ip)
             {
                 // pay attention to the difference between network and this.network
-                timestamp = 0;
+                Random randomGenerator = new Random();
+                timestamp = randomGenerator.Next(50);
+                Console.WriteLine("timestamp init to: " + timestamp);
+
                 requestsQueue = new HashSet<string>();
                 okayList = new HashSet<string>();
                 isPending = false;
@@ -29,20 +34,23 @@ namespace Networking
 
             public virtual void requestReceived(string ip, long timestamp)
             {
-                Console.WriteLine("Received request from ip " + ip + " timestamp = " + timestamp);
+                Console.WriteLine("Received request from ip " + ip + " timestamp = " + timestamp + " mystamp = " + this.timestamp);
                 if (CalcDone && !Pending)
                 {
+                   // Console.WriteLine("CalcDone && !Pending");
                     // send OK
                     sendOk(ip);
                 }
                 else if (!this.isCalcDone)
                 {
+                    //Console.WriteLine("isCalcDone");
                     requestsQueue.Add(ip);
                 }
                 else if (this.isPending)
                 {
                     // queue request
-                    if (timestamp <= this.timestamp)
+                    //Console.WriteLine("isPending ");
+                    if (timestamp < this.timestamp)
                     {
                         sendOk(ip);
                     }
@@ -53,26 +61,16 @@ namespace Networking
                 }
             }
 
-            private void sendOk(string ip)
-		{
-			Console.WriteLine("Sending okay to node " + ip + " timestamp = " + timestamp);
-			List<string> @params = new List<string>();
-			@params.Add(this.ip);
+       private void sendOk(string ip)
+  		{
+            Console.WriteLine("Sending okay to node " + ip + " timestamp = " + timestamp );
+            
+            NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+            executer.AttachLogger(new XmlRpcDebugLogger());
 
-			foreach (RemoteNode node in this.network)
-			{
-				if (node.getIP().CompareTo(ip) == 0)
-				{
-
-                    NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
-                    executer.AttachLogger(new XmlRpcDebugLogger());
-
-                    executer.Url = node.getURL();
-
-					executer.okReceived(ip);
-					break;
-				}
-			}
+            executer.Url = generate_url(ip);
+			executer.okReceived(this.ip);
+			
 		}
 
             public virtual void okReceived(string ip)
@@ -91,8 +89,8 @@ namespace Networking
             }
 
             public void run()
-            {
-                Console.WriteLine("\nThread  RicartArgwala is running\n");
+            {//192.168.0.33
+                Console.WriteLine("Thread  RicartArgwala is running");
 
                 while (_keepRunning)
                 {
@@ -103,11 +101,12 @@ namespace Networking
                         okayList.Clear();
                         broadcastRequest();
                         timestamp++;
-                        // wait for okay from all
-                        while ((okayList.Count <= (network.Count - 1))&&(_keepRunning)); ; // -1 because of self node
-
+                        // wait for okay from all                        
+                        while ((okayList.Count < (network.Count - 1))&&(_keepRunning)); // -1 because of self node
+                        Console.WriteLine("====> CS enter");
                         Access = true;
                         // can access now
+                        while ((Pending) && (_keepRunning)) ;
                         while ((!CalcDone)&&(_keepRunning));
 
                         isPending = false;
@@ -116,77 +115,71 @@ namespace Networking
                         sendOkayToQueueNodes();
 
                         Access = false;
+
+                        Console.WriteLine("<==== CS exit");
                     }
                 }
              Console.WriteLine("\nThread  RicartArgwala is terminated\n");
             }
 
-            private bool Pending
+        
+
+
+
+            public String generate_url(String ip)
             {
-                get
-                {
-                    lock (this)
-                    {
-                        return isPending;
-                    }
-                }
+                return "http://" + ip + ":" + 5000 + "/RPC2";
             }
 
-            private void sendOkayToQueueNodes()
-		{
 
-			List<string> @params = new List<string>();
 
-			@params.Add(this.ip);
+       private void sendOkayToQueueNodes(){
 
-			foreach (string node in requestsQueue)
-			{
-				foreach (RemoteNode rNode in network)
-				{
-					if (node.CompareTo(rNode.getIP()) == 0)
-					{
-						Console.WriteLine("Sending okay to queue node " + rNode.getIP());
+			foreach (string node_ip in requestsQueue)
+  			   {
+                Console.WriteLine("Sending okay to queue node " + node_ip);
 
-                        NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
-                        executer.AttachLogger(new XmlRpcDebugLogger());
+                NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                executer.AttachLogger(new XmlRpcDebugLogger());
 
-                        executer.Url = rNode.getURL();
-
-                        executer.okReceived(ip);
-
-						//rNode.getURL().execute("RicartArgawalaAux.okReceived", @params);
-					}
-				}
-			}
+                executer.Url = generate_url(node_ip);
+                executer.okReceived(this.ip);
+			   }
 
 		}
 
-            private void broadcastRequest()
+       private void broadcastRequest()
 		{
 			Console.WriteLine("Boradcasting request:");
-			List<string> @params = new List<string>();
-
-			@params.Add(this.ip);
-			@params.Add(Convert.ToString(this.timestamp));
-
 			foreach (RemoteNode node in network)
             {
                 
 				if (node.getIP().CompareTo(this.ip) != 0)
                 {
-                    Console.WriteLine("Boradcasting request to:" + node.getIP());
+                    //Console.WriteLine("Boradcasting request to:" + node.getIP());
                     NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
                     executer.AttachLogger(new XmlRpcDebugLogger());
 
                     executer.Url = node.getURL();
-
                     executer.requestReceived(this.ip, Convert.ToString(this.timestamp));
 
-
-						//node.getURL().execute("RicartArgawalaAux.requestReceived", @params);
 				}
 			}
 		}
+
+
+
+       private bool Pending
+       {
+           get
+           {
+               lock (this)
+               {
+                   return isPending;
+               }
+           }
+       }
+
 
             public override bool canAccess()
             {
@@ -207,5 +200,9 @@ namespace Networking
                 }
             }
         }
+
+
+
+
 
     }
