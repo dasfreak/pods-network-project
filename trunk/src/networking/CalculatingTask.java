@@ -18,9 +18,14 @@ public class CalculatingTask implements Runnable {
 		long currentTime = 0;
 	    Random randomGenerator = new Random();
 	    long randomTimeInMSec;
-	    		
+	    
+	    try {
+			Client.getInstance().handshake();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		System.out.println("Starting calc session for: "+TIME_FOR_CALC_IN_MSEC/1000+" seconds:");
-		
 		do
 		{	
 			if ( operationQueueSize < 1 )
@@ -63,5 +68,6 @@ public class CalculatingTask implements Runnable {
 		System.out.println("The time is up!");
 		SyncAlgorithm.getInstance().setSessionDone();
 	}
+
 	
 }

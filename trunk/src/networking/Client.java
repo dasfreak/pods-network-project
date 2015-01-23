@@ -28,8 +28,8 @@ public class Client implements Runnable {
 	volatile List<RemoteNode> network;
 	private volatile int startValue;
 	private volatile int currentValue;
-	private Thread syncAlgo;
-	private Thread calcTask;
+	volatile private Thread syncAlgo;
+	volatile private Thread calcTask;
 	class RemoteNode implements Comparable<RemoteNode>
 	{
 		String ip;
@@ -406,5 +406,31 @@ public class Client implements Runnable {
 	public void storeNewResult(int result) {
 		this.currentValue = result;
 		System.out.println("Result changed to: "+result);
+	}
+
+	public void handshake() {
+		int repliesCounter = 0;
+		Vector<String> params = new Vector<String>();
+		params.addElement(this.ip);
+		
+		for ( RemoteNode node : network )
+		{
+			try {
+				Object result = node.rpc.execute("ClientAux.handshakeMessage", params);
+				if ( ((Boolean)result) )
+					repliesCounter++;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		while (repliesCounter != network.size() - 1)
+		{
+			System.out.println("WTF someone didn't reply ?!");
+		}
+	}
+
+	public boolean threadsAreRunning() {
+		return (syncAlgo.isAlive() && calcTask.isAlive());
 	}
 }

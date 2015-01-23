@@ -13,6 +13,16 @@ public class ClientAux {
 		 
 	 }
 	 
+	 public static boolean handshakeMessage(String ip){
+		 try {
+			while (!Client.getInstance().threadsAreRunning());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	 }
+	 
 	 public static boolean startMessage( int value, int algoChoice )
 	 {
 		 try {
