@@ -126,7 +126,7 @@ public class Client implements Runnable {
 				{
 					for ( RemoteNode j : network)
 					{
-						if ( j.ip.compareTo(this.ip) != 0 && j.ip.compareTo(ip) != 0 )
+						if ( j.ip.compareTo(this.ip) != 0 && j.ip.compareTo(ip) != 0 && n.ip.compareTo(j.ip) != 0 )
 						{
 							Vector<String> params = new Vector<String>();
 							params.add(j.ip);
