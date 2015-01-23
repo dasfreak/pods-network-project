@@ -30,12 +30,12 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		okayList      = Collections.synchronizedSet( new TreeSet<String>() );
 		isPending     = false;
 		canAccess     = false;
-		instance = this;
+		instance      = this;
 	}
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-		//System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
+		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 		if ( isCalcDone() && !isPending() )
 		{
 			// send OK
@@ -60,7 +60,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void sendOk(String ip) {
-		//System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
+		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
 		params.add(this.ip);
 
@@ -80,11 +80,11 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	public synchronized void okReceived(String ip) {
-		//System.out.println("==>Received okay from "+ip);
+		System.out.println("==>Received okay from "+ip);
 		synchronized (okayList){
 			okayList.add(ip);
 		}
-		//System.out.println("   okayList size is"+okayList.size());
+		System.out.println("   okayList size is"+okayList.size());
 	}
 
 	@Override
