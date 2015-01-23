@@ -35,7 +35,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
+		//System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 		if ( isCalcDone() && !isPending() )
 		{
 			// send OK
@@ -60,7 +60,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void sendOk(String ip) {
-		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
+		//System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
 		params.add(this.ip);
 
@@ -80,11 +80,11 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	public synchronized void okReceived(String ip) {
-		System.out.println("==>Received okay from "+ip);
+		//System.out.println("==>Received okay from "+ip);
 		synchronized (okayList){
 			okayList.add(ip);
 		}
-		System.out.println("   okayList size is"+okayList.size());
+		//System.out.println("  okayList size is "+okayList.size());
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		{
 			if ( isPending() )
 			{
-				System.out.println("Pending request detected\n");
+			//	System.out.println("Pending request detected\n");
 				// request from all nodes
 				okayList.clear();
 				broadcastRequest();
@@ -135,7 +135,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				if (node.compareTo(rNode.ip) == 0)
 				{
-					System.out.println("Sending okay to queue node "+rNode.ip);
+					//System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
 						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
@@ -149,7 +149,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		System.out.println("Broadcasting request:");
+		//System.out.println("Broadcasting request:");
 		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
