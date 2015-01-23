@@ -432,9 +432,11 @@ public class Client implements Runnable {
 		{
 			System.out.println("WTF someone didn't reply ?!");
 		}
+		System.out.println("Handshake done successfuly!");
 	}
 
 	public boolean threadsAreRunning() {
-		return (syncAlgo.isAlive() && calcTask.isAlive());
+		return (syncAlgo != null && syncAlgo.isAlive() &&
+				calcTask != null && calcTask.isAlive() );
 	}
 }

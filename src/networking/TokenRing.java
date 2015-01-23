@@ -20,7 +20,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	{
 		// pay attension to the difference between network and this.network
 		super ( network, ip );
-		
+		token = null;
 		Collections.sort(super.network);
 		
 		for ( int index = 0; index < super.network.size(); index++ )
@@ -95,7 +95,7 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	
 	public synchronized void receivedToken(Token token)
 	{
-	System.out.println("Received Token!");
+		System.out.println("Received Token!");
 		this.token = token;
 	}
 	@Override
