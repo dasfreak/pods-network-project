@@ -136,12 +136,11 @@ public class Client implements Runnable {
 		RemoteNode node = CreateNode(ip);
 		for ( RemoteNode n : network )
 		{
-			if ( n.ip.compareTo(this.ip) != 0 )
+			if ( n.ip.compareTo(this.ip) != 0 && n.ip.compareTo(ip) != 0 )
 			{
 				propogateNewNodeMessage( node.rpc, n.ip);
 			}
 		}
-		network.add(node);
 	}
 
 	public boolean showMenu( boolean printMenu) throws IOException {
