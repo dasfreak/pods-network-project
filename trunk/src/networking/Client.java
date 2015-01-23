@@ -131,7 +131,7 @@ public class Client implements Runnable {
 							Vector<String> params = new Vector<String>();
 							params.add(j.ip);
 							try {
-								node.rpc.execute("ClientAux.addNodeToStructure", params);
+								n.rpc.execute("ClientAux.addNodeToStructure", params);
 							} catch (XmlRpcException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
