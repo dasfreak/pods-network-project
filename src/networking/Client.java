@@ -415,13 +415,17 @@ public class Client implements Runnable {
 		
 		for ( RemoteNode node : network )
 		{
-			try {
-				Object result = node.rpc.execute("ClientAux.handshakeMessage", params);
-				if ( ((Boolean)result) )
-					repliesCounter++;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if ( node.ip.compareTo(this.ip) != 0 )
+			{
+				try {
+					Object result = node.rpc.execute("ClientAux.handshakeMessage", params);
+					if ( ((Boolean)result) )
+						repliesCounter++;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 		}
 		while (repliesCounter != network.size() - 1)
