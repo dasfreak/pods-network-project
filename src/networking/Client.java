@@ -108,7 +108,7 @@ public class Client implements Runnable {
 	}
 		
 	
-	private void addNode(String ip) {
+	void addNode(String ip) {
 		for ( RemoteNode node : network )
 		{
 			if ( node.ip.compareTo(this.ip) != 0 )
@@ -117,12 +117,17 @@ public class Client implements Runnable {
 			}
 		}
 		
-		RemoteNode node = CreateNode(ip);
-		for ( RemoteNode n : network )
+		if ( !network.contains(ip))
 		{
-			propogateNewNodeMessage( node.rpc, n.ip);
+			RemoteNode node = CreateNode(ip);
+			for ( RemoteNode n : network )
+			{
+				propogateNewNodeMessage( node.rpc, n.ip);
+			}
+			
+			network.add(node);		
 		}
-		network.add(node);
+
 	}
 
 	public boolean showMenu( boolean printMenu) throws IOException {
