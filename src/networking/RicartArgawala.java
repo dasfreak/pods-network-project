@@ -89,7 +89,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 
 	@Override
 	public void run() {
-		while (true)
+
+		while (!canStart());
+		
+		while ( !isSessionDone() )
 		{
 			if ( isPending() )
 			{
