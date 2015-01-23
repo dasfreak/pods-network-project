@@ -96,7 +96,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		{
 			if ( isPending() )
 			{
-				//System.out.println("Pending request detected\n");
+				System.out.println("Pending request detected\n");
 				// request from all nodes
 				okayList.clear();
 
@@ -135,7 +135,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				if (node.compareTo(rNode.ip) == 0)
 				{
-					//System.out.println("Sending okay to queue node "+rNode.ip);
+					System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
 						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
@@ -149,7 +149,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		//System.out.println("Broadcasting request:");
+		System.out.println("Broadcasting request:");
 		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
