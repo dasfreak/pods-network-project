@@ -52,6 +52,9 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	
 	@Override
 	public void run() {
+		
+		while (!canStart());
+		
 		while ( !isSessionDone() )
 		{
 			if ( hasRing() && isCalcDone() && !isPending )

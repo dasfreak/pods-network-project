@@ -13,11 +13,13 @@ public abstract class SyncAlgorithm {
 	protected volatile boolean isCalcDone;
 	protected volatile boolean isPending;
 	private volatile boolean isSessionDone;
+	private volatile boolean canStart;
 
 	protected static SyncAlgorithm instance = null;
 
 	public SyncAlgorithm(List<RemoteNode> networkInput, String ip)
 	{
+		canStart     = false;
 		isSessionDone = false;
 		isPending = false;
 		isCalcDone = true;
@@ -61,5 +63,13 @@ public abstract class SyncAlgorithm {
 	
 	public synchronized boolean isSessionDone(){
 		return isSessionDone;
+	}
+
+	public void setCanStart() {
+		canStart = true;
+	}
+	public boolean canStart()
+	{
+		return canStart;
 	}
 }
