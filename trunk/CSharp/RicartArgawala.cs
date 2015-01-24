@@ -91,6 +91,7 @@ namespace Networking
             public void run()
             {//192.168.0.33
                 Console.WriteLine("Thread  RicartArgwala is running");
+                while (!getcanStart()) ;
 
                 while (_keepRunning)
                 {

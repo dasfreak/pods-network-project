@@ -40,7 +40,7 @@ namespace Networking
     bool initiator = false;
     Thread RicartArgawala_Thread;
     Thread TokenRing_Thread;
-    Thread CalculatingTask_Thread;
+    public Thread CalculatingTask_Thread;
     RicartArgawala RA;
     TokenRing TR;
 
@@ -236,9 +236,9 @@ namespace Networking
     }
 
     public void setStartValue(int value, int algoChoice) {
-		if ( isStartValueSet )
+        if (CalculatingTask_Thread != null && CalculatingTask_Thread.IsAlive)
 		{
-			Console.WriteLine("Recieved start value: "+value +" But start message is already set - no change!!"); 
+            Console.WriteLine("Recieved start value: " + value + " But session is already in progress, please wait until it finishes!");
 		}
         else
         {
@@ -253,9 +253,7 @@ namespace Networking
                 TR = new TokenRing(this.network, this.ip);
                 TokenRing_Thread = new Thread(TR.run);
                 TokenRing_Thread.Start();
-                
-                //var thread = new Thread(() => new TokenRing(this.network, this.ip));
-                //thread.Start();
+           
             }
             else
             {
@@ -264,11 +262,10 @@ namespace Networking
                 RicartArgawala_Thread = new Thread(RA.run);
                 RicartArgawala_Thread.Start();
 
-                ////var thread = new Thread(() => new RicartArgawala(this.network, this.ip));
-                //thread.Start();
-            }            
-            
-            InitiatorNode(!initiator); // Starts Calculation only if node did't triggerd the calc.
+            }
+
+            StartCalculatingTask(true);
+            //StartCalculatingTask(!initiator); // Starts Calculation only if node did't triggerd the calc.
             
             //var thread2 = new Thread(() => new CalculatingTask());
             //thread2.Start();
@@ -389,8 +386,8 @@ namespace Networking
 			Console.WriteLine("Result changed to: " + result);
 		}
 
-        
-        void InitiatorNode(bool nodeStartsCalc)
+
+        void StartCalculatingTask(bool nodeStartsCalc)
         {
             if (nodeStartsCalc)
             {
@@ -399,15 +396,62 @@ namespace Networking
                 CalculatingTask_Thread = new Thread(CT.run);
                 CalculatingTask_Thread.Start();
 
-                if(initiator) 
-                     CalculatingTask_Thread.Join(); // waits for calc. end
+              //  if(initiator) 
+                //     CalculatingTask_Thread.Join(); // waits for calc. end
 
-                StopsRicartArgawalaThread();
-                StopsTokenRingThread();
+                // StopsRicartArgawalaThread(); //moved to end of CalculatingTask_Thread
+               
             }
       }
 
-    public void startCalc(int intitialValue, int algoChoice)
+          public bool threadsAreRunning()
+           {
+            
+           return (((RicartArgawala_Thread != null)&&(RicartArgawala_Thread.IsAlive))||
+                  ((TokenRing_Thread != null) && (TokenRing_Thread.IsAlive)));       
+
+           }
+
+          public bool SendHandShake(String url)
+          {
+            NetworkClientInterface HandShake = XmlRpcProxyGen.Create<NetworkClientInterface>();
+            HandShake.AttachLogger(new XmlRpcDebugLogger());
+
+            HandShake.Url = url;
+            return HandShake.handshakeMessage(this.ip);           
+          }
+
+
+
+        public void handshake() {
+
+		int repliesCounter = 0;
+		bool result=false;
+
+            foreach (RemoteNode node in network)
+			  {
+               if (node.getIP() != this.ip)
+                  {
+                    result = SendHandShake(node.getURL()); 
+                    if ( ((Boolean)result) )
+						repliesCounter++;
+                    result=false;
+                }
+              }
+
+         
+		while (repliesCounter != network.Count - 1)
+		{
+			Console.WriteLine("WTF someone didn't reply ?!"+repliesCounter+" < " +(network.Count-1));
+		}
+
+        if(repliesCounter == network.Count - 1)
+		  Console.WriteLine("Handshake done successfuly!");
+	}
+
+
+
+        public void startCalc(int intitialValue, int algoChoice)
 		{
             initiator = true;
 			setStartValue(intitialValue, algoChoice);
@@ -420,7 +464,7 @@ namespace Networking
 				}
 			}
 
-            InitiatorNode(initiator);// node triggerd the calc. starts calc. after all nodes recieved StartMessage
+            //StartCalculatingTask(initiator);// node triggerd the calc. starts calc. after all nodes recieved StartMessage
              
             
             initiator = false;

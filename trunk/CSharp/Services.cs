@@ -28,6 +28,24 @@ namespace Networking
             return true;
         }
 
+        public  bool handshakeMessage(String ip)
+        {
+            try
+            {
+                while (!Client.getInstance().threadsAreRunning()) ;
+            }
+            catch (Exception e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+            return true;
+        }
+
+
+
+
         public int add(int i2)
         {
             int i1 = 0;

@@ -716,6 +716,8 @@ namespace Networking
               current_value.Text = textBox_startvalue.Text;
               Message.Text = "RicartArgawala is working for 20 Second\n              See Console!";
               My_Client.startCalc(Convert.ToInt32(textBox_startvalue.Text), 0);
+
+              My_Client.CalculatingTask_Thread.Join();
               Message.Text = "";
           }
           else

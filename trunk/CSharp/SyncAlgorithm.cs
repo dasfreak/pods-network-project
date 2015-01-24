@@ -11,11 +11,13 @@ namespace Networking
         protected internal string ip;
         protected internal volatile bool isCalcDone;
         protected internal volatile bool isPending;
+        protected internal volatile bool canStart;
 
         protected internal static SyncAlgorithm instance = null;
 
         public SyncAlgorithm(IList<RemoteNode> network, string ip)
         {
+            canStart = false;
             isPending = false;
             isCalcDone = true;
             // pay attention to the difference between network and this.network
@@ -67,10 +69,25 @@ namespace Networking
         {
             lock (this)
             {
-                Console.WriteLine("Setting isPending");
+                //Console.WriteLine("Setting isPending");
                 isPending = true;
             }
         }
+
+        public virtual void setCanStart() 
+        {
+            lock (this)
+            {
+                
+             canStart = true;
+            }
+        }
+
+        public bool getcanStart()
+        {
+            return canStart;
+        }
+
 
         public void clearPending()
         {
