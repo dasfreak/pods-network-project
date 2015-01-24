@@ -38,21 +38,23 @@ public class CalculatingTask implements Runnable {
 			
 			if ( SyncAlgorithm.getInstance().canAccess() )
 			{
-				System.out.println("==> CS Enter");
-				operationQueueSize--;
-				SyncAlgorithm.getInstance().setCalcInProgress();
-				SyncAlgorithm.getInstance().clearPending();
-				// Critical Section
-				
-				System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
-
-				try {
-					Client.getInstance().performCalc( op, genNumber );
-				} catch (Exception e) {
-					e.printStackTrace();
+				synchronized (SyncAlgorithm.getInstance().mutualLock ) {
+					System.out.println("==> CS Enter");
+					operationQueueSize--;
+					SyncAlgorithm.getInstance().setCalcInProgress();
+					SyncAlgorithm.getInstance().clearPending();
+					// Critical Section
+					
+					System.out.println("["+System.currentTimeMillis()+"] [ Distributed Calc Request ] calculation: Operation: "+op+" Value: "+genNumber);
+	
+					try {
+						Client.getInstance().performCalc( op, genNumber );
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					SyncAlgorithm.getInstance().setCalcDone();
+					System.out.println("<== CS Exit");
 				}
-				SyncAlgorithm.getInstance().setCalcDone();
-				System.out.println("<== CS Exit");
 			}
 			
 			// wait a random time	
