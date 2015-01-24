@@ -49,7 +49,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			else if ( isPending() )
 			{
 				// queue request
-				if ( timestamp < this.timestamp && ip.compareTo(this.ip) > 0 )
+				if ( timestamp < this.timestamp )
 				{
 						// send OK
 						sendOk(ip);
