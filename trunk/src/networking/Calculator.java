@@ -12,7 +12,6 @@ public class Calculator {
 			try {
 				i1 = Client.getInstance().getCurrentValue();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("Calculating: "+ i1 + " + "+ i2);
@@ -20,7 +19,6 @@ public class Calculator {
 			try {
 				Client.getInstance().storeNewResult(result);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -37,7 +35,6 @@ public class Calculator {
 			try {
 				i1 = Client.getInstance().getCurrentValue();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("Calculating: "+ i1 + " - "+ i2);
@@ -45,7 +42,6 @@ public class Calculator {
 			try {
 				Client.getInstance().storeNewResult(result);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -64,7 +60,6 @@ public class Calculator {
 			try {
 				i1 = Client.getInstance().getCurrentValue();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -76,7 +71,6 @@ public class Calculator {
 				try {
 					Client.getInstance().storeNewResult(result);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	
@@ -97,7 +91,6 @@ public class Calculator {
 			try {
 				i1 = Client.getInstance().getCurrentValue();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -106,7 +99,6 @@ public class Calculator {
 			try {
 				Client.getInstance().storeNewResult(result);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

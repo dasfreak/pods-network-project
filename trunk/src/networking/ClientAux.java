@@ -6,7 +6,7 @@ public class ClientAux {
 		 try {
 			Client.getInstance().addNode(ip);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return true;
@@ -17,7 +17,7 @@ public class ClientAux {
 		 try {
 			Client.getInstance().addNodeToStructure(ip);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		 return true;
@@ -27,7 +27,7 @@ public class ClientAux {
 		 try {
 			while (!Client.getInstance().threadsAreRunning());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return true;
@@ -38,7 +38,7 @@ public class ClientAux {
 		 try {
 			Client.getInstance().setStartValue(value, algoChoice);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return true;
@@ -49,7 +49,7 @@ public class ClientAux {
 		 try {
 			Client.getInstance().removeNodeFromStructure(ip);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		 
