@@ -29,6 +29,23 @@ namespace Networking
 			long randomTimeInMSec;
 			Console.WriteLine("Starting calc session for: " + TIME_FOR_CALC_IN_MSEC / 1000 + " seconds:");
             DateTime startUtcNow = DateTime.UtcNow;
+
+            try
+            {
+                Client.getInstance().handshake();
+            }
+            catch (Exception e1)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e1.ToString());
+                Console.Write(e1.StackTrace);
+            
+            }
+
+            SyncAlgorithm.Instance.setCanStart();
+
+
+
 			do
 			{
 				if (operationQueueSize < 1)
@@ -77,6 +94,10 @@ namespace Networking
 				}
 				currentTime = DateTimeHelperClass.CurrentUnixTimeMillis();
 			} while ((currentTime - timeStart) < TIME_FOR_CALC_IN_MSEC);
+
+
+            Client.getInstance().StopsRicartArgawalaThread();
+            Client.getInstance().StopsTokenRingThread();
 
             //Console.WriteLine("The timeC=" + currentTime + "The timeS=" + timeStart);
 			//Console.WriteLine("The time is up!");
