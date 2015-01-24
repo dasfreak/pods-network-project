@@ -68,12 +68,7 @@ public class CalculatingTask implements Runnable {
 			currentTime = System.currentTimeMillis();
 		} while ( ( currentTime - timeStart ) < TIME_FOR_CALC_IN_MSEC );
 		System.out.println("The time is up!");
-		try {
-			System.out.println("Final Result is: " + Client.getInstance().getCurrentValue());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		SyncAlgorithm.getInstance().setSessionDone();
 	}
 
