@@ -38,8 +38,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		//System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 		if ( isCalcDone() && !isPending() )
 		{
-			// send OK
-			sendOk(ip);
+			synchronized (this.mutualLock) {
+				// send OK
+				sendOk(ip);
+			}
 		}
 		else if ( !isCalcDone() )
 		{
@@ -50,7 +52,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			// queue request
 			if ( timestamp < this.timestamp )
 			{
-				sendOk(ip);
+				synchronized (this.mutualLock) {
+					// send OK
+					sendOk(ip);
+				}			
 			}
 			else
 			{
