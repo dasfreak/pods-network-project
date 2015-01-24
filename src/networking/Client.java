@@ -96,7 +96,7 @@ public class Client implements Runnable {
 		try {
 		node = new RemoteNode(ip,new XmlRpcClient("http://" + ip + ":5000" + "/RPC2"));
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}		
 		return node;
@@ -133,10 +133,10 @@ public class Client implements Runnable {
 							try {
 								n.rpc.execute("ClientAux.addNodeToStructure", params);
 							} catch (XmlRpcException e) {
-								// TODO Auto-generated catch block
+								
 								e.printStackTrace();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
+								
 								e.printStackTrace();
 							}
 						}
@@ -167,7 +167,7 @@ public class Client implements Runnable {
 				try {
 					node.rpc.execute("ClientAux.addNodeToStructure", params);
 				} catch (XmlRpcException | IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}	
 			}
@@ -287,7 +287,7 @@ public class Client implements Runnable {
 		try {
 			xmlRpcClient.execute("ClientAux.startMessage", params);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -312,7 +312,7 @@ public class Client implements Runnable {
 		try {
 			xmlRpcClient.execute("ClientAux.nodeQuitNetwork", params);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -325,7 +325,7 @@ public class Client implements Runnable {
 		try {
 			xmlRpcClient.execute("ClientAux.newNodeInNetwork", params);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -382,7 +382,7 @@ public class Client implements Runnable {
 		try {
 			xmlRpcClient.execute("Calculator."+op, params);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -397,10 +397,10 @@ public class Client implements Runnable {
 			try {
 				printMenu = showMenu( printMenu );
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -476,7 +476,7 @@ public class Client implements Runnable {
 					if ( ((Boolean)result) )
 						repliesCounter++;
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 

@@ -22,7 +22,6 @@ public class CalculatingTask implements Runnable {
 	    try {
 			Client.getInstance().handshake();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	    SyncAlgorithm.getInstance().setCanStart();
@@ -50,7 +49,6 @@ public class CalculatingTask implements Runnable {
 				try {
 					Client.getInstance().performCalc( op, genNumber );
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				SyncAlgorithm.getInstance().setCalcDone();
@@ -63,7 +61,6 @@ public class CalculatingTask implements Runnable {
 			try {
 				Thread.sleep(randomTimeInMSec);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			currentTime = System.currentTimeMillis();

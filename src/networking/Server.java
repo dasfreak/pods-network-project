@@ -17,7 +17,6 @@ public class Server {
 		server.addHandler("TokenRingAux", TokenRingAux.class);
 		server.addHandler("RicartArgawalaAux", RicartArgawalaAux.class);
 		server.addHandler("$default", new Echo());
-		// TODO Auto-generated method stub
 		System.out.println("Attempting to start XML-RPC Server at port: "+port);
 		server.start();
 		System.out.println("Started successfully.");

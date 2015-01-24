@@ -71,7 +71,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				try {
 					node.rpc.execute("RicartArgawalaAux.okReceived", params);
 				} catch (XmlRpcException | IOException e) {
-					// TODO Auto-generated catch block
+				
 					e.printStackTrace();
 				}
 				break;
@@ -139,7 +139,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					try {
 						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}				
@@ -162,7 +161,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				try {
 					node.rpc.execute("RicartArgawalaAux.requestReceived", params);
 				} catch (XmlRpcException | IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

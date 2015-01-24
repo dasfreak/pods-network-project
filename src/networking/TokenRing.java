@@ -90,7 +90,6 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		try {
 			network.get(nextPeer).rpc.execute("TokenRingAux.tokenReceived", params );
 		} catch (XmlRpcException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		token = null;
@@ -103,7 +102,6 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 	}
 	@Override
 	public synchronized boolean canAccess() {
-		// TODO Auto-generated method stub
 		return hasRing();
 	}
 	
