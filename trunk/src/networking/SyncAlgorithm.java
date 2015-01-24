@@ -14,11 +14,13 @@ public abstract class SyncAlgorithm {
 	protected volatile boolean isPending;
 	private volatile boolean isSessionDone;
 	private volatile boolean canStart;
+	Object mutualLock;
 
 	protected static SyncAlgorithm instance = null;
 
 	public SyncAlgorithm(List<RemoteNode> networkInput, String ip)
 	{
+		mutualLock = new Object();
 		canStart     = false;
 		isSessionDone = false;
 		isPending = false;

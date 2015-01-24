@@ -59,7 +59,10 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		{
 			if ( hasRing() && isCalcDone() && !isPending )
 			{
-				forwardToken();
+				synchronized (this.mutualLock){
+					// possible race that calculation is now has started
+					forwardToken();
+				}
 			}
 			//System.out.println("TokenStatus: " + hasRing());	
 		}
@@ -83,8 +86,10 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 
 		Vector<String> params = new Vector<String>();
 
+		token.currentHolder = network.get(nextPeer).ip;
+
 		params.add(token.ipCreator);
-		params.add(network.get(nextPeer).ip);
+		params.add(token.currentHolder);
 				
 		// send request to node
 		try {
@@ -92,7 +97,6 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		} catch (XmlRpcException | IOException e) {
 			e.printStackTrace();
 		}
-		token = null;
 	}
 	
 	public synchronized void receivedToken(Token token)
