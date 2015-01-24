@@ -35,10 +35,9 @@ public class CalculatingTask implements Runnable {
 				genNumber = randomGenerator.nextInt(100);
 				SyncAlgorithm.getInstance().setPending();
 			}
-			
-			if ( SyncAlgorithm.getInstance().canAccess() )
-			{
-				synchronized (SyncAlgorithm.getInstance().mutualLock ) {
+			synchronized (SyncAlgorithm.getInstance().mutualLock ) {
+				if ( SyncAlgorithm.getInstance().canAccess() )
+				{
 					System.out.println("==> CS Enter");
 					operationQueueSize--;
 					SyncAlgorithm.getInstance().setCalcInProgress();

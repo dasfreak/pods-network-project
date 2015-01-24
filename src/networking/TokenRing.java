@@ -57,10 +57,10 @@ public class TokenRing extends SyncAlgorithm implements Runnable {
 		
 		while ( !isSessionDone() )
 		{
-			if ( hasRing() && isCalcDone() && !isPending )
-			{
-				synchronized (this.mutualLock){
-					// possible race that calculation is now has started
+			synchronized (this.mutualLock){
+				if ( hasRing() && isCalcDone() && !isPending )
+				{
+						// possible race that calculation is now has started
 					forwardToken();
 				}
 			}
