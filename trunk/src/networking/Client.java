@@ -229,11 +229,6 @@ public class Client implements Runnable {
 			break;
 		}
 		
-		case 8:
-		{
-			performCalc(Operation.ADDITION,5);
-		}
-		
 		case 3:
 		{
 			if (network.size() < 1 )
