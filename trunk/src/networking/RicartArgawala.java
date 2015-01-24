@@ -98,17 +98,18 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		
 		while ( !isSessionDone() )
 		{
-			synchronized (this.mutualLock) {
 				if ( isPending() )
 				{
 				//	System.out.println("Pending request detected\n");
 					// request from all nodes
-					okayList.clear();
-					broadcastRequest();
-					timestamp++;
-						// wait for okay from all
-					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-					
+					synchronized (this.mutualLock) {
+						okayList.clear();
+						broadcastRequest();
+						
+						timestamp++;
+							// wait for okay from all
+						while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+					}
 					System.out.println("====> CS ra enter");
 					setAccess( true );
 					// can access now
@@ -120,7 +121,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					System.out.println("<==== CS ra exit");
 	
 					setAccess( false );
-				}
+				
 			}
 		}
 	}
