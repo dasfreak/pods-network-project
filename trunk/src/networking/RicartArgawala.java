@@ -35,18 +35,18 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp+" own timestamp is "+this.timestamp);
+//		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp+" own timestamp is "+this.timestamp);
 
 		synchronized (this.requestsQueue) {
 			if ( isCalcDone() && !isPending() )
 			{
-					System.out.println("Case isCalcDone() && !isPending()");
+//					System.out.println("Case isCalcDone() && !isPending()");
 					// send OK
 					sendOk(ip);
 			}
 			else if ( !isCalcDone() )
 			{
-				System.out.println("!isCalcDone");
+//				System.out.println("!isCalcDone");
 				requestsQueue.add(ip);
 			}
 			else if ( isPending() )
@@ -55,12 +55,12 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
 					   timestamp < this.timestamp )
 				{
-					System.out.println("case timestamp is smaller");
+//					System.out.println("case timestamp is smaller");
 						sendOk(ip);
 				}
 				else
 				{
-					System.out.println("case timestamp is bigger");
+//					System.out.println("case timestamp is bigger");
 					requestsQueue.add(ip);
 				}
 			}
@@ -68,7 +68,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void sendOk(String ip) {
-		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
+//		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
 		params.add(this.ip);
 
@@ -88,9 +88,9 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	public synchronized void okReceived(String ip) {
-		System.out.println("==>Received okay from "+ip);
+//		System.out.println("==>Received okay from "+ip);
 		okayList.add(ip);
-		System.out.println("  okayList size is "+okayList.size());
+//		System.out.println("  okayList size is "+okayList.size());
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			synchronized ( this.mutualLock ) {
 				if ( isPending() )
 				{
-					System.out.println("Pending request detected\n");
+//					System.out.println("Pending request detected\n");
 					// request from all nodes
 					okayList.clear();
 					broadcastRequest();
@@ -151,7 +151,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				if (node.compareTo(rNode.ip) == 0)
 				{
-					System.out.println("Sending okay to queue node "+rNode.ip);
+//					System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
 						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
