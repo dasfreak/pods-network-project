@@ -20,6 +20,7 @@ namespace Networking
    
   public class Form1 : System.Windows.Forms.Form
   {
+    private static Form1 instance;
     private System.Windows.Forms.TextBox IpNumber;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.Button Join_button;
@@ -27,7 +28,6 @@ namespace Networking
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox2;
-    private Label SubtResult;
     private Button leave_button;
     private GroupBox groupBox3;
     private Button enter;
@@ -39,9 +39,6 @@ namespace Networking
     private Label NetworkOutput;
     private GroupBox ServerGroupBox4;
     private Label ServerData;
-    private TextBox txtStateNumber1;
-    private Label label3;
-    private Button butGetStateNames;
     private Button button1;
     private Button button2;
     private TextBox textBox_startvalue;
@@ -49,9 +46,13 @@ namespace Networking
     private Label current_value;
     private Label label8;
     private Label Message;
-    private Button button3;
-    private Label timebox;
     Client My_Client;
+
+    public delegate void Recieved1(object sender, EventArgs e);  // cahnge Form1 Window connection
+    public event Recieved1 _connectedEvent;
+
+    public delegate void Recieved2(object sender, EventArgs e);  // cahnge Form1 Window connection
+    public event Recieved2 _calcEvent;
     //public Client My_Client;
 
     public Form1()
@@ -62,8 +63,11 @@ namespace Networking
 
       
       InitializeComponent();
+      instance = this;
       My_Client = new Client();
-      IpNumber.Text="192.168.0.33";
+      _connectedEvent += new Recieved1(this.Connected);
+      _calcEvent += new Recieved2(this.Calc);
+      //IpNumber.Text="192.168.0.33";
       my_ip_print.Text = My_Client.getIP();
       ServerData.Text = "Port: 5000";
       Server My_server=new Server();
@@ -101,10 +105,6 @@ namespace Networking
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.SubtResult = new System.Windows.Forms.Label();
-            this.txtStateNumber1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.butGetStateNames = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.enter = new System.Windows.Forms.Button();
             this.my_ip_print = new System.Windows.Forms.Label();
@@ -122,8 +122,6 @@ namespace Networking
             this.current_value = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.Message = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.timebox = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -201,51 +199,20 @@ namespace Networking
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.SubtResult);
-            this.groupBox2.Controls.Add(this.txtStateNumber1);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.butGetStateNames);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.textBox_startvalue);
+            this.groupBox2.Controls.Add(this.Message);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.current_value);
+            this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Location = new System.Drawing.Point(32, 354);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(342, 125);
+            this.groupBox2.Size = new System.Drawing.Size(342, 147);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Calculation";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
-            // 
-            // SubtResult
-            // 
-            this.SubtResult.Location = new System.Drawing.Point(115, 69);
-            this.SubtResult.Name = "SubtResult";
-            this.SubtResult.Size = new System.Drawing.Size(61, 22);
-            this.SubtResult.TabIndex = 3;
-            this.SubtResult.Click += new System.EventHandler(this.SubtResult_Click);
-            // 
-            // txtStateNumber1
-            // 
-            this.txtStateNumber1.Location = new System.Drawing.Point(118, 33);
-            this.txtStateNumber1.Name = "txtStateNumber1";
-            this.txtStateNumber1.Size = new System.Drawing.Size(58, 22);
-            this.txtStateNumber1.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(4, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(108, 18);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Value 1:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // butGetStateNames
-            // 
-            this.butGetStateNames.Location = new System.Drawing.Point(236, 30);
-            this.butGetStateNames.Name = "butGetStateNames";
-            this.butGetStateNames.Size = new System.Drawing.Size(84, 24);
-            this.butGetStateNames.TabIndex = 6;
-            this.butGetStateNames.Text = " Subtract ";
-            this.butGetStateNames.Click += new System.EventHandler(this.butGetStateNames_Click);
             // 
             // groupBox3
             // 
@@ -339,7 +306,7 @@ namespace Networking
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(436, 384);
+            this.button1.Location = new System.Drawing.Point(11, 65);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(139, 24);
             this.button1.TabIndex = 7;
@@ -348,7 +315,7 @@ namespace Networking
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(596, 384);
+            this.button2.Location = new System.Drawing.Point(180, 65);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(140, 24);
             this.button2.TabIndex = 8;
@@ -357,7 +324,7 @@ namespace Networking
             // 
             // textBox_startvalue
             // 
-            this.textBox_startvalue.Location = new System.Drawing.Point(540, 350);
+            this.textBox_startvalue.Location = new System.Drawing.Point(107, 27);
             this.textBox_startvalue.Name = "textBox_startvalue";
             this.textBox_startvalue.Size = new System.Drawing.Size(59, 22);
             this.textBox_startvalue.TabIndex = 7;
@@ -365,15 +332,15 @@ namespace Networking
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(432, 354);
+            this.label5.Location = new System.Drawing.Point(8, 27);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(108, 19);
+            this.label5.Size = new System.Drawing.Size(74, 19);
             this.label5.TabIndex = 7;
             this.label5.Text = "StartValue:";
             // 
             // current_value
             // 
-            this.current_value.Location = new System.Drawing.Point(719, 351);
+            this.current_value.Location = new System.Drawing.Point(275, 27);
             this.current_value.Name = "current_value";
             this.current_value.Size = new System.Drawing.Size(61, 22);
             this.current_value.TabIndex = 7;
@@ -381,7 +348,7 @@ namespace Networking
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(606, 354);
+            this.label8.Location = new System.Drawing.Point(177, 27);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(108, 19);
             this.label8.TabIndex = 9;
@@ -390,40 +357,16 @@ namespace Networking
             // 
             // Message
             // 
-            this.Message.Location = new System.Drawing.Point(476, 423);
+            this.Message.Location = new System.Drawing.Point(76, 101);
             this.Message.Name = "Message";
-            this.Message.Size = new System.Drawing.Size(260, 56);
+            this.Message.Size = new System.Drawing.Size(260, 33);
             this.Message.TabIndex = 10;
             this.Message.Click += new System.EventHandler(this.Message_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(236, 95);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(84, 24);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Time";
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // timebox
-            // 
-            this.timebox.Location = new System.Drawing.Point(413, 250);
-            this.timebox.Name = "timebox";
-            this.timebox.Size = new System.Drawing.Size(186, 27);
-            this.timebox.TabIndex = 11;
             // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-            this.ClientSize = new System.Drawing.Size(887, 509);
-            this.Controls.Add(this.timebox);
-            this.Controls.Add(this.Message);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.current_value);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox_startvalue);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(887, 542);
             this.Controls.Add(this.ServerGroupBox4);
             this.Controls.Add(this.NetworkOutput);
             this.Controls.Add(this.Show_button1);
@@ -441,7 +384,6 @@ namespace Networking
             this.groupBox3.PerformLayout();
             this.ServerGroupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
     }
 		#endregion
@@ -482,6 +424,8 @@ namespace Networking
               {
                   ConnectionStatus.Text = "connected";
                   IpNumber.ReadOnly = true;
+                  NetworkOutput.Text = string.Empty;
+                  NetworkOutput.Text = My_Client.getTable();
               }
               else
                   ConnectionStatus.Text = "Conection failed!";
@@ -498,7 +442,7 @@ namespace Networking
 
 
 
-
+      /*
     private void butGetStateNames_Click(object sender, System.EventArgs e)
     {
        
@@ -528,7 +472,7 @@ namespace Networking
       }
       Cursor = Cursors.Default;
          
-    }
+    }*/
 
 
 
@@ -566,7 +510,7 @@ namespace Networking
          return true;
      return false;    
     }
-
+       
     private void enter_Click(object sender, System.EventArgs e)
     {
         Cursor = Cursors.WaitCursor;
@@ -701,18 +645,20 @@ namespace Networking
               current_value.Text = textBox_startvalue.Text;
               Message.Text = "TokenRing is working for 20 Second\n              See Console!";
               My_Client.startCalc(Convert.ToInt32(textBox_startvalue.Text), 1);
-              
+              My_Client.CalculatingTask_Thread.Join();
               Message.Text = "";
           }
           else
               Message.Text = "           Error: Enter StartValue!";
+
+          Message.Text = "            Calculation Result: " + Convert.ToString(My_Client.CurrentValue);
       }
 
       private void button2_Click(object sender, EventArgs e)
       {
 
           if (StringOK(textBox_startvalue.Text)){
-              //My_Client.EndRicartArgawalaThread();
+       
               current_value.Text = textBox_startvalue.Text;
               Message.Text = "RicartArgawala is working for 20 Second\n              See Console!";
               My_Client.startCalc(Convert.ToInt32(textBox_startvalue.Text), 0);
@@ -723,7 +669,7 @@ namespace Networking
           else
               Message.Text = "           Error: Enter StartValue!";
 
-          Message.Text = "           Error: Enter StartValue!";
+          
           Message.Text = "            Calculation Result: "+Convert.ToString(My_Client.CurrentValue);
       }
 
@@ -759,12 +705,72 @@ namespace Networking
 
       }
 
-      
 
-      
-      
 
-      
+
+      delegate void StringParameterDelegate(string value);
+
+      void UpdateForm(string value)
+      {
+          if (InvokeRequired)
+          {
+              // We're not in the UI thread, so we need to call BeginInvoke
+              BeginInvoke(new StringParameterDelegate(UpdateForm), new object[] { value });
+              return;
+          }
+          // Must be on the UI thread if we've got this far
+          ConnectionStatus.Text = value;
+          
+          NetworkOutput.Text = string.Empty;
+          NetworkOutput.Text = My_Client.getTable();
+          IpNumber.ReadOnly = true;
+      }
+   
+      private void Connected(object sender, EventArgs e)
+      {
+          UpdateForm("connected");       
+      }
+
+
+
+      void UpdateForm2(string value)
+      {
+          if (InvokeRequired)
+          {
+              // We're not in the UI thread, so we need to call BeginInvoke
+              BeginInvoke(new StringParameterDelegate(UpdateForm2), new object[] { value });
+              return;
+          }
+          // Must be on the UI thread if we've got this far
+          
+          Message.Text = value;
+          current_value.Text = Convert.ToString(My_Client.CurrentValue);
+          My_Client.CalculatingTask_Thread.Join();
+          Message.Text = "            Calculation Result: " + Convert.ToString(My_Client.CurrentValue);
+      }
+   
+      private void Calc(object sender, EventArgs e)
+      {
+          UpdateForm2("Calculation is working for 20 Second\n              See Console!");       
+          
+
+      }
+
+      public void setCalcEvent()
+      {
+
+          _calcEvent(this, new EventArgs());
+      }
+
+      public void setConnectedEvent()
+      {
+
+          _connectedEvent(this, new EventArgs());
+      }
+
+  public static Form1 getInstance(){
+    return instance;
+   }      
 
   }
 }

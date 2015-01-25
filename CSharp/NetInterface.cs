@@ -19,6 +19,10 @@ public interface NetworkClientInterface : IXmlRpcProxy
   [XmlRpcMethod("ClientAux.handshakeMessage")]
      bool handshakeMessage(String ip);
 
+  [XmlRpcMethod("ClientAux.addNodeToStructure")]
+     bool addNodeToStructure(String ip);
+		
+
   // Calculator
 
   [XmlRpcMethod("Calculator.subtract")]
@@ -65,6 +69,9 @@ public interface NetworkServerInterface
 
     [XmlRpcMethod("ClientAux.handshakeMessage")]
        bool handshakeMessage(String ip);
+
+    [XmlRpcMethod("ClientAux.addNodeToStructure")]
+         bool addNodeToStructure(String ip);
 
     // Calculator
 

@@ -32,11 +32,14 @@ namespace Networking
 
             try
             {
+                Console.WriteLine("bef handshake ");
                 Client.getInstance().handshake();
+                Console.WriteLine("after handshake ");
             }
             catch (Exception e1)
             {
                 // TODO Auto-generated catch block
+                Console.WriteLine("handshake fail");
                 Console.WriteLine(e1.ToString());
                 Console.Write(e1.StackTrace);
             
