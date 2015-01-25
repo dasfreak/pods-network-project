@@ -113,6 +113,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					// wait for okay from all
 					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
 					isSyncDone = true;
+					setAccess( true );
 				}
 			}
 			
@@ -122,7 +123,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				System.out.println("====> CS ra enter");
 				
 				synchronized ( this.requestsQueue) {
-					setAccess( true );
 					// can access now
 					while (isPending());
 					while (!isCalcDone());
