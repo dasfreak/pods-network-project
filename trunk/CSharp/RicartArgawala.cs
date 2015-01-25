@@ -13,8 +13,9 @@ namespace Networking
             private volatile HashSet<string> okayList;
 
             private volatile bool canAccess_Renamed;
+            private volatile bool isSyncing;
+            private volatile Object syncLock;
 
-            
             private long timestamp;
             bool _keepRunning = true;
 
@@ -23,55 +24,84 @@ namespace Networking
                 // pay attention to the difference between network and this.network
                 Random randomGenerator = new Random();
                 timestamp = randomGenerator.Next(50);
-                Console.WriteLine("timestamp init to: " + timestamp);
+               // Console.WriteLine("timestamp init to: " + timestamp);
 
                 requestsQueue = new HashSet<string>();
                 okayList = new HashSet<string>();
                 isPending = false;
-
+                canAccess_Renamed = false;
+                isSyncing = false;
+                syncLock = new Object();
                 instance = this;
             }
 
             public virtual void requestReceived(string ip, long timestamp)
             {
-                Console.WriteLine("Received request from ip " + ip + " timestamp = " + timestamp + " mystamp = " + this.timestamp);
-                if (CalcDone && !Pending)
+                // Console.WriteLine("Received request from ip " + ip + " timestamp = " + timestamp + " mystamp = " + this.timestamp);
+                bool sendOk_r = false;
+                bool addToQueue = false;
+
+                bool calcIsDone = CalcDone;
+                bool isPending = Pending;
+
+                lock (syncLock)
                 {
-                   // Console.WriteLine("CalcDone && !Pending");
-                    // send OK
-                    sendOk(ip);
-                }
-                else if (!this.isCalcDone)
-                {
-                    //Console.WriteLine("isCalcDone");
-                    requestsQueue.Add(ip);
-                }
-                else if (this.isPending)
-                {
-                    // queue request
-                    //Console.WriteLine("isPending ");
-                    
-                    if ((timestamp < this.timestamp)||
-                        ( (timestamp == this.timestamp) && (ip.CompareTo(this.ip) > 0) )   )
+
+                    if (calcIsDone && !isPending)
+                    {
+                        // Console.WriteLine("CalcDone && !Pending");
+                        // send OK
+                        sendOk_r = true;
+                    }
+                    else if (!calcIsDone)
+                    {
+                        addToQueue = true;
+                    }
+                    else if (isPending || _keepRunning)
+                    {
+                        if ((timestamp == this.timestamp && ip.CompareTo(this.ip) > 0) ||
+                               timestamp < this.timestamp)
+                        {
+                            sendOk_r = true;
+                        }
+                        else
+                        {
+                            addToQueue = true;
+                        }
+                    }
+                    if (sendOk_r)
                     {
                         sendOk(ip);
                     }
                     else
                     {
-                        requestsQueue.Add(ip);
+                        lock (this.requestsQueue)
+                        {
+                            requestsQueue.Add(ip);
+                        }
                     }
                 }
             }
+        
 
        private void sendOk(string ip)
   		{
-            Console.WriteLine("Sending okay to node " + ip + " timestamp = " + timestamp );
+            //Console.WriteLine("Sending okay to node " + ip + " timestamp = " + timestamp );
             
             NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
             executer.AttachLogger(new XmlRpcDebugLogger());
 
             executer.Url = generate_url(ip);
-			executer.okReceived(this.ip);
+
+            foreach (RemoteNode node in network)
+            {
+                if (node.getIP().CompareTo(ip) == 0)
+                {
+                    executer.okReceived(this.ip);
+                    break;
+                }
+            }
+
 			
 		}
 
@@ -79,9 +109,9 @@ namespace Networking
             {
                 lock (this)
                 {
-                    Console.WriteLine("==>Received okay from " + ip);
+                   // Console.WriteLine("==>Received okay from " + ip);
                     okayList.Add(ip);
-                    Console.WriteLine("   okayList size is" + okayList.Count);
+                    //Console.WriteLine("   okayList size is" + okayList.Count);
                 }
             }
 
@@ -92,34 +122,55 @@ namespace Networking
 
             public void run()
             {//192.168.0.33
+
+                bool isSyncDone = false;
+
                 Console.WriteLine("Thread  RicartArgwala is running");
                 while (!getcanStart()) ;
 
                 while (_keepRunning)
                 {
-                    if (Pending)
+
+                    bool isPending;
+			        lock ( this.mutualLock ) {
+				    isPending = Pending;
+			}
+                    lock(syncLock)
+                        if (isPending)
                     {
-                        Console.WriteLine("Pending request detected\n");
+                     //   Console.WriteLine("Pending request detected\n");
                         // request from all nodes
                         okayList.Clear();
                         broadcastRequest();
-                        timestamp++;
+                       
                         // wait for okay from all                        
                         while ((okayList.Count < (network.Count - 1))&&(_keepRunning)); // -1 because of self node
-                        Console.WriteLine("====> CS enter");
-                        Access = true;
+                         Access = true;
+                        }
+
+                    if (isSyncDone)
+                    {
+                        Console.WriteLine("====> CS ra enter");
+
                         // can access now
                         while ((Pending) && (_keepRunning)) ;
                         while ((!CalcDone)&&(_keepRunning));
 
-                        isPending = false;
-
-                        // send okay to all processes in queue
-                        sendOkayToQueueNodes();
-
                         Access = false;
 
+                        // send okay to all processes in queue
+                        lock (this.requestsQueue)
+                        {
+                            
+                            sendOkayToQueueNodes();
+                        }
+
+                        timestamp++;
+
                         Console.WriteLine("<==== CS exit");
+
+                        isPending = false;
+                        
                     }
                 }
              Console.WriteLine("\nThread  RicartArgwala is terminated\n");
@@ -135,18 +186,22 @@ namespace Networking
             }
 
 
-
        private void sendOkayToQueueNodes(){
 
 			foreach (string node_ip in requestsQueue)
   			   {
-                Console.WriteLine("Sending okay to queue node " + node_ip);
+                //Console.WriteLine("Sending okay to queue node " + node_ip);
 
-                NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
-                executer.AttachLogger(new XmlRpcDebugLogger());
+                   if (node_ip.CompareTo(this.ip) == 0)
+                   {
+                       NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+                       executer.AttachLogger(new XmlRpcDebugLogger());
 
-                executer.Url = generate_url(node_ip);
-                executer.okReceived(this.ip);
+                       executer.Url = generate_url(node_ip);
+                       executer.okReceived(this.ip);
+                   }
+
+                
 			   }
 
 		}
@@ -183,7 +238,7 @@ namespace Networking
            }
        }
 
-
+        
             public override bool canAccess()
             {
                 lock (this)
@@ -202,6 +257,7 @@ namespace Networking
                     }
                 }
             }
+
         }
 
 
