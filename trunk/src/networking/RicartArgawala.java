@@ -36,35 +36,75 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	public void requestReceived( String ip, long timestamp )
 	{
 //		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp+" own timestamp is "+this.timestamp);
-
-		synchronized (this.requestsQueue) {
+		boolean sendOk = false;
+		boolean addToQueue = false;
+		
+		synchronized(this.mutualLock)
+		{
 			if ( isCalcDone() && !isPending() )
 			{
-//					System.out.println("Case isCalcDone() && !isPending()");
-					// send OK
-					sendOk(ip);
+				sendOk = true;
 			}
 			else if ( !isCalcDone() )
 			{
-//				System.out.println("!isCalcDone");
-				requestsQueue.add(ip);
+				addToQueue = true;
 			}
 			else if ( isPending() )
 			{
-				// queue request
 				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
-					   timestamp < this.timestamp )
+						   timestamp < this.timestamp )
 				{
-//					System.out.println("case timestamp is smaller");
-						sendOk(ip);
+					sendOk = true;
 				}
 				else
 				{
-//					System.out.println("case timestamp is bigger");
-					requestsQueue.add(ip);
+					addToQueue = true;
 				}
 			}
 		}
+		
+		if ( sendOk )
+		{
+			sendOk(ip);
+		}
+		else
+		{
+			synchronized (this.requestsQueue)
+			{
+				requestsQueue.add(ip);
+			}
+		}
+
+		
+//		synchronized (this.requestsQueue) {
+//			if ( isCalcDone() && !isPending() )
+//			{
+////					System.out.println("Case isCalcDone() && !isPending()");
+//					// send OK
+//					
+//					sendOk(ip);
+//			}
+//			else if ( !isCalcDone() )
+//			{
+////				System.out.println("!isCalcDone");
+//				requestsQueue.add(ip);
+//			}
+//			else if ( isPending() )
+//			{
+//				// queue request
+//				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
+//					   timestamp < this.timestamp )
+//				{
+////					System.out.println("case timestamp is smaller");
+//						sendOk(ip);
+//				}
+//				else
+//				{
+////					System.out.println("case timestamp is bigger");
+//					requestsQueue.add(ip);
+//				}
+//			}
+//		}
 	}
 
 	private void sendOk(String ip) {
