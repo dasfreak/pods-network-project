@@ -19,6 +19,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	private volatile boolean canAccess;
 	private long timestamp;
+	private volatile boolean isSyncing;
+	private volatile Object syncLock;
 	
 	public RicartArgawala(List<RemoteNode> networkInput, String ip)
 	{
@@ -30,6 +32,8 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		okayList      = Collections.synchronizedSet( new TreeSet<String>() );
 		isPending     = false;
 		canAccess     = false;
+		isSyncing     = false;
+		syncLock      = new Object();
 		instance      = this;
 	}
 	
@@ -42,38 +46,42 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		boolean calcIsDone = isCalcDone();
 		boolean isPending = isPending();
 		
-		if ( calcIsDone && !isPending )
-		{
-			sendOk = true;
-		}
-		else if ( !calcIsDone )
-		{
-			addToQueue = true;
-		}
-		else if ( isPending )
-		{
-			if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
-					   timestamp < this.timestamp )
+		synchronized (syncLock) {
+			
+			if ( calcIsDone && !isPending )
 			{
 				sendOk = true;
 			}
-			else
+			else if ( !calcIsDone || isSyncing )
 			{
 				addToQueue = true;
 			}
-		}
-		
-		if ( sendOk )
-		{
-			sendOk(ip);
-		}
-		else
-		{
-			synchronized (this.requestsQueue)
+			else if ( isPending )
 			{
-				requestsQueue.add(ip);
+				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
+						   timestamp < this.timestamp )
+				{
+					sendOk = true;
+				}
+				else
+				{
+					addToQueue = true;
+				}
+			}
+
+			if ( sendOk )
+			{
+				sendOk(ip);
+			}
+			else
+			{
+				synchronized (this.requestsQueue)
+				{
+					requestsQueue.add(ip);
+				}
 			}
 		}
+
 
 
 		
@@ -147,9 +155,11 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			synchronized ( this.mutualLock ) {
 				isPending = isPending();
 			}
+			synchronized (syncLock) {
 				if ( isPending )
 				{
-//					System.out.println("Pending request detected\n");
+					isSyncing = true;
+//						System.out.println("Pending request detected\n");
 					// request from all nodes
 					okayList.clear();
 					broadcastRequest();
@@ -159,27 +169,28 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					isSyncDone = true;
 					setAccess( true );
 				}
-			
-			
-			
-			if ( isSyncDone )
-			{
-				System.out.println("====> CS ra enter");
 				
-					// can access now
-					while (isPending());
-					while (!isCalcDone());
-
-					setAccess( false );
-					// send okay to all processes in queue
-					synchronized ( this.requestsQueue) {
-						sendOkayToQueueNodes();
-					}
-
-					timestamp++;
 				
-				System.out.println("<==== CS ra exit");
+				
+				if ( isSyncDone )
+				{
+					System.out.println("====> CS ra enter");
+					
+						// can access now
+						while (isPending());
+						while (!isCalcDone());
 
+						setAccess( false );
+						// send okay to all processes in queue
+						synchronized ( this.requestsQueue) {
+							sendOkayToQueueNodes();
+						}
+
+						timestamp++;
+					
+					System.out.println("<==== CS ra exit");
+					isSyncing = false;
+				}
 			}
 		}
 	}
