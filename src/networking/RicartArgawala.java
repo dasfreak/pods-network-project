@@ -40,11 +40,13 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		synchronized (this.requestsQueue) {
 			if ( isCalcDone() && !isPending() )
 			{
+					System.out.println("Case isCalcDone() && !isPending()");
 					// send OK
 					sendOk(ip);
 			}
 			else if ( !isCalcDone() )
 			{
+				System.out.println("!isCalcDone");
 				requestsQueue.add(ip);
 			}
 			else if ( isPending() )
@@ -53,10 +55,12 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
 					   timestamp < this.timestamp )
 				{
+					System.out.println("case timestamp is smaller");
 						sendOk(ip);
 				}
 				else
 				{
+					System.out.println("case timestamp is bigger");
 					requestsQueue.add(ip);
 				}
 			}
