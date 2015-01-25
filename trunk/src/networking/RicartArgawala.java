@@ -116,15 +116,17 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				}
 			}
 			
+			
 			if ( isSyncDone )
 			{
 				System.out.println("====> CS ra enter");
-				setAccess( true );
-				// can access now
-				while (isPending());
-				while (!isCalcDone());
 				
-				synchronized (this.requestsQueue) {
+				synchronized ( this.requestsQueue) {
+					setAccess( true );
+					// can access now
+					while (isPending());
+					while (!isCalcDone());
+
 					setAccess( false );
 					// send okay to all processes in queue
 					sendOkayToQueueNodes();
