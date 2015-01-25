@@ -9,16 +9,21 @@ namespace Networking
 
         protected internal List<RemoteNode> network;
         protected internal string ip;
-        protected internal volatile bool isCalcDone;
-        protected internal volatile bool isPending;
+        protected volatile bool isCalcDone;
+        public volatile bool isPending;
+        private volatile bool isSessionDone;
         protected internal volatile bool canStart;
+        public Object mutualLock;
 
         protected internal static SyncAlgorithm instance = null;
 
         public SyncAlgorithm(IList<RemoteNode> network, string ip)
         {
+
+            mutualLock = new Object();
             canStart = false;
             isPending = false;
+            isSessionDone = false;
             isCalcDone = true;
             // pay attention to the difference between network and this.network
             this.network = new List<RemoteNode>();
@@ -96,6 +101,21 @@ namespace Networking
                 isPending = false;
             }
         }
+
+        public void setSessionDone() {
+            lock (this)
+            {
+		        isSessionDone = true;
+            }
+
+	    }
+        public bool SessionDone(){
+            lock (this)
+            {
+                return isSessionDone;
+            }
+
+	    }
 
     }
 
