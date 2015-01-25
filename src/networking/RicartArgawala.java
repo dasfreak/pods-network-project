@@ -102,8 +102,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		while ( !isSessionDone() )
 		{
 			isSyncDone = false;
-			synchronized ( this.requestsQueue) {
-
 			synchronized ( this.mutualLock ) {
 				if ( isPending() )
 				{
@@ -123,6 +121,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				System.out.println("====> CS ra enter");
 				
+				synchronized ( this.requestsQueue) {
 					setAccess( true );
 					// can access now
 					while (isPending());
