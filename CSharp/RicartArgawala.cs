@@ -14,7 +14,6 @@ namespace Networking
 
             private volatile bool canAccess_Renamed;
             private volatile bool isSyncing;
-            private volatile Object syncLock;
 
             private long timestamp;
             bool _keepRunning = true;
@@ -31,7 +30,6 @@ namespace Networking
                 isPending = false;
                 canAccess_Renamed = false;
                 isSyncing = false;
-                syncLock = new Object();
                 instance = this;
             }
 
@@ -44,10 +42,7 @@ namespace Networking
                 bool calcIsDone = CalcDone;
                 bool isPending = Pending;
 
-                lock (syncLock)
-                {
-
-                    if (calcIsDone && !isPending)
+                if (calcIsDone && !isPending)
                     {
                         // Console.WriteLine("CalcDone && !Pending");
                         // send OK
@@ -81,7 +76,6 @@ namespace Networking
                         }
                     }
                 }
-            }
         
 
        private void sendOk(string ip)
@@ -93,7 +87,7 @@ namespace Networking
 
             executer.Url = generate_url(ip);
 
-            foreach (RemoteNode node in network)
+            foreach (RemoteNode node in this.network)
             {
                 if (node.getIP().CompareTo(ip) == 0)
                 {
@@ -130,14 +124,15 @@ namespace Networking
 
                 while (_keepRunning)
                 {
-
+                    isSyncDone = false;
                     bool isPending;
 			        lock ( this.mutualLock ) {
-				    isPending = Pending;
-			}
-                    lock(syncLock)
-                        if (isPending)
+				        isPending = Pending;
+			        }
+
+                    if (isPending)
                     {
+                        isSyncing = true;
                      //   Console.WriteLine("Pending request detected\n");
                         // request from all nodes
                         okayList.Clear();
@@ -145,7 +140,8 @@ namespace Networking
                        
                         // wait for okay from all                        
                         while ((okayList.Count < (network.Count - 1))&&(_keepRunning)); // -1 because of self node
-                         Access = true;
+                        isSyncDone = true; 
+                        Access = true;
                         }
 
                     if (isSyncDone)
@@ -153,15 +149,14 @@ namespace Networking
                         Console.WriteLine("====> CS ra enter");
 
                         // can access now
-                        while ((Pending) && (_keepRunning)) ;
-                        while ((!CalcDone)&&(_keepRunning));
+                        while (Pending);
+                        while (!CalcDone);
 
                         Access = false;
 
                         // send okay to all processes in queue
                         lock (this.requestsQueue)
                         {
-                            
                             sendOkayToQueueNodes();
                         }
 
@@ -176,9 +171,6 @@ namespace Networking
              Console.WriteLine("\nThread  RicartArgwala is terminated\n");
             }
 
-        
-
-
 
             public String generate_url(String ip)
             {
@@ -191,8 +183,8 @@ namespace Networking
 			foreach (string node_ip in requestsQueue)
   			   {
                 //Console.WriteLine("Sending okay to queue node " + node_ip);
-
-                   if (node_ip.CompareTo(this.ip) == 0)
+                foreach(RemoteNode rNode in network){
+                   if (node_ip.CompareTo(rNode.getIP()) == 0)
                    {
                        NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
                        executer.AttachLogger(new XmlRpcDebugLogger());
@@ -200,9 +192,8 @@ namespace Networking
                        executer.Url = generate_url(node_ip);
                        executer.okReceived(this.ip);
                    }
-
-                
-			   }
+                }
+                }
 
 		}
 
