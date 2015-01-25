@@ -39,41 +39,41 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		boolean sendOk = false;
 		boolean addToQueue = false;
 		
-		synchronized(this.mutualLock)
+		if ( isCalcDone() && !isPending() )
 		{
-			if ( isCalcDone() && !isPending() )
+			sendOk = true;
+		}
+		else if ( !isCalcDone() )
+		{
+			addToQueue = true;
+		}
+		else if ( isPending() )
+		{
+			if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
+					   timestamp < this.timestamp )
 			{
 				sendOk = true;
 			}
-			else if ( !isCalcDone() )
+			else
 			{
 				addToQueue = true;
 			}
-			else if ( isPending() )
+		}
+		synchronized(this.mutualLock)
+		{
+			if ( sendOk )
 			{
-				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
-						   timestamp < this.timestamp )
+				sendOk(ip);
+			}
+			else
+			{
+				synchronized (this.requestsQueue)
 				{
-					sendOk = true;
-				}
-				else
-				{
-					addToQueue = true;
+					requestsQueue.add(ip);
 				}
 			}
 		}
-		
-		if ( sendOk )
-		{
-			sendOk(ip);
-		}
-		else
-		{
-			synchronized (this.requestsQueue)
-			{
-				requestsQueue.add(ip);
-			}
-		}
+
 
 		
 //		synchronized (this.requestsQueue) {
