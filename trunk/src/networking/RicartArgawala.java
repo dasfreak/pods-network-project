@@ -35,8 +35,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-		//System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
-		synchronized (this.mutualLock) {
+		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 			if ( isCalcDone() && !isPending() && canAccess() )
 			{
 					// send OK
@@ -59,12 +58,10 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					requestsQueue.add(ip);
 				}
 			}
-		}
-
 	}
 
 	private void sendOk(String ip) {
-		//System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
+		System.out.println("Sending okay to node "+ip+" timestamp = "+timestamp);
 		Vector<String> params = new Vector<String>();
 		params.add(this.ip);
 
@@ -84,29 +81,37 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	public synchronized void okReceived(String ip) {
-		//System.out.println("==>Received okay from "+ip);
+		System.out.println("==>Received okay from "+ip);
 		okayList.add(ip);
-		//System.out.println("  okayList size is "+okayList.size());
+		System.out.println("  okayList size is "+okayList.size());
 	}
 
 	@Override
 	public void run() {
 
+		boolean isSyncDone = false;
 		while (!canStart());
 		
 		while ( !isSessionDone() )
 		{
-			if ( isPending() )
+			isSyncDone = false;
+			synchronized ( this.mutualLock ) {
+				if ( isPending() )
+				{
+					System.out.println("Pending request detected\n");
+					// request from all nodes
+					okayList.clear();
+					broadcastRequest();
+					
+					timestamp++;
+						// wait for okay from all
+					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+					isSyncDone = true;
+				}
+			}
+			
+			if ( isSyncDone )
 			{
-			//	System.out.println("Pending request detected\n");
-				// request from all nodes
-				okayList.clear();
-				broadcastRequest();
-				
-				timestamp++;
-					// wait for okay from all
-				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-				
 				System.out.println("====> CS ra enter");
 				setAccess( true );
 				// can access now
@@ -138,7 +143,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			{
 				if (node.compareTo(rNode.ip) == 0)
 				{
-					//System.out.println("Sending okay to queue node "+rNode.ip);
+					System.out.println("Sending okay to queue node "+rNode.ip);
 					try {
 						rNode.rpc.execute("RicartArgawalaAux.okReceived", params);
 					} catch (XmlRpcException | IOException e) {
@@ -151,7 +156,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	}
 
 	private void broadcastRequest() {
-		//System.out.println("Broadcasting request:");
+		System.out.println("Broadcasting request:");
 		Vector<String> params = new Vector<String>();
 		
 		params.add(this.ip);
