@@ -35,13 +35,15 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	
 	public void requestReceived( String ip, long timestamp )
 	{
-		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
+		System.out.println("Received request from ip "+ip+" timestamp = "+timestamp+" own timestamp is "+this.timestamp);
+
+		synchronized (this.requestsQueue) {
 			if ( isCalcDone() && !isPending() && !canAccess() )
 			{
 					// send OK
 					sendOk(ip);
 			}
-			else if ( !isCalcDone() )
+			else if ( !isCalcDone() || !canAccess() )
 			{
 				requestsQueue.add(ip);
 			}
@@ -58,6 +60,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 					requestsQueue.add(ip);
 				}
 			}
+		}
 	}
 
 	private void sendOk(String ip) {
@@ -117,12 +120,13 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 				// can access now
 				while (isPending());
 				while (!isCalcDone());
-							
-				// send okay to all processes in queue
-				sendOkayToQueueNodes();
-				System.out.println("<==== CS ra exit");
-
-				setAccess( false );
+				
+				synchronized (this.requestsQueue) {
+					setAccess( false );
+					// send okay to all processes in queue
+					sendOkayToQueueNodes();
+					System.out.println("<==== CS ra exit");
+				}
 			}
 		}
 	}
