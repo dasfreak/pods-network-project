@@ -50,7 +50,9 @@ namespace Networking
                 {
                     // queue request
                     //Console.WriteLine("isPending ");
-                    if (timestamp < this.timestamp)
+                    
+                    if ((timestamp < this.timestamp)||
+                        ( (timestamp == this.timestamp) && (ip.CompareTo(this.ip) > 0) )   )
                     {
                         sendOk(ip);
                     }

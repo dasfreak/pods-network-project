@@ -1,0 +1,11 @@
+C:\Users\Marc\Documents\Visual Studio 2013\bin\Networking.exe.config
+C:\Users\Marc\Documents\Visual Studio 2013\bin\Networking.exe.manifest
+C:\Users\Marc\Documents\Visual Studio 2013\bin\Networking.application
+C:\Users\Marc\Documents\Visual Studio 2013\bin\Networking.exe
+C:\Users\Marc\Documents\Visual Studio 2013\bin\Networking.pdb
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\Networking.Form1.resources
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\xml-rpc.csproj.GenerateResource.Cache
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\Networking.exe.manifest
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\Networking.application
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\Networking.exe
+C:\Users\Marc\Documents\Visual Studio 2013\Projects\xmlrpc\obj\Debug\Networking.pdb

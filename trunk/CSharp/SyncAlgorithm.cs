@@ -89,9 +89,12 @@ namespace Networking
         }
 
 
-        public void clearPending()
+        public virtual void clearPending()
         {
-            isPending = false;
+            lock (this)
+            {
+                isPending = false;
+            }
         }
 
     }

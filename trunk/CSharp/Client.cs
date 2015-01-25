@@ -24,12 +24,12 @@ namespace Networking
     private static Client instance;   // singleton design
 
 
-    public static Client getInstance() // singleton design
+    public static Client getInstance() // Singleton design 
     {
         return instance;
     }
 
-    String ip;
+    String ip; 
     RemoteNode node;
     List<RemoteNode> network;
     static String port = "5000";
@@ -37,7 +37,10 @@ namespace Networking
     private bool isStartValueSet;
     private int currentValue;
 
-    bool initiator = false;
+    //bool initiator = false;
+
+    
+
     Thread RicartArgawala_Thread;
     Thread TokenRing_Thread;
     public Thread CalculatingTask_Thread;
@@ -89,9 +92,9 @@ namespace Networking
        network.RemoveAt(TableContains(this.ip));
        
        this.ip = ip;
-       node = new RemoteNode(ip, generate_url(ip));
-       network.Add(node);
+       node = new RemoteNode(ip, generate_url(ip));       
        exitNetwork();
+       //network.Add(node);
 
     }
 
@@ -119,18 +122,20 @@ namespace Networking
         return "http://"+ip+":"+port+"/RPC2";
      }
 
-    public bool propogateNewNodeMessage(String url ,String ip)
+    public bool propogateAddNodeMessage(String url, String ip)
     {
 
         bool param = false;
 
         NetworkClientInterface Join = XmlRpcProxyGen.Create<NetworkClientInterface>();
         Join.AttachLogger(new XmlRpcDebugLogger());
-
+        
         Join.Url = url;
 
-        param = Join.newNodeInNet(ip);
 
+        param = Join.addNodeToStructure(ip);
+        
+               
         return param;
     }
 
@@ -150,10 +155,16 @@ namespace Networking
               Join.Url = url;
               network.Add(node);
 
-              param = Join.newNodeInNet(this.ip);              
-
-              //if (param == true) network.Add(node);
-              if (param == false) network.RemoveAt(TableContains(ip));
+              try
+              {
+                  param = Join.newNodeInNet(this.ip);
+              }
+              catch
+              {
+                  network.RemoveAt(TableContains(ip));
+                  
+              }
+   
           }
 
       return param;
@@ -162,44 +173,67 @@ namespace Networking
     public void propagate(String ip) {
 
         String url = generate_url(ip);
+        RemoteNode local_node = new RemoteNode(ip, url);
+        
 
         for (int i = 0; i < network.Count; i++)
         {
             if (network[i] != null)
             {
-                if ((network[i].getIP() != this.ip) && (network[i].getIP() != ip))
-                {
-                    propogateNewNodeMessage(network[i].getURL(), ip); // new node to table entry
-                    propogateNewNodeMessage(url, network[i].getIP());     // Table content to new node
+                if (network[i].getIP() != this.ip)
+                {                    
+                    propogateAddNodeMessage(network[i].getURL(), ip); // new node to table entry
+                    propogateAddNodeMessage(url, network[i].getIP());     // Table content to new node
                 }
             }
         }
-    
+
+        network.Add(local_node);
      }
 
-    public int TableContains (String ip){
+    public int TableContains(String ip){
+        return SearchTableIndex(ip,this.network);
+     }
+
+    public int SearchTableIndex(String ip, List<RemoteNode> net) {
         int index = -1;
 
-        for (int i = 0; i < network.Count; i++){
-            if (network[i] != null){
-                if (network[i].getIP() == ip){
+        for (int i = 0; i < net.Count; i++)
+        {
+            if (net[i] != null)
+            {
+                if (net[i].getIP() == ip)
+                {
                     index = i;
                     break;
-                }                   
+                }
             }
         }
         return index;
-     }
+    }
 
-    public void addNode(String ip)
+
+    public void addNodeToStruct(String ip)
     {
         RemoteNode local_node = new RemoteNode(ip, generate_url(ip));
 
-        if (TableContains(ip)==(-1))
+        if (TableContains(ip) == (-1))
         {
-            network.Add(local_node);                                 
+            network.Add(local_node);
+                     
+        }
+    }
+
+
+    public void addNode(String ip)
+    {
+        
+
+        if (TableContains(ip)==(-1))
+        {            
             propagate(ip);
-            
+            Form1.getInstance().setConnectedEvent();      
+                        
         }
 	}
 
@@ -439,21 +473,25 @@ namespace Networking
                 }
               }
 
-         
-		while (repliesCounter != network.Count - 1)
-		{
-			Console.WriteLine("WTF someone didn't reply ?!"+repliesCounter+" < " +(network.Count-1));
-		}
+        
+//		while (repliesCounter != network.Count - 1)
+           if(repliesCounter < network.Count - 1)
+            for(int j=0; j <40  ; j++)
+            {               
+                Console.WriteLine("WTF someone didn't reply ?!" + repliesCounter + " < " + (network.Count - 1));
+            }
 
         if(repliesCounter == network.Count - 1)
 		  Console.WriteLine("Handshake done successfuly!");
-	}
+        
+
+        }
 
 
 
         public void startCalc(int intitialValue, int algoChoice)
 		{
-            initiator = true;
+            //initiator = true;
 			setStartValue(intitialValue, algoChoice);
             Console.WriteLine("Starting distributed calc with initial value of: " + startValue);
 			foreach (RemoteNode node in network)
@@ -467,9 +505,11 @@ namespace Networking
             //StartCalculatingTask(initiator);// node triggerd the calc. starts calc. after all nodes recieved StartMessage
              
             
-            initiator = false;
+            //initiator = false;
 		}
+        
 
+        
     public void propogateStartMessage(string xmlRpcClient, int intitialValue, int algoChoice)
 		{
 			try

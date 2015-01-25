@@ -11,25 +11,39 @@ namespace Networking
         private int indexInRing = -1;
         private string ipCordinator;
         private volatile Token token = null;
+
         bool _keepRunning = true;
 
+
+	
         public TokenRing(IList<RemoteNode> network, string ip) : base(network, ip)
 		{
 			// pay attension to the difference between network and this.network
-
+       
+            token = null;
+           
+            Console.WriteLine(Client.getInstance().getTable());
 			this.network.Sort();
 
-			for (int index = 0; index < network.Count; index++)
-			{
+            this.indexInRing = Client.getInstance().SearchTableIndex(this.ip,this.network);
+
+            /*
+            for (int index = 0; index < this.network.Count; index++)
+            {
+                //Console.WriteLine(this.network[index].getIP());
 				if (this.network[index].getIP().CompareTo(this.ip) == 0)
 				{
 					this.indexInRing = index;
 					break;
 				}
-			}
+			}*/
 
+            Console.WriteLine("My index in network is: " + this.indexInRing);
 			fetchCordinator();
 			TokenRing.instance = this;
+
+
+
 		}
 
         public void RequestStop()
@@ -39,7 +53,7 @@ namespace Networking
 
 		private void fetchCordinator()
 		{
-			ipCordinator = network[0].getIP();
+			ipCordinator = this.network[0].getIP();
 			if (ipCordinator.CompareTo(this.ip) == 0)
 			{
 				// this node won the election according to IP metric:
@@ -53,9 +67,12 @@ namespace Networking
 		public void run()
         {
             Console.WriteLine("\nThread  TokenRing is running\n");
+            while (!getcanStart());
+            
             while (_keepRunning)
 			{
-				if (hasRing() && CalcDone)
+
+				if ((hasRing() && CalcDone) && !isPending )
 				{
 					forwardToken();
 				}
@@ -64,47 +81,51 @@ namespace Networking
 		}
 
 
+
+ 
+
 		public virtual bool hasRing()
 		{
 			lock (this)
 			{
-				if (token != null && token.currentHolder.CompareTo(this.ip) == 0)
-				{
-					return true;
+				if (token != null)
+                {
+                    if (token.currentHolder.CompareTo(this.ip) == 0)
+					      return true;
 				}
 				return false;
 			}
 		}
 
+
+
+
 		private void forwardToken()
 		{
-			// fetch next peer:
-			int nextPeer = (indexInRing + 1) % network.Count;
-			//System.out.println("Forwarding token to IP "+network.get(nextPeer).ip);
+			// fetch next peer index:
+		 int nextPeerIndex = (indexInRing + 1) %this.network.Count;
+         String nextIP=this.network[nextPeerIndex].getIP();
 
-			List<string> @params = new List<string>();
+         token.currentHolder = nextIP;	
+	     Console.WriteLine("Forwarding token to IP "+nextIP );
 
-			@params.Add(token.ipCreator);
-			@params.Add(network[nextPeer].getIP());
+	     // send request to node
 
-			token = null;
+         NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
+         executer.AttachLogger(new XmlRpcDebugLogger());
 
-			// send request to node
-
-            NetworkClientInterface executer = XmlRpcProxyGen.Create<NetworkClientInterface>();
-            executer.AttachLogger(new XmlRpcDebugLogger());
-
-            executer.Url = network[nextPeer].getURL();
-
-			executer.tokenReceived(token.ipCreator,network[nextPeer].getIP());
+         executer.Url = network[nextPeerIndex].getURL();
+		 executer.tokenReceived(token.ipCreator,nextIP);
 
 		}
+
+
 
 		public virtual void receivedToken(Token token)
 		{
 			lock (this)
 			{
-			//	System.out.println("Received Token!");
+			Console.WriteLine("Received Token!");
 				this.token = token;
 			}
 		}
@@ -120,3 +141,11 @@ namespace Networking
 	}
 
 }
+
+
+
+	
+	
+	
+
+	

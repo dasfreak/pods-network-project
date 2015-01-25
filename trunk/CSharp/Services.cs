@@ -11,7 +11,7 @@ namespace Networking
 
         public bool newNodeInNet(String ip)
         {
-            Client.getInstance().addNode( ip);
+            Client.getInstance().addNode(ip);            
             return true;
         }
 
@@ -28,11 +28,22 @@ namespace Networking
             return true;
         }
 
+        
+        public bool addNodeToStructure(String ip){
+
+            Client.getInstance().addNodeToStruct(ip);
+
+            return true;
+
+           }
+
         public  bool handshakeMessage(String ip)
         {
             try
             {
                 while (!Client.getInstance().threadsAreRunning()) ;
+                Form1.getInstance().setCalcEvent();
+                    
             }
             catch (Exception e)
             {
