@@ -20,7 +20,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	private volatile boolean canAccess;
 	private long timestamp;
 	private volatile boolean isSyncing;
-	private volatile Object syncLock;
 	
 	public RicartArgawala(List<RemoteNode> networkInput, String ip)
 	{
@@ -33,7 +32,6 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		isPending     = false;
 		canAccess     = false;
 		isSyncing     = false;
-		syncLock      = new Object();
 		instance      = this;
 	}
 	
@@ -45,40 +43,37 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		
 		boolean calcIsDone = isCalcDone();
 		boolean isPending = isPending();
-		
-		synchronized (syncLock) {
-			
-			if ( calcIsDone && !isPending )
+
+		if ( calcIsDone && !isPending )
+		{
+			sendOk = true;
+		}
+		else if ( !calcIsDone || isSyncing )
+		{
+			addToQueue = true;
+		}
+		else if ( isPending )
+		{
+			if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
+					   timestamp < this.timestamp )
 			{
 				sendOk = true;
 			}
-			else if ( !calcIsDone || isSyncing )
+			else
 			{
 				addToQueue = true;
 			}
-			else if ( isPending )
-			{
-				if ( ( timestamp == this.timestamp && ip.compareTo(this.ip) > 0 ) || 
-						   timestamp < this.timestamp )
-				{
-					sendOk = true;
-				}
-				else
-				{
-					addToQueue = true;
-				}
-			}
+		}
 
-			if ( sendOk )
+		if ( sendOk )
+		{
+			sendOk(ip);
+		}
+		else
+		{
+			synchronized (this.requestsQueue)
 			{
-				sendOk(ip);
-			}
-			else
-			{
-				synchronized (this.requestsQueue)
-				{
-					requestsQueue.add(ip);
-				}
+				requestsQueue.add(ip);
 			}
 		}
 
@@ -155,42 +150,41 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 			synchronized ( this.mutualLock ) {
 				isPending = isPending();
 			}
-			synchronized (syncLock) {
-				if ( isPending )
-				{
-					isSyncing = true;
+			
+			if ( isPending )
+			{
+				isSyncing = true;
 //						System.out.println("Pending request detected\n");
-					// request from all nodes
-					okayList.clear();
-					broadcastRequest();
-					
-					// wait for okay from all
-					while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-					isSyncDone = true;
-					setAccess( true );
-				}
+				// request from all nodes
+				okayList.clear();
+				broadcastRequest();
+				
+				// wait for okay from all
+				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+				isSyncDone = true;
+				setAccess( true );
+			}
 				
 				
 				
-				if ( isSyncDone )
-				{
-					System.out.println("====> CS ra enter");
-					
-						// can access now
-						while (isPending());
-						while (!isCalcDone());
+			if ( isSyncDone )
+			{
+				System.out.println("====> CS ra enter");
+				
+					// can access now
+					while (isPending());
+					while (!isCalcDone());
 
-						setAccess( false );
-						// send okay to all processes in queue
-						synchronized ( this.requestsQueue) {
-							sendOkayToQueueNodes();
-						}
+					setAccess( false );
+					// send okay to all processes in queue
+					synchronized ( this.requestsQueue) {
+						sendOkayToQueueNodes();
+					}
 
-						timestamp++;
-					
-					System.out.println("<==== CS ra exit");
-					isSyncing = false;
-				}
+					timestamp++;
+				
+				System.out.println("<==== CS ra exit");
+				isSyncing = false;
 			}
 		}
 	}
