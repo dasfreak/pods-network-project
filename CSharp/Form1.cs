@@ -242,9 +242,9 @@ namespace Networking
             // 
             this.label8.Location = new System.Drawing.Point(180, 22);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(90, 17);
+            this.label8.Size = new System.Drawing.Size(79, 19);
             this.label8.TabIndex = 9;
-            this.label8.Text = "CurrentValue:";
+            this.label8.Text = "CurrentValue: ";
             this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // button2
@@ -258,9 +258,9 @@ namespace Networking
             // 
             // current_value
             // 
-            this.current_value.Location = new System.Drawing.Point(265, 22);
+            this.current_value.Location = new System.Drawing.Point(265, 20);
             this.current_value.Name = "current_value";
-            this.current_value.Size = new System.Drawing.Size(51, 19);
+            this.current_value.Size = new System.Drawing.Size(70, 29);
             this.current_value.TabIndex = 7;
             this.current_value.Click += new System.EventHandler(this.current_value_Click);
             // 
