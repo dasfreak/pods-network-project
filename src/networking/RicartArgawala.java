@@ -37,7 +37,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 	{
 		//System.out.println("Received request from ip "+ip+" timestamp = "+timestamp);
 		synchronized (this.mutualLock) {
-			if ( isCalcDone() && !isPending() )
+			if ( isCalcDone() && !isPending() && canAccess() )
 			{
 					// send OK
 					sendOk(ip);
@@ -85,9 +85,7 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 
 	public synchronized void okReceived(String ip) {
 		//System.out.println("==>Received okay from "+ip);
-		synchronized (okayList){
-			okayList.add(ip);
-		}
+		okayList.add(ip);
 		//System.out.println("  okayList size is "+okayList.size());
 	}
 
@@ -98,30 +96,28 @@ public class RicartArgawala extends SyncAlgorithm implements Runnable {
 		
 		while ( !isSessionDone() )
 		{
-				if ( isPending() )
-				{
-				//	System.out.println("Pending request detected\n");
-					// request from all nodes
-					synchronized (this.mutualLock) {
-						okayList.clear();
-						broadcastRequest();
-						
-						timestamp++;
-							// wait for okay from all
-						while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
-					}
-					System.out.println("====> CS ra enter");
-					setAccess( true );
-					// can access now
-					while (isPending());
-					while (!isCalcDone());
-								
-					// send okay to all processes in queue
-					sendOkayToQueueNodes();
-					System.out.println("<==== CS ra exit");
-	
-					setAccess( false );
+			if ( isPending() )
+			{
+			//	System.out.println("Pending request detected\n");
+				// request from all nodes
+				okayList.clear();
+				broadcastRequest();
 				
+				timestamp++;
+					// wait for okay from all
+				while( okayList.size() < ( network.size() - 1 ) ); // -1 because of self node
+				
+				System.out.println("====> CS ra enter");
+				setAccess( true );
+				// can access now
+				while (isPending());
+				while (!isCalcDone());
+							
+				// send okay to all processes in queue
+				sendOkayToQueueNodes();
+				System.out.println("<==== CS ra exit");
+
+				setAccess( false );
 			}
 		}
 	}
